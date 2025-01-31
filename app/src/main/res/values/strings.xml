@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Food Planner Application</string>
+    <string name="splash_title">FoodDay</string>
+    <string name="onboarding_title">You Can’t  stop eating, so go!</string>
+    <string name="onboarding_body">Let deliciousness twirl in\n your mouth </string>
+    <string name="onboarding_button">Let\'s Start</string>
 </resources>
