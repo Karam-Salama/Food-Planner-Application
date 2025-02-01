@@ -1,37 +1,50 @@
 package com.example.foodplannerapplication.modules.onboarding
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.database.cache.CacheHelper
+import com.example.foodplannerapplication.core.functions.hideStatusAndNavBar.hideStatusAndNavBar
+import com.example.foodplannerapplication.modules.auth.RegisterActivity
 
 
 class OnboardingActivity : AppCompatActivity() {
+    private lateinit var startButton: Button
+    private lateinit var rotatedImage: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_onboarding)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         // hide status bar and navigation bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            window.insetsController?.hide(WindowInsets.Type.systemBars())
-        } else {
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    )
+        hideStatusAndNavBar()
+
+        rotatedImage = findViewById(R.id.imageView_dish3)
+        startButton = findViewById(R.id.startButton)
+
+        // add animation file to image
+        val rotateAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate)
+        rotatedImage.startAnimation(rotateAnimation)
+
+        // start register activity & save data in shared preferences
+        startButton.setOnClickListener {
+            CacheHelper.saveData("welcomeVisited", true)
+            startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
         }
     }
+
+
 }

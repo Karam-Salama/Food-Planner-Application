@@ -8,10 +8,6 @@
     android:background="@color/primary"
     tools:context=".modules.splash.SplashActivity">
 
-    <!-- Lottie Animation View -->
-
-    <!-- TextView تحت الـ Lottie Animation View -->
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
         android:layout_width="200dp"
@@ -34,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="356dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="@string/splash_title"
+        android:text="@string/app_name"
         android:textColor="@color/black"
         android:textSize="46sp"
         android:textStyle="bold"
