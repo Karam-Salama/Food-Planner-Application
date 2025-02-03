@@ -21,8 +21,7 @@ class LoginActivity : AppCompatActivity() {
         tv_forgetPassword = findViewById(R.id.tv_forgetPassword)
 
         tv_signup.setOnClickListener {
-            var intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+           finish()
         }
 
         tv_forgetPassword.setOnClickListener {
