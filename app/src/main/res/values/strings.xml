@@ -31,4 +31,16 @@
     <!--    Forget Password    -->
     <string name="forget_password_title">Forget \nPassword</string>
     <string name="reset_password_btn">Reset Password</string>
+
+    <!-- Custom error messages -->
+    <string name="weak_password_error">The password is too weak.</string>
+    <string name="email_already_in_use_error">An account already exists with this email address.</string>
+    <string name="invalid_email_error">The email address is not valid.</string>
+    <string name="operation_not_allowed_error">This email address is not allowed.</string>
+    <string name="network_error">Please check your internet connection.</string>
+    <string name="generic_error">An error occurred, please try again later.</string>
+    <string name="invalid_credentials_error">The email or password is incorrect.</string>
+    <string name="user_disabled_error">Your account has been disabled.</string>
+    <string name="account_exists_with_different_credentials_error">An account already exists with a different credential.</string>
+    <string name="no_user_record_error">There is no user record corresponding to this identifier. The user may have been deleted.</string>
 </resources>

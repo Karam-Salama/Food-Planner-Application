@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">FoodDay</string>
-    <string name="onboarding_title">Your Smart Meal Planner</string>
-    <string name="onboarding_body">Plan your meals, save time, and eat healthier every day</string>
-    <string name="onboarding_button">Get Started</string>
-    <string name="register_title">Register Screen</string>
-</resources>
