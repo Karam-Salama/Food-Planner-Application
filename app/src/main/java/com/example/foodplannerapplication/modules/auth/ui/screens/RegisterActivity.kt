@@ -10,44 +10,89 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.auth.data.repos.AuthRepo
+import com.example.foodplannerapplication.core.functions.Validation
 import com.example.foodplannerapplication.modules.home.HomeActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class RegisterActivity() : AppCompatActivity() {
-    private lateinit var edt_Name:EditText
-    private lateinit var edt_Email:EditText
-    private lateinit var edt_Password:EditText
-    private lateinit var edt_Phone:EditText
+class RegisterActivity : AppCompatActivity() {
+    private lateinit var edtFullName: EditText
+    private lateinit var edtPhone: EditText
+    private lateinit var edtEmail: EditText
+    private lateinit var edtPassword: EditText
+    private lateinit var edtConfirmPassword: EditText
+    private lateinit var tvLogin: TextView
+    private lateinit var btnSignUp: Button
+    private lateinit var errorName: TextView
+    private lateinit var errorPhone: TextView
+    private lateinit var errorEmail: TextView
+    private lateinit var errorPassword: TextView
+    private lateinit var errorConfirmPassword: TextView
 
-    private lateinit var tv_login:TextView
-    private lateinit var btn_signUp:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
         // Initialize views
-        edt_Name = findViewById(R.id.edt_Name)
-        edt_Phone = findViewById(R.id.edt_Phone)
-        edt_Email = findViewById(R.id.edt_Email)
-        edt_Password = findViewById(R.id.edt_Password)
-        btn_signUp = findViewById(R.id.btn_signUp)
-        tv_login = findViewById(R.id.tv_login)
+        edtFullName = findViewById(R.id.edt_Name)
+        edtPhone = findViewById(R.id.edt_Phone)
+        edtEmail = findViewById(R.id.edt_Email)
+        edtPassword = findViewById(R.id.edt_Password)
+        edtConfirmPassword = findViewById(R.id.edt_confirmPassword)
+        btnSignUp = findViewById(R.id.btn_signUp)
+        tvLogin = findViewById(R.id.tv_login)
 
-        // set onClickListeners
-        tv_login.setOnClickListener {
-            finish()
-        }
+        // Initialize error views
+        errorName = findViewById(R.id.error_name)
+        errorPhone = findViewById(R.id.error_phone)
+        errorEmail = findViewById(R.id.error_email)
+        errorPassword = findViewById(R.id.error_password)
+        errorConfirmPassword = findViewById(R.id.error_confirmPassword)
 
-        btn_signUp.setOnClickListener{
-            createUserWithEmailAndPassword(
-                email = edt_Email.text.toString().trim(),
-                password = edt_Password.text.toString().trim(),
-            )
+        // Set onClickListeners
+        tvLogin.setOnClickListener { finish() }
+
+        btnSignUp.setOnClickListener {
+            if (validateInputs()) {
+                createUserWithEmailAndPassword(
+                    email = edtEmail.text.toString().trim(),
+                    password = edtPassword.text.toString().trim()
+                )
+            }
         }
+    }
+
+    private fun validateInputs(): Boolean {
+        val fullName = edtFullName.text.toString().trim()
+        val phone = edtPhone.text.toString().trim()
+        val email = edtEmail.text.toString().trim()
+        val password = edtPassword.text.toString().trim()
+        val confirmPassword = edtConfirmPassword.text.toString().trim()
+
+        var isValid = true
+
+        val nameError = Validation.validateName(fullName)
+        errorName.text = nameError
+        if (nameError != null) isValid = false
+
+        val phoneError = Validation.validatePhone(phone)
+        errorPhone.text = phoneError
+        if (phoneError != null) isValid = false
+
+        val emailError = Validation.validateEmail(email)
+        errorEmail.text = emailError
+        if (emailError != null) isValid = false
+
+        val passwordError = Validation.validatePassword(password)
+        errorPassword.text = passwordError
+        if (passwordError != null) isValid = false
+
+        val confirmPasswordError = Validation.validateConfirmPassword(confirmPassword, password)
+        errorConfirmPassword.text = confirmPasswordError
+        if (confirmPasswordError != null) isValid = false
+
+        return isValid
     }
 
     private fun createUserWithEmailAndPassword(email: String, password: String) {
@@ -55,22 +100,12 @@ class RegisterActivity() : AppCompatActivity() {
         Firebase.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    Toast.makeText(
-                        baseContext,
-                        "Sign up successfully.",
-                        Toast.LENGTH_LONG,
-                    ).show()
+                    Toast.makeText(this, "Sign up successful.", Toast.LENGTH_LONG).show()
                     startActivity(Intent(this, HomeActivity::class.java))
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Sign up failed.",
-                        Toast.LENGTH_LONG,
-                    ).show()
+                    Toast.makeText(this, "Sign up failed.", Toast.LENGTH_LONG).show()
                 }
             }
     }

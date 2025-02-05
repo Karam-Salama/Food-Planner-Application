@@ -10,44 +10,71 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.functions.Validation
 import com.example.foodplannerapplication.modules.home.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var tv_signup: TextView
-    private lateinit var tv_forgetPassword: TextView
-    private lateinit var edt_Email: EditText
-    private lateinit var edt_Password: EditText
-    private lateinit var btn_login: Button
+    private lateinit var tvSignup: TextView
+    private lateinit var tvForgetPassword: TextView
+    private lateinit var edtEmail: EditText
+    private lateinit var edtPassword: EditText
+    private lateinit var btnLogin: Button
+    private lateinit var errorEmail: TextView
+    private lateinit var errorPassword: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
-        tv_signup = findViewById(R.id.tv_signup)
-        tv_forgetPassword = findViewById(R.id.tv_forgetPassword)
-        edt_Email = findViewById(R.id.edt_Email)
-        edt_Password = findViewById(R.id.edt_Password)
-        btn_login = findViewById(R.id.btn_login)
+        tvSignup = findViewById(R.id.tv_signup)
+        tvForgetPassword = findViewById(R.id.tv_forgetPassword)
+        edtEmail = findViewById(R.id.edt_Email)
+        edtPassword = findViewById(R.id.edt_Password)
+        btnLogin = findViewById(R.id.btn_login)
 
-        tv_signup.setOnClickListener {
+
+        errorEmail = findViewById(R.id.error_login_email)
+        errorPassword = findViewById(R.id.error_login_password)
+
+        tvSignup.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        tv_forgetPassword.setOnClickListener {
+        tvForgetPassword.setOnClickListener {
             startActivity(Intent(this, ForgetPasswordActivity::class.java))
         }
 
-        btn_login.setOnClickListener{
-            signInWithEmailAndPassword(
-                edt_Email.text.toString().trim(),
-                edt_Password.text.toString().trim(),
-            )
+        btnLogin.setOnClickListener{
+            if (validateInputs()){
+                signInWithEmailAndPassword(
+                    edtEmail.text.toString().trim(),
+                    edtPassword.text.toString().trim(),
+                )
+            }
         }
 
     }
+
+    private fun validateInputs(): Boolean {
+        val email = edtEmail.text.toString().trim()
+        val password = edtPassword.text.toString().trim()
+
+        var isValid = true
+
+        val emailError = Validation.validateEmail(email)
+        errorEmail.text = emailError
+        if (emailError != null) isValid = false
+
+        val passwordError = Validation.validatePassword(password)
+        errorPassword.text = passwordError
+        if (passwordError != null) isValid = false
+        return isValid
+    }
+
     private fun signInWithEmailAndPassword(email: String, password: String) {
         val TAG = "SignInActivity"
         Firebase.auth.signInWithEmailAndPassword(email, password)
