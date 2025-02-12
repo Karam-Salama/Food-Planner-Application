@@ -49,4 +49,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation (libs.lottie)
+
+    // for google authentication
+    implementation(libs.firebase.ui.auth)
 }
