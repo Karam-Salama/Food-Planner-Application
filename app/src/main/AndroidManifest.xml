@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +15,16 @@
         android:theme="@style/Theme.FoodPlannerApplication"
         tools:targetApi="31">
         <activity
-            android:name=".modules.auth.RegisterActivity"
+            android:name=".modules.home.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".modules.auth.ui.screens.ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".modules.auth.ui.screens.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".modules.auth.ui.screens.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".modules.splash.SplashActivity"
@@ -26,7 +37,7 @@
         </activity>
         <activity
             android:name=".modules.onboarding.OnboardingActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

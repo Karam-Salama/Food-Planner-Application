@@ -59,10 +59,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView_dish3">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp"/>
-
             <TextView
                 android:id="@+id/tv_onboarding_title"
                 android:layout_width="match_parent"
@@ -84,17 +80,14 @@
                 android:textSize="18sp"
                 android:fontFamily="@font/poppins_medium"
                 android:textStyle="normal" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="40dp"/>
 
             <Button
                 android:id="@+id/startButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_onboarding_button"
                 android:text="@string/onboarding_button"
+                android:background="@drawable/button_background"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:fontFamily="@font/inter_medium"

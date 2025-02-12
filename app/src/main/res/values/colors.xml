@@ -2,7 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#FF1CCA69</color>
+    <color name="primary">#FF068251</color>
     <color name="lighter_primary">#9BEABA</color>
-    <color name="background">#FF0D0D0D</color>
+    <color name="background">#FFF2F2F2</color>
+    <color name="edt_background">#FFD7D6D7</color>
+    <color name="edt_input">#FF707070</color>
+    <color name="edt_error_msg">#FFD32F2F</color>
 </resources>

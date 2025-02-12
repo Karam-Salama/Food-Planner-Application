@@ -12,7 +12,7 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.database.cache.CacheHelper
 import com.example.foodplannerapplication.core.functions.hideStatusAndNavBar.hideStatusAndNavBar
 import com.example.foodplannerapplication.core.utils.Constants
-import com.example.foodplannerapplication.modules.auth.RegisterActivity
+import com.example.foodplannerapplication.modules.auth.ui.screens.LoginActivity
 
 
 class OnboardingActivity : AppCompatActivity() {
@@ -38,7 +38,7 @@ class OnboardingActivity : AppCompatActivity() {
         // start register activity & save data in shared preferences
         startButton.setOnClickListener {
             CacheHelper.saveData(Constants.OnBoarding_KEY, true)
-            startActivity(Intent(this, RegisterActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }
