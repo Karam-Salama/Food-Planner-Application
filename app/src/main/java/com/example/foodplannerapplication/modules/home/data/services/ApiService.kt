@@ -1,6 +1,7 @@
 package com.example.foodplannerapplication.modules.home.data.services
 
 
+import com.example.foodplannerapplication.modules.home.data.models.CategoryResponse
 import com.example.foodplannerapplication.modules.home.data.models.RandomMealResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,6 +11,10 @@ interface APIService {
     // https://www.themealdb.com/api/json/v1/1/random.php
     @GET("random.php")
     suspend fun getMealOfTheDay(): RandomMealResponse
+
+    // https://www.themealdb.com/api/json/v1/1/categories.php
+    @GET("categories.php")
+    suspend fun getCategories(): CategoryResponse
 }
 
 object RetrofitHelper {

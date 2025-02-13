@@ -6,69 +6,65 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.RecyclerView
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.home.data.models.MealModel
+import com.example.foodplannerapplication.modules.home.data.models.CategoryModel
 import com.example.foodplannerapplication.modules.home.data.services.RetrofitHelper
-import com.google.android.material.imageview.ShapeableImageView
+import com.example.foodplannerapplication.modules.home.ui.adapters.CategoryAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MealOfDayFragment : Fragment() {
+class CategoriesFragment : Fragment() {
     // ================================= Global Variables ==========================================
-    private lateinit var mealTitle: TextView
-    private lateinit var mealImage: ShapeableImageView
-    private var mealOfTheDay: MealModel? = null
+    private lateinit var categoryRecyclerView: RecyclerView
+    private lateinit var categoryAdapter: CategoryAdapter
+    private var categories: List<CategoryModel?>? = null
 
     // ================================= onCreateView()  ===========================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_meal_of_day, container, false)
+        return inflater.inflate(R.layout.fragment_categories, container, false)
     }
 
     // ================================= onViewCreated() ===========================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews(view)
+        setupRecyclerView(view)
         fetchDataFromApi()
     }
 
-    // ================================= initViews  ================================================
-    private fun initViews(view: View) {
-        mealTitle = view.findViewById(R.id.mealTitle)
-        mealImage = view.findViewById(R.id.mealImage)
+    // ================================= setupRecyclerView =========================================
+    private fun setupRecyclerView(view: View) {
+        categoryRecyclerView = view.findViewById(R.id.rv_categories)
+        categoryAdapter = CategoryAdapter(categories, requireContext())
+
+        categoryRecyclerView.apply {
+            overScrollMode = View.OVER_SCROLL_NEVER
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = categoryAdapter
+        }
     }
 
     // ================================= fetchDataFromApi ==========================================
     private fun fetchDataFromApi() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val response = RetrofitHelper.retrofitService.getMealOfTheDay()
-                mealOfTheDay = response.meals?.firstOrNull()
+                val response = RetrofitHelper.retrofitService.getCategories()
+                val categories = response.categories.orEmpty()
 
                 withContext(Dispatchers.Main) {
-                    mealTitle.text = mealOfTheDay?.strMeal
-                    mealOfTheDay?.strMealThumb?.let { loadMealImage(it) }
+                    categoryAdapter.updateCategories(categories)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.e("===>", "Error Fetching Meal of the Day", e)
+                    Log.e("===>", "Error Fetching Categories", e)
                 }
             }
         }
-    }
-
-    // ================================= loadMealImage Using Glide =================================
-    private fun loadMealImage(imageUrl: String) {
-        Glide.with(this)
-            .load(imageUrl)
-            .placeholder(R.drawable.placeholder_ic)
-            .into(mealImage)
     }
 }

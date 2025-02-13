@@ -50,5 +50,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Meal_of_day">Meal OF Day</string>
     <string name="app_developer">Karam Salama</string>
-    <string name="meal_image_desc">Image OF Meal Of The Day\n</string>
+    <string name="meal_image_desc">Image OF Meal Of The Day</string>
+    <string name="categories">Categories</string>
+    <string name="breakfast">Breakfast</string>
 </resources>

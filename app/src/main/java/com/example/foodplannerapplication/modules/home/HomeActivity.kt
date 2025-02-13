@@ -16,24 +16,32 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class HomeActivity : AppCompatActivity() {
+    // ================================= Global Variables ==========================================
     private lateinit var tvUserName: TextView
     private lateinit var edtSearch: EditText
+
+    // ================================= onCreate() ================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
 
-        tvUserName = findViewById(R.id.tv_userName)
-        edtSearch = findViewById(R.id.et_search)
-
-
+        initViews()
     }
 
+    // ================================= initViews  ================================================
+    private fun initViews() {
+        tvUserName = findViewById(R.id.tv_userName)
+        edtSearch = findViewById(R.id.et_search)
+    }
+
+    // ================================= onStart() ================================================
     override fun onStart() {
         super.onStart()
         displayUserName()
     }
 
+    // ================================= displayUserName() =========================================
     private fun displayUserName() {
         val currentUser = Firebase.auth.currentUser
         Log.d(
