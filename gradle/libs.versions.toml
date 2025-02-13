@@ -14,6 +14,11 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 firebaseUiAuth = "7.2.0"
+retrofit="2.11.0"
+retrofitConverterGson = "2.11.0"
+gsonVersion = "2.11.0"
+glide = "4.16.0"
+youtubePlayer = "12.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +33,11 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie"
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-ui-auth = {group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUiAuth" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitConverterGson" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+android-youtube-player = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtubePlayer" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

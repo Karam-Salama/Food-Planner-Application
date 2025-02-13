@@ -53,11 +53,5 @@ dependencies {
     // for google authentication
     implementation(libs.firebase.ui.auth)
     // retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.gson)
-    // Network Image Viewer
-    implementation(libs.glide)
-    // Youtube Player
-    implementation(libs.android.youtube.player)
+
 }
