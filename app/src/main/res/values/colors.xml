@@ -8,4 +8,5 @@
     <color name="edt_background">#FFD7D6D7</color>
     <color name="edt_input">#FF707070</color>
     <color name="edt_error_msg">#FFD32F2F</color>
+    <color name="lightGrey">#FFF5F5F5</color>
 </resources>

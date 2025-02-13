@@ -44,4 +44,11 @@
     <string name="account_exists_with_different_credentials_error">An account already exists with a different credential.</string>
     <string name="no_user_record_error">There is no user record corresponding to this identifier. The user may have been deleted.</string>
     <string name="auth_header_image">Auth Header Image</string>
+    <string name="have_a_nice_day">Have A Nice Day</string>
+    <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Meal_of_day">Meal OF Day</string>
+    <string name="app_developer">Karam Salama</string>
+    <string name="meal_image_desc">Image OF Meal Of The Day\n</string>
 </resources>

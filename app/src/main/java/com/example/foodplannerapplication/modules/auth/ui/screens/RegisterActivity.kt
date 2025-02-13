@@ -10,9 +10,12 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.database.cache.CacheHelper
 import com.example.foodplannerapplication.core.functions.Validation
+import com.example.foodplannerapplication.core.utils.Constants
 import com.example.foodplannerapplication.modules.home.HomeActivity
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
@@ -96,13 +99,28 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun createUserWithEmailAndPassword(email: String, password: String) {
+        val fullName = edtFullName.text.toString().trim()
         val TAG = "RegisterActivity"
+
         Firebase.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")
-                    Toast.makeText(this, "Sign up successful.", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    val user = Firebase.auth.currentUser
+                    val profileUpdates = userProfileChangeRequest {
+                        displayName = fullName
+                    }
+
+                    user?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener { profileTask ->
+                            if (profileTask.isSuccessful) {
+                                Log.d(TAG, "User profile updated.")
+                                Toast.makeText(this, "Sign up successful.", Toast.LENGTH_LONG).show()
+                                startActivity(Intent(this, HomeActivity::class.java))
+                            } else {
+                                Log.w(TAG, "User profile update failed.", profileTask.exception)
+                            }
+                        }
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(this, "Sign up failed.", Toast.LENGTH_LONG).show()
