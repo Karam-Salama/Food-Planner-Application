@@ -1,0 +1,23 @@
+package com.example.foodplannerapplication.modules.home.data.services
+
+
+import com.example.foodplannerapplication.modules.home.data.models.RandomMealResponse
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+
+interface APIService {
+    // https://www.themealdb.com/api/json/v1/1/random.php
+    @GET("random.php")
+    suspend fun getMealOfTheDay(): RandomMealResponse
+}
+
+object RetrofitHelper {
+    private val BASE_URL = "https://www.themealdb.com/api/json/v1/1/"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val retrofitService = retrofit.create(APIService::class.java)
+}

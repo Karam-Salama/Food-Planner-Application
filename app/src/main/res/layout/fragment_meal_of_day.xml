@@ -65,13 +65,10 @@
         android:fontFamily="@font/poppins_bold"
         android:lineSpacingMultiplier="1.4"
         android:maxLines="1"
-        android:text="@string/app_developer"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
-
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
