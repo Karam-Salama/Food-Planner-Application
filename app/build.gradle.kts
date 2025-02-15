@@ -61,4 +61,8 @@ dependencies {
     // Youtube Player
     implementation(libs.android.youtube.player)
 
+    // Navigation Component
+    implementation(libs.nav.fragment)
+    implementation(libs.nav.ui)
+
 }
