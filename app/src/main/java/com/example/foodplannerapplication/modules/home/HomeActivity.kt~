@@ -35,7 +35,7 @@ class HomeActivity : AppCompatActivity() {
         edtSearch = findViewById(R.id.et_search)
     }
 
-    // ================================= onStart() =================================================
+    // ================================= onStart() ================================================
     override fun onStart() {
         super.onStart()
         displayUserName()

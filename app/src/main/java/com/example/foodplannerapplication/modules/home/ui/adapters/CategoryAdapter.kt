@@ -11,7 +11,11 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.home.data.models.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 
-class CategoryAdapter(private var categories: List<CategoryModel?>?, private val context: Context) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryAdapter(
+    private var categories: List<CategoryModel?>?,
+    private val context: Context,
+    private val onCategoryClick: (String?) -> Unit
+) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.category_list_item, parent, false)
@@ -25,8 +29,13 @@ class CategoryAdapter(private var categories: List<CategoryModel?>?, private val
             val description = currentItem.strCategoryDescription?.split(".")?.firstOrNull()?.trim() ?: "No description available"
             holder.categorySubTitle.text = description
             Glide.with(context).load(currentItem.strCategoryThumb).into(holder.categoryImage)
+
+            holder.itemView.setOnClickListener {
+                onCategoryClick(currentItem.strCategory)
+            }
         }
     }
+
 
 
     override fun getItemCount(): Int {

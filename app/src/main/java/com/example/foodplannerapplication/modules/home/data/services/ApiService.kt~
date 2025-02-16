@@ -8,7 +8,6 @@ import com.example.foodplannerapplication.modules.home.data.models.RandomMealRes
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface APIService {
     // https://www.themealdb.com/api/json/v1/1/random.php
@@ -21,7 +20,7 @@ interface APIService {
 
     // https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     @GET("filter.php")
-    suspend fun getMealsByCategory(@Query("c") category: String): FilterdMealsResponse
+    suspend fun getMealsByCategory(category: String): FilterdMealsResponse
 }
 
 object RetrofitHelper {

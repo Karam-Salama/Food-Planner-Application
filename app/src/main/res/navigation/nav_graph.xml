@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mealOfDayFragment">
+
+    <fragment
+        android:id="@+id/mealOfDayFragment"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.MealOfDayFragment"
+        android:label="fragment_meal_of_day"
+        tools:layout="@layout/fragment_meal_of_day" >
+        <action
+            android:id="@+id/action_mealOfDayFragment_to_randomMealDetailsFragment"
+            app:destination="@id/randomMealDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/randomMealDetailsFragment"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.RandomMealDetailsFragment"
+        android:label="fragment_random_meal_details"
+        tools:layout="@layout/fragment_random_meal_details" />
+</navigation>
