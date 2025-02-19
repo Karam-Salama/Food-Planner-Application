@@ -1,54 +1,135 @@
 package com.example.foodplannerapplication.modules.home
-
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.database.cache.CacheHelper
 import com.example.foodplannerapplication.core.utils.Constants
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class HomeActivity : AppCompatActivity() {
-    // ================================= Global Variables ==========================================
-    private lateinit var tvUserName: TextView
-    private lateinit var edtSearch: EditText
+    private lateinit var navController: NavController
+    private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var navView: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var toolbar: Toolbar
 
-    // ================================= onCreate() ================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
 
         initViews()
-    }
+        setSupportActionBar(toolbar)
 
-    // ================================= initViews  ================================================
+        initNav()
+        toggle = setupActionBarDrawerToggle()
+        handleLeadingToolbarIcon()
+        handleLeadingToolbarTitle()
+
+        NavigationUI.setupWithNavController(navView, navController)
+        bottomNavigationView.setupWithNavController(navController)
+    }
+    // =============================== init Views & Nav Controller =================================
     private fun initViews() {
-        tvUserName = findViewById(R.id.tv_userName)
-        edtSearch = findViewById(R.id.et_search)
+        navView = findViewById(R.id.nav_view)
+        drawerLayout = findViewById(R.id.main)
+        bottomNavigationView = findViewById(R.id.bottom_nav_view)
+        toolbar = findViewById(R.id.tool_bar)
     }
 
-    // ================================= onStart() =================================================
-    override fun onStart() {
-        super.onStart()
-        displayUserName()
+    private fun initNav() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
+        navController = navHostFragment.navController
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.addMealFragment) {
+                bottomNavigationView.visibility = View.GONE
+            } else {
+                bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
     }
 
-    // ================================= displayUserName() =========================================
-    private fun displayUserName() {
-        val currentUser = Firebase.auth.currentUser
-        Log.d(
-            "HomeActivity",
-            "================ onStart: ${currentUser?.displayName} ====================="
-        )
-        tvUserName.text = currentUser?.displayName ?: "Guest"
+
+    // =============================== Setup Drawer Toggle & Toolbar Handling ======================
+    private fun setupActionBarDrawerToggle(): ActionBarDrawerToggle {
+        return ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        ).apply {
+            drawerLayout.addDrawerListener(this)
+            syncState()
+        }
     }
 
+    private fun handleLeadingToolbarTitle() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.fragmentHome -> toolbar.title = "Home"
+                R.id.fragmentFavorite -> toolbar.title = "Favorites"
+                R.id.fragmentSearch -> toolbar.title = "Search"
+                R.id.fragmentSetting -> toolbar.title = "Settings"
+                R.id.addMealFragment -> toolbar.title = "Add Meal"
+                else -> toolbar.title = "FoodDay"
+            }
+        }
+    }
+
+    private fun handleLeadingToolbarIcon() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val isHomeFragment = destination.id == R.id.fragmentHome
+            val actionBar = supportActionBar
+
+            if (isHomeFragment) {
+                toggle.isDrawerIndicatorEnabled = true
+                actionBar?.setDisplayHomeAsUpEnabled(false)
+                actionBar?.setHomeAsUpIndicator(R.drawable.menu_icon)
+                toggle.setToolbarNavigationClickListener(null)
+            } else {
+                toggle.isDrawerIndicatorEnabled = false
+                actionBar?.setDisplayHomeAsUpEnabled(true)
+                actionBar?.setHomeAsUpIndicator(R.drawable.arrow_back_icon)
+                toggle.setToolbarNavigationClickListener {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        }
+    }
+
+    // =============================== Handle Drawer Menu List Clicks ==============================
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
