@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.safe.args)
 }
 
 android {
@@ -61,8 +63,14 @@ dependencies {
     // Youtube Player
     implementation(libs.android.youtube.player)
 
-    // Navigation Component
-    implementation(libs.nav.fragment)
-    implementation(libs.nav.ui)
+    // Room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    testImplementation(libs.room.testing)
+    kapt(libs.room.compiler)
 
+    // Navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 }
