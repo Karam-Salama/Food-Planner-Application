@@ -126,7 +126,7 @@ class FragmentHome : Fragment() {
 
         categoryRecyclerView.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = categoryAdapter
         }
     }

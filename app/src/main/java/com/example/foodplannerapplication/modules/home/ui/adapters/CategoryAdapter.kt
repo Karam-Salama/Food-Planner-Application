@@ -20,7 +20,7 @@ class CategoryAdapter(
 
     @SuppressLint("ResourceType")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.drawable.category_list_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.category_list_item, parent, false)
         return CategoryViewHolder(itemView)
     }
 
@@ -28,8 +28,6 @@ class CategoryAdapter(
         val currentItem = categories?.get(position)
         if (currentItem != null) {
             holder.categoryTitle.text = currentItem.strCategory
-            val description = currentItem.strCategoryDescription?.split(".")?.firstOrNull()?.trim() ?: "No description available"
-            holder.categorySubTitle.text = description
             Glide.with(context).load(currentItem.strCategoryThumb).into(holder.categoryImage)
 
             holder.itemView.setOnClickListener {
@@ -52,6 +50,5 @@ class CategoryAdapter(
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
         val categoryImage = itemView.findViewById<ShapeableImageView>(R.id.itemImage)
         val categoryTitle = itemView.findViewById<TextView>(R.id.itemTitle)
-        val categorySubTitle = itemView.findViewById<TextView>(R.id.itemSubTitle)
     }
 }
