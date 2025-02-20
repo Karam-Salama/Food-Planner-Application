@@ -1,20 +1,45 @@
 package com.example.foodplannerapplication.modules.home.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.modules.home.data.server.models.CategoryModel
+import com.example.foodplannerapplication.modules.home.data.server.models.MealModel
+import com.example.foodplannerapplication.modules.home.data.server.services.RetrofitHelper
+import com.example.foodplannerapplication.modules.home.ui.adapters.CategoryAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.imageview.ShapeableImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FragmentHome : Fragment() {
+    private lateinit var categoryRecyclerView: RecyclerView
+    private lateinit var categoryAdapter: CategoryAdapter
+    private var categories: List<CategoryModel?>? = null
+
+    private lateinit var mealTitle: TextView
+    private lateinit var mealImage: ShapeableImageView
+    private var mealOfTheDay: MealModel? = null
+
     private lateinit var addMealFab: FloatingActionButton
+
+    // ================================ onCreateView ===============================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -23,21 +48,112 @@ class FragmentHome : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    // ================================= onViewCreated =============================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViews(view)
+        setupActionBar()
+        setupNavigationDrawer(view)
+        setupFab(view)
+        fetchRandomMealFromApi()
+        setupRecyclerView(view)
+        fetchCategoriesFromApi()
+
+    }
+
+    // ================================= Setup ActionBar ===========================================
+    private fun setupActionBar() {
         val activity = activity as? AppCompatActivity
         activity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
+    // ================================ Setup Navigation Drawer ====================================
+    private fun setupNavigationDrawer(view: View) {
+        val activity = activity as? AppCompatActivity
         val drawerLayout = activity?.findViewById<DrawerLayout>(R.id.main)
-        addMealFab = view.findViewById(R.id.add_meal_fab)
-
-        addMealFab.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentHome_to_addMealFragment)
-        }
-
         view.findViewById<Toolbar>(R.id.tool_bar)?.setNavigationOnClickListener {
             drawerLayout?.openDrawer(GravityCompat.START)
         }
     }
+
+    // ================================ Setup Floating Action Button  ==============================
+    private fun setupFab(view: View) {
+        addMealFab = view.findViewById(R.id.add_meal_fab)
+        addMealFab.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentHome_to_addMealFragment)
+        }
+    }
+
+    // ================================= initViews For Random Meal =================================
+    private fun initViews(view: View) {
+        mealTitle = view.findViewById(R.id.mealTitle)
+        mealImage = view.findViewById(R.id.mealImage)
+    }
+
+    // =============== fetchRandomMealFromApi & loadMealImage Using Glide ==========================
+    private fun fetchRandomMealFromApi() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = RetrofitHelper.retrofitService.getMealOfTheDay()
+                mealOfTheDay = response.meals?.firstOrNull()
+
+                withContext(Dispatchers.Main) {
+                    mealTitle.text = mealOfTheDay?.strMeal
+                    mealOfTheDay?.strMealThumb?.let { loadMealImage(it) }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("===>", "Error Fetching Meal of the Day", e)
+                }
+            }
+        }
+    }
+
+    private fun loadMealImage(imageUrl: String) {
+        Glide.with(this)
+            .load(imageUrl)
+            .placeholder(R.drawable.placeholder_ic)
+            .into(mealImage)
+    }
+
+    // =============== fetchCategoriesFromApi &  setupRecyclerView =================================
+    private fun setupRecyclerView(view: View) {
+        categoryRecyclerView = view.findViewById(R.id.rv_categories)
+        categoryAdapter = CategoryAdapter(null, requireContext()) { category ->
+            openMealsActivity(category)
+        }
+
+        categoryRecyclerView.apply {
+            overScrollMode = View.OVER_SCROLL_NEVER
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = categoryAdapter
+        }
+    }
+
+    private fun openMealsActivity(category: String?) {
+//        val intent = Intent(requireContext(), FilteredMealsActivity::class.java)
+//        intent.putExtra("CATEGORY_NAME", category)
+//        startActivity(intent)
+
+        Toast.makeText(this.requireContext(), category, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun fetchCategoriesFromApi() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = RetrofitHelper.retrofitService.getCategories()
+                val categories = response.categories.orEmpty()
+
+                withContext(Dispatchers.Main) {
+                    categoryAdapter.updateCategories(categories)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("===>", "Error Fetching Categories", e)
+                }
+            }
+        }
+    }
+
 }

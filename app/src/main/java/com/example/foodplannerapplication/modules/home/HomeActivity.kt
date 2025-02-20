@@ -1,6 +1,7 @@
 package com.example.foodplannerapplication.modules.home
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
@@ -25,7 +26,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-
 class HomeActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
@@ -50,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(navView, navController)
         bottomNavigationView.setupWithNavController(navController)
     }
+
     // =============================== init Views & Nav Controller =================================
     private fun initViews() {
         navView = findViewById(R.id.nav_view)
@@ -63,14 +64,10 @@ class HomeActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.addMealFragment) {
-                bottomNavigationView.visibility = View.GONE
-            } else {
-                bottomNavigationView.visibility = View.VISIBLE
-            }
+            bottomNavigationView.visibility = if (destination.id == R.id.addMealFragment) View.GONE else View.VISIBLE
+            invalidateOptionsMenu() // تحديث القائمة عند تغيير الوجهة
         }
     }
-
 
     // =============================== Setup Drawer Toggle & Toolbar Handling ======================
     private fun setupActionBarDrawerToggle(): ActionBarDrawerToggle {
@@ -87,12 +84,26 @@ class HomeActivity : AppCompatActivity() {
     private fun handleLeadingToolbarTitle() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.fragmentHome -> toolbar.title = "Home"
-                R.id.fragmentFavorite -> toolbar.title = "Favorites"
-                R.id.fragmentSearch -> toolbar.title = "Search"
-                R.id.fragmentSetting -> toolbar.title = "Settings"
-                R.id.addMealFragment -> toolbar.title = "Add Meal"
-                else -> toolbar.title = "FoodDay"
+                R.id.fragmentHome -> {
+                    toolbar.title = "Have A Nice Day"
+                    toolbar.subtitle = Firebase.auth.currentUser?.displayName
+                }
+                R.id.fragmentFavorite, R.id.fragmentSearch, R.id.fragmentSetting -> {
+                    toolbar.title = when (destination.id) {
+                        R.id.fragmentFavorite -> "Favorites"
+                        R.id.fragmentSearch -> "Search"
+                        else -> "Settings"
+                    }
+                    toolbar.subtitle = ""
+                }
+                R.id.addMealFragment -> {
+                    toolbar.title = "Add Meal"
+                    toolbar.subtitle = ""
+                }
+                else -> {
+                    toolbar.title = "FoodDay"
+                    toolbar.subtitle = ""
+                }
             }
         }
     }
@@ -115,6 +126,8 @@ class HomeActivity : AppCompatActivity() {
                     onBackPressedDispatcher.onBackPressed()
                 }
             }
+
+            invalidateOptionsMenu()
         }
     }
 
@@ -131,5 +144,12 @@ class HomeActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val menuItemProfile = menu?.findItem(R.id.profile_image)
+        menuItemProfile?.isVisible = navController.currentDestination?.id == R.id.fragmentHome
+        return true
     }
 }
