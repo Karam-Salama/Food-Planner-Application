@@ -1,4 +1,4 @@
-package com.example.foodplannerapplication.core.database.cache
+package com.example.foodplannerapplication.core.cache
 
 import android.content.Context
 import android.content.SharedPreferences

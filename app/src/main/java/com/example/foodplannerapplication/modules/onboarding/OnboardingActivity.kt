@@ -9,7 +9,7 @@ import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.database.cache.CacheHelper
+import com.example.foodplannerapplication.core.cache.CacheHelper
 import com.example.foodplannerapplication.core.functions.hideStatusAndNavBar.hideStatusAndNavBar
 import com.example.foodplannerapplication.core.utils.Constants
 import com.example.foodplannerapplication.modules.auth.ui.screens.LoginActivity

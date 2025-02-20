@@ -19,7 +19,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.database.cache.CacheHelper
+import com.example.foodplannerapplication.core.cache.CacheHelper
 import com.example.foodplannerapplication.core.utils.Constants
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView

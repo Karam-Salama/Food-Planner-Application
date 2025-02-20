@@ -1,4 +1,4 @@
-package com.example.foodplannerapplication.modules.home.data.models
+package com.example.foodplannerapplication.modules.home.data.server.models
 
 data class CategoryResponse(
     val categories: List<CategoryModel?>?

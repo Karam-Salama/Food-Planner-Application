@@ -1,13 +1,14 @@
-package com.example.foodplannerapplication.modules.home.data.services
+package com.example.foodplannerapplication.modules.home.data.server.services
 
 
-import com.example.foodplannerapplication.modules.home.data.models.CategoryResponse
-import com.example.foodplannerapplication.modules.home.data.models.FilterdMealsResponse
-import com.example.foodplannerapplication.modules.home.data.models.MealModel
-import com.example.foodplannerapplication.modules.home.data.models.RandomMealResponse
+import com.example.foodplannerapplication.modules.home.data.server.models.CategoryResponse
+import com.example.foodplannerapplication.modules.home.data.server.models.FilterdMealsResponse
+import com.example.foodplannerapplication.modules.home.data.server.models.MealModel
+import com.example.foodplannerapplication.modules.home.data.server.models.RandomMealResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface APIService {
     // https://www.themealdb.com/api/json/v1/1/random.php
@@ -20,7 +21,7 @@ interface APIService {
 
     // https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     @GET("filter.php")
-    suspend fun getMealsByCategory(category: String): FilterdMealsResponse
+    suspend fun getMealsByCategory(@Query("c") category: String): FilterdMealsResponse
 }
 
 object RetrofitHelper {
