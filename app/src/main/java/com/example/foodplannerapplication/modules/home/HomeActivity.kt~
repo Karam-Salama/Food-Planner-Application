@@ -67,7 +67,6 @@ class HomeActivity : AppCompatActivity() {
             bottomNavigationView.visibility = when (destination.id) {
                 R.id.addMealFragment ->View.GONE
                 R.id.randomMealDetailFragment ->View.GONE
-                R.id.filteredMealsByCategoryFragment ->View.GONE
                 else -> View.VISIBLE
             }
             invalidateOptionsMenu()

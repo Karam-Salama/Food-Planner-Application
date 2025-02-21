@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
@@ -37,6 +38,8 @@ class FragmentHome : Fragment() {
     private lateinit var mealImage: ShapeableImageView
     private var mealOfTheDay: MealModel? = null
 
+    private lateinit var randomMealLayout: ConstraintLayout
+
     private lateinit var addMealFab: FloatingActionButton
 
     // ================================ onCreateView ===============================================
@@ -53,6 +56,7 @@ class FragmentHome : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews(view)
+        setUpListeners()
         setupActionBar()
         setupNavigationDrawer(view)
         setupFab(view)
@@ -89,6 +93,13 @@ class FragmentHome : Fragment() {
     private fun initViews(view: View) {
         mealTitle = view.findViewById(R.id.mealTitle)
         mealImage = view.findViewById(R.id.mealImage)
+        randomMealLayout = view.findViewById(R.id.mealContainer)
+    }
+
+    private fun setUpListeners() {
+        randomMealLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentHome_to_randomMealDetailFragment)
+        }
     }
 
     // =============== fetchRandomMealFromApi & loadMealImage Using Glide ==========================
@@ -136,7 +147,9 @@ class FragmentHome : Fragment() {
 //        intent.putExtra("CATEGORY_NAME", category)
 //        startActivity(intent)
 
-        Toast.makeText(this.requireContext(), category, Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_fragmentHome_to_filteredMealsByCategoryFragment)
+
+//         Toast.makeText(this.requireContext(), category, Toast.LENGTH_SHORT).show()
     }
 
     private fun fetchCategoriesFromApi() {

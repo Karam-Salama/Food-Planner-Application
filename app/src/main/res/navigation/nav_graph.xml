@@ -14,6 +14,12 @@
         <action
             android:id="@+id/action_fragmentHome_to_addMealFragment"
             app:destination="@id/addMealFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_randomMealDetailFragment"
+            app:destination="@id/randomMealDetailFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_filteredMealsByCategoryFragment"
+            app:destination="@id/filteredMealsByCategoryFragment" />
     </fragment>
 
     <fragment
@@ -64,5 +70,15 @@
         android:name="com.example.foodplannerapplication.modules.home.ui.fragments.AddMealFragment"
         android:label="fragment_add_meal"
         tools:layout="@layout/fragment_add_meal" />
+    <fragment
+        android:id="@+id/randomMealDetailFragment"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.RandomMealDetailFragment"
+        android:label="fragment_random_meal_detail"
+        tools:layout="@layout/fragment_random_meal_detail" />
+    <fragment
+        android:id="@+id/filteredMealsByCategoryFragment"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FilteredMealsByCategoryFragment"
+        android:label="fragment_filtered_meals_by_category"
+        tools:layout="@layout/fragment_filtered_meals_by_category" />
 
 </navigation>
