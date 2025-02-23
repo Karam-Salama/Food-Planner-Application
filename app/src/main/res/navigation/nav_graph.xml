@@ -74,11 +74,23 @@
         android:id="@+id/randomMealDetailFragment"
         android:name="com.example.foodplannerapplication.modules.home.ui.fragments.RandomMealDetailFragment"
         android:label="fragment_random_meal_detail"
-        tools:layout="@layout/fragment_random_meal_detail" />
+        tools:layout="@layout/fragment_random_meal_detail" >
+        <argument
+            android:name="mealId"
+            app:nullable="true"
+            android:defaultValue="52772"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/filteredMealsByCategoryFragment"
         android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FilteredMealsByCategoryFragment"
         android:label="fragment_filtered_meals_by_category"
-        tools:layout="@layout/fragment_filtered_meals_by_category" />
+        tools:layout="@layout/fragment_filtered_meals_by_category" >
+        <argument
+            android:name="categoryName"
+            app:nullable="true"
+            android:defaultValue="Beef"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

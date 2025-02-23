@@ -98,7 +98,9 @@ class FragmentHome : Fragment() {
 
     private fun setUpListeners() {
         randomMealLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentHome_to_randomMealDetailFragment)
+            val actionFragmentHomeToRandomMealDetailFragment =
+                FragmentHomeDirections.actionFragmentHomeToRandomMealDetailFragment(mealOfTheDay?.idMeal)
+            findNavController().navigate(actionFragmentHomeToRandomMealDetailFragment)
         }
     }
 
@@ -108,7 +110,6 @@ class FragmentHome : Fragment() {
             try {
                 val response = RetrofitHelper.retrofitService.getMealOfTheDay()
                 mealOfTheDay = response.meals?.firstOrNull()
-
                 withContext(Dispatchers.Main) {
                     mealTitle.text = mealOfTheDay?.strMeal
                     mealOfTheDay?.strMealThumb?.let { loadMealImage(it) }
@@ -143,13 +144,9 @@ class FragmentHome : Fragment() {
     }
 
     private fun openMealsActivity(category: String?) {
-//        val intent = Intent(requireContext(), FilteredMealsActivity::class.java)
-//        intent.putExtra("CATEGORY_NAME", category)
-//        startActivity(intent)
-
-        findNavController().navigate(R.id.action_fragmentHome_to_filteredMealsByCategoryFragment)
-
-//         Toast.makeText(this.requireContext(), category, Toast.LENGTH_SHORT).show()
+        val actionFragmentHomeToFilteredMealsByCategoryFragment =
+            FragmentHomeDirections.actionFragmentHomeToFilteredMealsByCategoryFragment(category)
+        findNavController().navigate(actionFragmentHomeToFilteredMealsByCategoryFragment)
     }
 
     private fun fetchCategoriesFromApi() {

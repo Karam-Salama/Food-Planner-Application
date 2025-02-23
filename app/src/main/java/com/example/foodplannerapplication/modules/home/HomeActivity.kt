@@ -106,7 +106,10 @@ class HomeActivity : AppCompatActivity() {
                     toolbar.subtitle = ""
                 }
                 R.id.randomMealDetailFragment -> {
-                    toolbar.title = "Random Meal"
+                    toolbar.title = "Meal Details"
+                    toolbar.subtitle = ""
+                } R.id.filteredMealsByCategoryFragment -> {
+                    toolbar.title = "Filtered Meals"
                     toolbar.subtitle = ""
                 }
                 else -> {

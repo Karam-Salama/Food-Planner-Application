@@ -15,13 +15,17 @@ interface APIService {
     @GET("random.php")
     suspend fun getMealOfTheDay(): RandomMealResponse
 
+    // https://www.themealdb.com/api/json/v1/1/lookup.php?i=52848
+    @GET("lookup.php")
+    suspend fun getMealById(@Query("i") id: String?): RandomMealResponse
+
     // https://www.themealdb.com/api/json/v1/1/categories.php
     @GET("categories.php")
     suspend fun getCategories(): CategoryResponse
 
     // https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     @GET("filter.php")
-    suspend fun getMealsByCategory(@Query("c") category: String): FilterdMealsResponse
+    suspend fun getMealsByCategory(@Query("c") category: String?): FilterdMealsResponse
 }
 
 object RetrofitHelper {
