@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_fragmentHome_to_filteredMealsByCategoryFragment"
             app:destination="@id/filteredMealsByCategoryFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_filteredMealsByAreaFragment"
+            app:destination="@id/filteredMealsByAreaFragment" />
     </fragment>
 
     <fragment
@@ -91,6 +94,17 @@
             app:nullable="true"
             android:defaultValue="Beef"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/filteredMealsByAreaFragment"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FilteredMealsByAreaFragment"
+        android:label="fragment_filtered_meals_by_area"
+        tools:layout="@layout/fragment_filtered_meals_by_area" >
+        <argument
+            android:name="areaName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="Egyptian" />
     </fragment>
 
 </navigation>

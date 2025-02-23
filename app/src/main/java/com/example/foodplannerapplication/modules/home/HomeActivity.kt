@@ -111,6 +111,9 @@ class HomeActivity : AppCompatActivity() {
                 } R.id.filteredMealsByCategoryFragment -> {
                     toolbar.title = "Filtered Meals"
                     toolbar.subtitle = ""
+                } R.id.filteredMealsByAreaFragment -> {
+                    toolbar.title = "Filtered Meals"
+                    toolbar.subtitle = ""
                 }
                 else -> {
                     toolbar.title = "FoodDay"

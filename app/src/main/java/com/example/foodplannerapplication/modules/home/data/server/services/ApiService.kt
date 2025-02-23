@@ -1,6 +1,7 @@
 package com.example.foodplannerapplication.modules.home.data.server.services
 
 
+import com.example.foodplannerapplication.modules.home.data.server.models.AreaResponse
 import com.example.foodplannerapplication.modules.home.data.server.models.CategoryResponse
 import com.example.foodplannerapplication.modules.home.data.server.models.FilterdMealsResponse
 import com.example.foodplannerapplication.modules.home.data.server.models.MealModel
@@ -26,6 +27,14 @@ interface APIService {
     // https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     @GET("filter.php")
     suspend fun getMealsByCategory(@Query("c") category: String?): FilterdMealsResponse
+
+    // https://www.themealdb.com/api/json/v1/1/filter.php?a=Italian
+    @GET("filter.php")
+    suspend fun getMealsByArea(@Query("a") area: String?): FilterdMealsResponse
+
+    // https://www.themealdb.com/api/json/v1/1/list.php?a=list
+    @GET("list.php?a=list")
+    suspend fun getAreas(): AreaResponse
 }
 
 object RetrofitHelper {
