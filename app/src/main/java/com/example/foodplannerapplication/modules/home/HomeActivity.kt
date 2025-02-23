@@ -68,6 +68,8 @@ class HomeActivity : AppCompatActivity() {
                 R.id.addMealFragment ->View.GONE
                 R.id.randomMealDetailFragment ->View.GONE
                 R.id.filteredMealsByCategoryFragment ->View.GONE
+                R.id.filteredMealsByAreaFragment ->View.GONE
+                R.id.mealDatailsFragment ->View.GONE
                 else -> View.VISIBLE
             }
             invalidateOptionsMenu()
@@ -105,7 +107,7 @@ class HomeActivity : AppCompatActivity() {
                     toolbar.title = "Add Meal"
                     toolbar.subtitle = ""
                 }
-                R.id.randomMealDetailFragment -> {
+                R.id.randomMealDetailFragment, R.id.mealDatailsFragment -> {
                     toolbar.title = "Meal Details"
                     toolbar.subtitle = ""
                 } R.id.filteredMealsByCategoryFragment -> {

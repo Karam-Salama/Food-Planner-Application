@@ -38,6 +38,11 @@ class FilteredMealsByAreaAdapter(private var filteredMeals: List<FilteredMealMod
         return filteredMeals?.size ?: 0
     }
 
+    fun updateFilteredMeals(newFilteredMeals: List<FilteredMealModel?>?) {
+        filteredMeals = newFilteredMeals
+        notifyDataSetChanged()
+    }
+
     class FilteredMealsByAreaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mealTitle = itemView.findViewById<TextView>(R.id.tv_mealName)
         val mealImage = itemView.findViewById<ShapeableImageView>(R.id.si_mealImage)

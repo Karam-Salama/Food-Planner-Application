@@ -12,8 +12,11 @@ import com.example.foodplannerapplication.modules.home.data.server.models.Filter
 import com.example.foodplannerapplication.modules.home.ui.adapters.FilteredMealsByCategoryAdapter.CategoryViewHolder
 import com.google.android.material.imageview.ShapeableImageView
 
-class FilteredMealsByAreaAdapter(private var filteredMeals: List<FilteredMealModel?>?,
-                                 private val context: Context) : RecyclerView.Adapter<FilteredMealsByAreaAdapter.FilteredMealsByAreaViewHolder>() {
+class FilteredMealsByAreaAdapter(
+    private var filteredMeals: List<FilteredMealModel?>?,
+    private val context: Context,
+    private val onFilteredMealClick: (String?) -> Unit
+) : RecyclerView.Adapter<FilteredMealsByAreaAdapter.FilteredMealsByAreaViewHolder>() {
 
 
     override fun onCreateViewHolder(
@@ -31,6 +34,10 @@ class FilteredMealsByAreaAdapter(private var filteredMeals: List<FilteredMealMod
         if (currentItem != null) {
             Glide.with(context).load(currentItem.strMealThumb).into(holder.mealImage)
             holder.mealTitle.text = currentItem.strMeal
+        }
+
+        holder.itemView.setOnClickListener {
+            onFilteredMealClick(currentItem?.idMeal)
         }
     }
 

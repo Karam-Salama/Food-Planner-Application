@@ -16,6 +16,7 @@ import com.google.android.material.imageview.ShapeableImageView
 class FilteredMealsByCategoryAdapter(
     private var filteredMeals: List<FilteredMealModel?>?,
     private val context: Context,
+    private val onFilteredMealClick: (String?) -> Unit
 ) : RecyclerView.Adapter<FilteredMealsByCategoryAdapter.CategoryViewHolder>() {
 
     @SuppressLint("ResourceType")
@@ -29,6 +30,9 @@ class FilteredMealsByCategoryAdapter(
         if (currentItem != null) {
             Glide.with(context).load(currentItem.strMealThumb).into(holder.mealImage)
             holder.mealTitle.text = currentItem.strMeal
+        }
+        holder.itemView.setOnClickListener {
+            onFilteredMealClick(currentItem?.idMeal)
         }
     }
 

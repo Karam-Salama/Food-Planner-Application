@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,13 +47,24 @@ class FilteredMealsByCategoryFragment : Fragment() {
     // =============== fetchCategoriesFromApi &  setupRecyclerView =================================
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByCategory = view.findViewById(R.id.rv_filteredMealsByCategory)
-        filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext())
+        filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext(), {
+                meal -> openMealsDetailsActivity(meal)
+            }
+        )
 
         rvFilteredMealsByCategory.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = filteredMealsByCategoryAdapter
         }
+    }
+
+    private fun openMealsDetailsActivity(mealId: String?) {
+        val actionFilteredMealsByCategoryFragmentToMealDatailsFragment =
+            FilteredMealsByCategoryFragmentDirections.actionFilteredMealsByCategoryFragmentToMealDatailsFragment(
+                mealId
+            )
+        findNavController().navigate(actionFilteredMealsByCategoryFragmentToMealDatailsFragment)
     }
 
     // =============== fetchRandomMealFromApi & loadMealImage Using Glide ==========================

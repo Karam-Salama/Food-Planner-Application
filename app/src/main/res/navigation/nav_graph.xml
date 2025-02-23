@@ -94,6 +94,9 @@
             app:nullable="true"
             android:defaultValue="Beef"
             app:argType="string" />
+        <action
+            android:id="@+id/action_filteredMealsByCategoryFragment_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/filteredMealsByAreaFragment"
@@ -105,6 +108,20 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="Egyptian" />
+        <action
+            android:id="@+id/action_filteredMealsByAreaFragment_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealDatailsFragment"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.MealDatailsFragment"
+        android:label="fragment_meal_datails"
+        tools:layout="@layout/fragment_meal_datails" >
+        <argument
+            android:name="mealId"
+            app:nullable="true"
+            android:defaultValue="52772"
+            app:argType="string" />
     </fragment>
 
 </navigation>
