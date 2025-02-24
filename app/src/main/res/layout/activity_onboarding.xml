@@ -9,7 +9,7 @@
     android:background="@color/lightGrey"
     android:scrollbars="none"
     android:overScrollMode="never"
-    tools:context=".modules.onboarding.OnboardingActivity">
+    tools:context=".modules.onboarding.view.OnboardingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragmentHome"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FragmentHome"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FragmentHome"
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
@@ -27,25 +27,25 @@
 
     <fragment
         android:id="@+id/fragmentFavorite"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FragmentFavorite"
+        android:name="com.example.foodplannerapplication.modules.favorite.view.FragmentFavorite"
         android:label="Favorite"
         tools:layout="@layout/fragment_favorite"/>
 
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FragmentSearch"
+        android:name="com.example.foodplannerapplication.modules.search.view.FragmentSearch"
         android:label="Search"
         tools:layout="@layout/fragment_search"/>
 
     <fragment
         android:id="@+id/fragmentSetting"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FragmentSetting"
+        android:name="com.example.foodplannerapplication.modules.settings.view.FragmentSetting"
         android:label="Settings"
         tools:layout="@layout/fragment_setting"/>
 
     <fragment
         android:id="@+id/fragmentDashboard"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FragmentDashboard"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FragmentDashboard"
         android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard">
 
@@ -73,12 +73,12 @@
     </fragment>
     <fragment
         android:id="@+id/addMealFragment"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.AddMealFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.AddMealFragment"
         android:label="fragment_add_meal"
         tools:layout="@layout/fragment_add_meal" />
     <fragment
         android:id="@+id/filteredMealsByCategoryFragment"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FilteredMealsByCategoryFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FilteredMealsByCategoryFragment"
         android:label="fragment_filtered_meals_by_category"
         tools:layout="@layout/fragment_filtered_meals_by_category" >
         <argument
@@ -92,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/filteredMealsByAreaFragment"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FilteredMealsByAreaFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FilteredMealsByAreaFragment"
         android:label="fragment_filtered_meals_by_area"
         tools:layout="@layout/fragment_filtered_meals_by_area" >
         <argument
@@ -106,7 +106,7 @@
     </fragment>
     <fragment
         android:id="@+id/mealDatailsFragment"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.MealDatailsFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.MealDatailsFragment"
         android:label="fragment_meal_datails"
         tools:layout="@layout/fragment_meal_datails" >
         <argument
@@ -117,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentWeeklyPlans"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.WeeklyPlansFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.WeeklyPlansFragment"
         android:label="fragment_weekly_plans"
         tools:layout="@layout/fragment_weekly_plans" />
 

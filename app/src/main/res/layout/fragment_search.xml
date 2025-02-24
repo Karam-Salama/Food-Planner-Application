@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/lightGrey"
-    tools:context=".modules.home.ui.fragments.FragmentSearch">
+    tools:context=".modules.search.view.FragmentSearch">
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"

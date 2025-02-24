@@ -9,13 +9,13 @@
     android:background="@color/lightGrey"
     android:scrollbars="none"
     android:overScrollMode="never"
-    tools:context=".modules.auth.ui.screens.RegisterActivity">
+    tools:context=".modules.auth.view.RegisterActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".modules.auth.ui.screens.RegisterActivity">
+        tools:context=".modules.auth.view.RegisterActivity">
 
         <ImageView
             android:id="@+id/imageView"
