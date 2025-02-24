@@ -62,6 +62,7 @@
     <string name="mealname">mealName</string>
     <string name="instructions">Instructions</string>
     <string name="ingredients">Ingredients</string>
+    <string name="plans">Plans</string>
 
     <string-array name="meal_types">
         <item>Breakfast</item>

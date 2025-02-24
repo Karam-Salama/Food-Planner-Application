@@ -18,6 +18,11 @@
         android:title="@string/search" />
 
     <item
+        android:id="@+id/fragmentWeeklyPlans"
+        android:icon="@drawable/restaurant_icon"
+        android:title="@string/plans" />
+
+    <item
         android:id="@+id/fragmentSetting"
         android:icon="@drawable/settings_icon"
         android:title="@string/settings" />

@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_fragmentDashboard_to_fragmentFavorite"
             app:destination="@id/fragmentFavorite" />
+        <action
+            android:id="@+id/action_fragmentDashboard_to_weeklyPlansFragment"
+            app:destination="@id/fragmentWeeklyPlans" />
 
     </fragment>
     <fragment
@@ -112,5 +115,10 @@
             android:defaultValue="52772"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentWeeklyPlans"
+        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.WeeklyPlansFragment"
+        android:label="fragment_weekly_plans"
+        tools:layout="@layout/fragment_weekly_plans" />
 
 </navigation>

@@ -4,17 +4,21 @@
     <item
         android:id="@+id/fragmentHome"
         android:icon="@drawable/home_icon"
-        android:title="Home" />
+        android:title="@string/home" />
     <item
         android:id="@+id/fragmentFavorite"
         android:icon="@drawable/favorite_icon"
-        android:title="Favorite" />
+        android:title="@string/favorite" />
     <item
         android:id="@+id/fragmentSearch"
         android:icon="@drawable/search_icon"
-        android:title="Search" />
+        android:title="@string/search" />
+    <item
+        android:id="@+id/fragmentWeeklyPlans"
+        android:icon="@drawable/restaurant_icon"
+        android:title="@string/plans" />
     <item
         android:id="@+id/fragmentSetting"
         android:icon="@drawable/settings_icon"
-        android:title="Settings" />
+        android:title="@string/settings" />
 </menu>

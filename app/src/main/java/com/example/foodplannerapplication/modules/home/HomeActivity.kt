@@ -94,10 +94,11 @@ class HomeActivity : AppCompatActivity() {
                     toolbar.title = "Have A Nice Day"
                     toolbar.subtitle = Firebase.auth.currentUser?.displayName
                 }
-                R.id.fragmentFavorite, R.id.fragmentSearch, R.id.fragmentSetting -> {
+                R.id.fragmentFavorite, R.id.fragmentSearch,R.id.fragmentWeeklyPlans, R.id.fragmentSetting -> {
                     toolbar.title = when (destination.id) {
                         R.id.fragmentFavorite -> "Favorites"
                         R.id.fragmentSearch -> "Search"
+                        R.id.fragmentWeeklyPlans -> "Plans"
                         else -> "Settings"
                     }
                     toolbar.subtitle = ""
