@@ -15,14 +15,14 @@
             android:id="@+id/action_fragmentHome_to_addMealFragment"
             app:destination="@id/addMealFragment" />
         <action
-            android:id="@+id/action_fragmentHome_to_randomMealDetailFragment"
-            app:destination="@id/randomMealDetailFragment" />
-        <action
             android:id="@+id/action_fragmentHome_to_filteredMealsByCategoryFragment"
             app:destination="@id/filteredMealsByCategoryFragment" />
         <action
             android:id="@+id/action_fragmentHome_to_filteredMealsByAreaFragment"
             app:destination="@id/filteredMealsByAreaFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
     </fragment>
 
     <fragment
@@ -73,17 +73,6 @@
         android:name="com.example.foodplannerapplication.modules.home.ui.fragments.AddMealFragment"
         android:label="fragment_add_meal"
         tools:layout="@layout/fragment_add_meal" />
-    <fragment
-        android:id="@+id/randomMealDetailFragment"
-        android:name="com.example.foodplannerapplication.modules.home.ui.fragments.RandomMealDetailFragment"
-        android:label="fragment_random_meal_detail"
-        tools:layout="@layout/fragment_random_meal_detail" >
-        <argument
-            android:name="mealId"
-            app:nullable="true"
-            android:defaultValue="52772"
-            app:argType="string" />
-    </fragment>
     <fragment
         android:id="@+id/filteredMealsByCategoryFragment"
         android:name="com.example.foodplannerapplication.modules.home.ui.fragments.FilteredMealsByCategoryFragment"

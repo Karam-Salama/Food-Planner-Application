@@ -66,7 +66,6 @@ class HomeActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             bottomNavigationView.visibility = when (destination.id) {
                 R.id.addMealFragment ->View.GONE
-                R.id.randomMealDetailFragment ->View.GONE
                 R.id.filteredMealsByCategoryFragment ->View.GONE
                 R.id.filteredMealsByAreaFragment ->View.GONE
                 R.id.mealDatailsFragment ->View.GONE
@@ -107,7 +106,7 @@ class HomeActivity : AppCompatActivity() {
                     toolbar.title = "Add Meal"
                     toolbar.subtitle = ""
                 }
-                R.id.randomMealDetailFragment, R.id.mealDatailsFragment -> {
+                 R.id.mealDatailsFragment -> {
                     toolbar.title = "Meal Details"
                     toolbar.subtitle = ""
                 } R.id.filteredMealsByCategoryFragment -> {

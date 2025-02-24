@@ -106,7 +106,7 @@ class FragmentHome : Fragment() {
     private fun setUpListeners() {
         randomMealLayout.setOnClickListener {
             val actionFragmentHomeToRandomMealDetailFragment =
-                FragmentHomeDirections.actionFragmentHomeToRandomMealDetailFragment(mealOfTheDay?.idMeal)
+                FragmentHomeDirections.actionFragmentHomeToMealDatailsFragment(mealOfTheDay?.idMeal)
             findNavController().navigate(actionFragmentHomeToRandomMealDetailFragment)
         }
     }
