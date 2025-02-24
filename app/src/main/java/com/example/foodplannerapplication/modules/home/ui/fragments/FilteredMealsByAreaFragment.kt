@@ -47,7 +47,9 @@ class FilteredMealsByAreaFragment : Fragment() {
     // =============== fetchCategoriesFromApi &  setupRecyclerView =================================
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByArea = view.findViewById(R.id.rv_filteredMealsByArea)
-        filteredMealsByAreaAdapter = FilteredMealsByAreaAdapter(null, requireContext(), {  meal -> openMealsDetailsActivity(meal) })
+        filteredMealsByAreaAdapter = FilteredMealsByAreaAdapter(null, requireContext()) { meal ->
+            openMealsDetailsActivity(meal)
+        }
 
         rvFilteredMealsByArea.apply {
             overScrollMode = View.OVER_SCROLL_NEVER

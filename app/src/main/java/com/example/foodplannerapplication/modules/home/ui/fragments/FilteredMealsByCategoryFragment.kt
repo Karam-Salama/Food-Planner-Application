@@ -47,10 +47,8 @@ class FilteredMealsByCategoryFragment : Fragment() {
     // =============== fetchCategoriesFromApi &  setupRecyclerView =================================
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByCategory = view.findViewById(R.id.rv_filteredMealsByCategory)
-        filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext(), {
-                meal -> openMealsDetailsActivity(meal)
-            }
-        )
+        filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext()
+        ) { meal -> openMealsDetailsActivity(meal) }
 
         rvFilteredMealsByCategory.apply {
             overScrollMode = View.OVER_SCROLL_NEVER

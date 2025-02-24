@@ -1,5 +1,8 @@
 package com.example.foodplannerapplication.modules.home.ui.fragments
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,8 +12,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.functions.CountryFlagMapper
+import com.example.foodplannerapplication.modules.home.data.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.data.server.services.RetrofitHelper
+import com.example.foodplannerapplication.modules.home.ui.adapters.AreaAdapter
+import com.example.foodplannerapplication.modules.home.ui.adapters.IngredientsAdapter
+import com.google.android.material.imageview.ShapeableImageView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,7 +32,14 @@ import kotlinx.coroutines.withContext
 
 class MealDatailsFragment : Fragment() {
     private val MealDatailsFragmentArgs: MealDatailsFragmentArgs by navArgs()
+    private lateinit var mealImage: ShapeableImageView
     private lateinit var mealTitle: TextView
+    private lateinit var mealCategory: TextView
+    private lateinit var mealInstructions: TextView
+    private lateinit var youtubePlayerView: YouTubePlayerView
+    private lateinit var rcMealIngredients: RecyclerView
+    private lateinit var ingredientsAdapter: IngredientsAdapter
+    private lateinit var mealSource: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,19 +54,32 @@ class MealDatailsFragment : Fragment() {
 
         initViews(view)
         fetchMealDetailsByIdFromApi(MealDatailsFragmentArgs.mealId)
+        setUpRecyclerView(view)
     }
 
     private fun initViews(view: View) {
+        mealImage = view.findViewById(R.id.si_mealImage)
         mealTitle = view.findViewById(R.id.tv_mealName)
+        mealCategory = view.findViewById(R.id.tv_mealCategory)
+        mealInstructions = view.findViewById(R.id.tv_mealInstructions)
+        youtubePlayerView = view.findViewById(R.id.youtubePlayerView)
+        mealSource = view.findViewById(R.id.tv_txtNeedToKnowMore)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun fetchMealDetailsByIdFromApi(mealId: String?) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val response = RetrofitHelper.retrofitService.getMealById(mealId)
                 val filteredMeals = response.meals?.firstOrNull()
                 withContext(Dispatchers.Main) {
+                    filteredMeals?.strMealThumb?.let { loadMealImage(it) }
                     mealTitle.text = filteredMeals?.strMeal
+                    mealCategory.text = formatCategoryAppearence(filteredMeals)
+                    mealInstructions.text = filteredMeals?.strInstructions
+                    loadYouTubeVideo(filteredMeals)
+                    showIngredients(filteredMeals)
+                    setupMealSourceLink(filteredMeals)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
@@ -55,4 +89,71 @@ class MealDatailsFragment : Fragment() {
         }
     }
 
+    private fun formatCategoryAppearence(filteredMeals: MealModel?) =
+        "${filteredMeals?.strArea} ${filteredMeals?.strCategory} ${
+            CountryFlagMapper.getFlagEmoji(
+                filteredMeals?.strArea
+            )
+        }"
+
+    private fun loadMealImage(imageUrl: String) {
+        Glide.with(this)
+            .load(imageUrl)
+            .placeholder(R.drawable.placeholder_ic)
+            .into(mealImage)
+    }
+
+    private fun loadYouTubeVideo(filteredMeals: MealModel?) {
+        val videoId = filteredMeals?.strYoutube?.let { extractYoutubeVideoId(it) }
+        videoId?.let {
+            youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    // Load video but do not autoplay for better UX
+                    youTubePlayer.cueVideo(it, 0f)
+                }
+            })
+        }
+    }
+
+    private fun extractYoutubeVideoId(url: String): String? {
+        val regex =
+            "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%2F|%2Fv%2F)[^#\\&\\?\\n]*".toRegex()
+        return regex.find(url)?.value
+    }
+
+    private fun setUpRecyclerView(view: View){
+        rcMealIngredients = view.findViewById(R.id.rc_Ingredients)
+        ingredientsAdapter = IngredientsAdapter(listOf(), requireContext())
+        rcMealIngredients.apply {
+            overScrollMode = View.OVER_SCROLL_NEVER
+            layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = ingredientsAdapter
+        }
+    }
+
+    private fun showIngredients(filteredMeals: MealModel?) {
+        filteredMeals?.let { meal ->
+            val ingredientNames = mutableListOf<String>()
+
+            for (i in 1..9) {
+                val ingredient = meal.javaClass.getDeclaredField("strIngredient$i")
+                    .apply { isAccessible = true }
+                    .get(meal) as? String
+
+                if (!ingredient.isNullOrEmpty()) {
+                    ingredientNames.add(ingredient)
+                }
+            }
+
+            ingredientsAdapter.updateIngredients(ingredientNames)
+        }
+    }
+
+    private fun setupMealSourceLink(filteredMeals: MealModel?) {
+        mealSource.setOnClickListener {
+            filteredMeals?.strSource?.let { url ->
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) // Open the link in a browser
+            }
+        }
+    }
 }
