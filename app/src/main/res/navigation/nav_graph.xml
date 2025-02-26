@@ -117,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentWeeklyPlans"
-        android:name="com.example.foodplannerapplication.modules.home.view.fragments.WeeklyPlansFragment"
+        android:name="com.example.foodplannerapplication.modules.plans.view.WeeklyPlansFragment"
         android:label="fragment_weekly_plans"
         tools:layout="@layout/fragment_weekly_plans" />
 

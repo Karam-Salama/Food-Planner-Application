@@ -73,4 +73,7 @@ dependencies {
     // Navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+
+    // lifecycle
+    implementation(libs.lifecycle.viewmodel)
 }
