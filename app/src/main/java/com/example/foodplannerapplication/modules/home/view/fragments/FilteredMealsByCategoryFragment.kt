@@ -6,24 +6,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.home.model.server.models.FilteredMealModel
+import com.example.foodplannerapplication.core.model.FilteredMealModel
+import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
+import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
+import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
+import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
-import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.FilteredMealsByCategoryAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class FilteredMealsByCategoryFragment : Fragment() {
+class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener {
+    // arguments
     private val filteredMealsByCategoryFragmentArgs: FilteredMealsByCategoryFragmentArgs by navArgs()
+
+    // view model
+    private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
 
     // ui components
     private lateinit var filteredMealsByCategoryAdapter: FilteredMealsByCategoryAdapter
@@ -40,15 +48,16 @@ class FilteredMealsByCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupRecyclerView(view)
-        fetchAllMealsFilteredByCategory(filteredMealsByCategoryFragmentArgs.categoryName)
+        setUpViewModel()
+        extractedDataFromViewModel()
+        observeViewModel()
     }
 
-    // =============== fetchCategoriesFromApi &  setupRecyclerView =================================
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByCategory = view.findViewById(R.id.rv_filteredMealsByCategory)
-        filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext()
-        ) { meal -> openMealsDetailsActivity(meal) }
+        filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext(), this)
 
         rvFilteredMealsByCategory.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
@@ -57,29 +66,42 @@ class FilteredMealsByCategoryFragment : Fragment() {
         }
     }
 
-    private fun openMealsDetailsActivity(mealId: String?) {
+    private fun setUpViewModel() {
+        var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
+        var myFactory = MyFactory(dao, RetrofitHelper)
+        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
+    }
+
+    private fun extractedDataFromViewModel() {
+        lifecycleScope.launch {
+            addToFavoriteViewModel.getFilteredMealsByCategory(filteredMealsByCategoryFragmentArgs.categoryName)
+        }
+    }
+
+    private fun observeViewModel() {
+        addToFavoriteViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
+            filteredMealsByCategoryAdapter.filteredMeals = newList.toList()
+            filteredMealsByCategoryAdapter.notifyDataSetChanged()
+        }
+
+
+        addToFavoriteViewModel.message.observe(viewLifecycleOwner) {
+            Snackbar.make(rvFilteredMealsByCategory, it, Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
+        lifecycleScope.launch {
+            addToFavoriteViewModel.saveFilteredMeals(filteredMealsModel)
+        }
+    }
+
+    override fun onFilteredMealsClick(mealId: String?) {
         val actionFilteredMealsByCategoryFragmentToMealDatailsFragment =
             FilteredMealsByCategoryFragmentDirections.actionFilteredMealsByCategoryFragmentToMealDatailsFragment(
                 mealId
             )
         findNavController().navigate(actionFilteredMealsByCategoryFragmentToMealDatailsFragment)
-    }
-
-    // =============== fetchRandomMealFromApi & loadMealImage Using Glide ==========================
-    private fun fetchAllMealsFilteredByCategory(categoryName: String?) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val response = RetrofitHelper.retrofitService.getMealsByCategory(categoryName)
-                val filteredMeals = response.meals.orEmpty()
-                withContext(Dispatchers.Main) {
-                    filteredMealsByCategoryAdapter.updateFilteredMeals(filteredMeals)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Log.e("===>", "Error Fetching Meal of the Day", e)
-                }
-            }
-        }
     }
 
 }

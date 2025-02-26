@@ -72,7 +72,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:text=""
-                android:textColor="@color/edt_error_msg" />
+                android:textColor="@color/red" />
 
             <EditText
                 android:id="@+id/edt_Phone"
@@ -94,7 +94,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:text=""
-                android:textColor="@color/edt_error_msg" />
+                android:textColor="@color/red" />
 
             <EditText
                 android:id="@+id/edt_Email"
@@ -116,7 +116,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:text=""
-                android:textColor="@color/edt_error_msg" />
+                android:textColor="@color/red" />
 
             <EditText
                 android:id="@+id/edt_Password"
@@ -138,7 +138,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:text=""
-                android:textColor="@color/edt_error_msg" />
+                android:textColor="@color/red" />
 
             <EditText
                 android:id="@+id/edt_confirmPassword"
@@ -160,7 +160,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="4dp"
                 android:text=""
-                android:textColor="@color/edt_error_msg" />
+                android:textColor="@color/red" />
 
 
             <Button
