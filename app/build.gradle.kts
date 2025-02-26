@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.safe.args)
 }
 
 android {
@@ -52,4 +54,26 @@ dependencies {
 
     // for google authentication
     implementation(libs.firebase.ui.auth)
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.gson)
+    // Network Image Viewer
+    implementation(libs.glide)
+    // Youtube Player
+    implementation(libs.android.youtube.player)
+
+    // Room
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    testImplementation(libs.room.testing)
+    kapt(libs.room.compiler)
+
+    // Navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+
+    // lifecycle
+    implementation(libs.lifecycle.viewmodel)
 }

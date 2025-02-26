@@ -9,7 +9,7 @@
     android:background="@color/primary"
     android:scrollbars="none"
     android:overScrollMode="never"
-    tools:context=".modules.splash.SplashActivity">
+    tools:context=".modules.splash.view.SplashActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary"
-        tools:context=".modules.splash.SplashActivity">
+        tools:context=".modules.splash.view.SplashActivity">
 
         <!-- Lottie Animation -->
         <com.airbnb.lottie.LottieAnimationView

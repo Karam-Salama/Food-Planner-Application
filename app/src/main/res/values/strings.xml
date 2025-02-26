@@ -44,4 +44,30 @@
     <string name="account_exists_with_different_credentials_error">An account already exists with a different credential.</string>
     <string name="no_user_record_error">There is no user record corresponding to this identifier. The user may have been deleted.</string>
     <string name="auth_header_image">Auth Header Image</string>
+    <string name="have_a_nice_day">Have A Nice Day</string>
+    <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Meal_of_day">Meal OF Day</string>
+    <string name="app_developer">Karam Salama</string>
+    <string name="meal_image_desc">Image OF Meal Of The Day</string>
+    <string name="categories">Categories</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="navigation_drawer_open">navigation_drawer_open</string>
+    <string name="navigation_drawer_close">navigation_drawer_close</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="settings">Settings</string>
+    <string name="areas">Areas</string>
+    <string name="mealname">mealName</string>
+    <string name="instructions">Instructions</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="plans">Plans</string>
+
+    <string-array name="meal_types">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Snack</item>
+    </string-array>
 </resources>
