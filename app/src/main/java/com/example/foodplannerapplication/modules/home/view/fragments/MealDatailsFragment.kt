@@ -9,14 +9,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.model.FilteredMealModel
+import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
+import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
 import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
+import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
+import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
@@ -30,8 +37,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class MealDatailsFragment : Fragment() {
+class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
+    // arguments
     private val MealDatailsFragmentArgs: MealDatailsFragmentArgs by navArgs()
+
+    // view model
+    private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
+
+    // ui components
     private lateinit var mealImage: ShapeableImageView
     private lateinit var mealTitle: TextView
     private lateinit var mealCategory: TextView
@@ -40,6 +53,7 @@ class MealDatailsFragment : Fragment() {
     private lateinit var rcMealIngredients: RecyclerView
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var mealSource: TextView
+    private lateinit var favoriteButton: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +67,11 @@ class MealDatailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews(view)
-        fetchMealDetailsByIdFromApi(MealDatailsFragmentArgs.mealId)
+        setUpViewModel()
         setUpRecyclerView(view)
+        extractedDataFromViewModel()
+        observeMealDetails()
+
     }
 
     private fun initViews(view: View) {
@@ -64,27 +81,41 @@ class MealDatailsFragment : Fragment() {
         mealInstructions = view.findViewById(R.id.tv_mealInstructions)
         youtubePlayerView = view.findViewById(R.id.youtubePlayerView)
         mealSource = view.findViewById(R.id.tv_txtNeedToKnowMore)
+        favoriteButton = view.findViewById(R.id.saveBtn)
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun fetchMealDetailsByIdFromApi(mealId: String?) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val response = RetrofitHelper.retrofitService.getMealById(mealId)
-                val filteredMeals = response.meals?.firstOrNull()
-                withContext(Dispatchers.Main) {
-                    filteredMeals?.strMealThumb?.let { loadMealImage(it) }
-                    mealTitle.text = filteredMeals?.strMeal
-                    mealCategory.text = formatCategoryAppearence(filteredMeals)
-                    mealInstructions.text = filteredMeals?.strInstructions
-                    loadYouTubeVideo(filteredMeals)
-                    showIngredients(filteredMeals)
-                    setupMealSourceLink(filteredMeals)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Log.e("===>", "Error Fetching Meal of the Day", e)
-                }
+    private fun setUpViewModel() {
+        var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
+        var myFactory = MyFactory(dao, RetrofitHelper)
+        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
+    }
+
+    private fun extractedDataFromViewModel() {
+        lifecycleScope.launch {
+            addToFavoriteViewModel.fetchMealDetailsById(MealDatailsFragmentArgs.mealId)
+        }
+    }
+
+    private fun setUpRecyclerView(view: View){
+        rcMealIngredients = view.findViewById(R.id.rc_Ingredients)
+        ingredientsAdapter = IngredientsAdapter(listOf(), requireContext())
+        rcMealIngredients.apply {
+            overScrollMode = View.OVER_SCROLL_NEVER
+            layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = ingredientsAdapter
+        }
+    }
+
+    private fun observeMealDetails() {
+        addToFavoriteViewModel.mealDetails.observe(viewLifecycleOwner) { meal ->
+            meal?.let {
+                it.strMealThumb?.let { loadMealImage(it) }
+                mealTitle.text = it.strMeal
+                mealCategory.text = formatCategoryAppearence(it)
+                mealInstructions.text = it.strInstructions
+                loadYouTubeVideo(it)
+                showIngredients(it)
+                setupMealSourceLink(it)
             }
         }
     }
@@ -121,16 +152,6 @@ class MealDatailsFragment : Fragment() {
         return regex.find(url)?.value
     }
 
-    private fun setUpRecyclerView(view: View){
-        rcMealIngredients = view.findViewById(R.id.rc_Ingredients)
-        ingredientsAdapter = IngredientsAdapter(listOf(), requireContext())
-        rcMealIngredients.apply {
-            overScrollMode = View.OVER_SCROLL_NEVER
-            layoutManager = GridLayoutManager(requireContext(), 3)
-            adapter = ingredientsAdapter
-        }
-    }
-
     private fun showIngredients(filteredMeals: MealModel?) {
         filteredMeals?.let { meal ->
             val ingredientNames = mutableListOf<String>()
@@ -155,5 +176,15 @@ class MealDatailsFragment : Fragment() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) // Open the link in a browser
             }
         }
+    }
+
+    override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
+        lifecycleScope.launch {
+            addToFavoriteViewModel.saveFilteredMeals(filteredMealsModel)
+        }
+    }
+
+    override fun onFilteredMealsClick(mealId: String?) {
+        TODO("Not yet implemented")
     }
 }

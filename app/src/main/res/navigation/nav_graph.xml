@@ -29,7 +29,11 @@
         android:id="@+id/fragmentFavorite"
         android:name="com.example.foodplannerapplication.modules.favorite.view.FragmentFavorite"
         android:label="Favorite"
-        tools:layout="@layout/fragment_favorite"/>
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_fragmentFavorite_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragmentSearch"

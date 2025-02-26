@@ -3,8 +3,7 @@ package com.example.foodplannerapplication.modules.home.model.server.services
 
 import com.example.foodplannerapplication.modules.home.model.server.models.AreaResponse
 import com.example.foodplannerapplication.modules.home.model.server.models.CategoryResponse
-import com.example.foodplannerapplication.modules.home.model.server.models.FilterdMealsResponse
-import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
+import com.example.foodplannerapplication.core.model.FilterdMealsResponse
 import com.example.foodplannerapplication.modules.home.model.server.models.RandomMealResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
