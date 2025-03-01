@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -21,16 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
-import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
-import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
-import com.example.foodplannerapplication.modules.home.viewmodel.HomeViewModel
-import com.example.foodplannerapplication.modules.home.viewmodel.MyFactory
+import com.example.foodplannerapplication.core.viewmodel.DashboardViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +46,7 @@ class FragmentHome : Fragment() {
 
     private lateinit var addMealFab: FloatingActionButton
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var dashboardViewModel: DashboardViewModel
 
 
     // ================================ onCreateView ===============================================
@@ -82,14 +76,14 @@ class FragmentHome : Fragment() {
 
     // ================================= setUpViewModel ============================================
     private fun setUpViewModel() {
-        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        dashboardViewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
     }
 
     private fun observeViewModel() {
-        homeViewModel.categories.observe(viewLifecycleOwner) {
+        dashboardViewModel.categories.observe(viewLifecycleOwner) {
             categoryAdapter.updateCategories(it)
         }
-        homeViewModel.areas.observe(viewLifecycleOwner) {
+        dashboardViewModel.areas.observe(viewLifecycleOwner) {
             areaAdapter.updateAreas(it)
         }
     }
