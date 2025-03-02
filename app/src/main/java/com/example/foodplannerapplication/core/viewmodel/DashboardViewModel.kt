@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
 import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
+import com.example.foodplannerapplication.modules.home.model.server.models.IngredientModel
+import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,10 +21,13 @@ class DashboardViewModel : ViewModel() {
     private val _areas = MutableLiveData<List<AreaModel>>()
     val areas: LiveData<List<AreaModel>> get() = _areas
 
+    private val _ingredients = MutableLiveData<List<IngredientModel>>()
+    val ingredients: LiveData<List<IngredientModel>> get() = _ingredients
 
     init {
         fetchCategories()
         fetchAreas()
+        fetchIngredients()
     }
 
     private fun fetchCategories() {
@@ -46,7 +51,16 @@ class DashboardViewModel : ViewModel() {
             }
         }
     }
-
+    private fun fetchIngredients() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = RetrofitHelper.retrofitService.getIngredients()
+                _ingredients.postValue(response.meals.orEmpty().filterNotNull())
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error Fetching Ingredients", e)
+            }
+        }
+    }
 }
 
 

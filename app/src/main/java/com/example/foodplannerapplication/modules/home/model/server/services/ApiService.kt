@@ -4,6 +4,7 @@ package com.example.foodplannerapplication.modules.home.model.server.services
 import com.example.foodplannerapplication.modules.home.model.server.models.AreaResponse
 import com.example.foodplannerapplication.modules.home.model.server.models.CategoryResponse
 import com.example.foodplannerapplication.core.model.FilterdMealsResponse
+import com.example.foodplannerapplication.modules.home.model.server.models.IngredientsResponse
 import com.example.foodplannerapplication.modules.home.model.server.models.RandomMealResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,6 +35,10 @@ interface APIService {
     // https://www.themealdb.com/api/json/v1/1/list.php?a=list
     @GET("list.php?a=list")
     suspend fun getAreas(): AreaResponse
+
+    // https://www.themealdb.com/api/json/v1/1/list.php?i=list
+    @GET("list.php?i=list")
+    suspend fun getIngredients(): IngredientsResponse
 }
 
 object RetrofitHelper {
