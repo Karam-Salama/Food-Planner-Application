@@ -68,6 +68,16 @@
     <string name="common_ingredients">Common Ingredients</string>
     <string name="countries">countries</string>
     <string name="Search_by_Country_Category_or_Ingredient">Search by Country, Category or Ingredient</string>
+    <string name="logout">Logout</string>
+    <string name="who_we_are">Who We Are</string>
+    <string name="helping">Helping</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="my_plans">My Plans</string>
+    <string name="karamsalama2024_gmail_com">karamsalama2024@gmail.com</string>
+    <string name="karam_salama">Karam Salama</string>
+    <string name="general">General</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="todo">TODO</string>
 
     <string-array name="meal_types">
         <item>Breakfast</item>
