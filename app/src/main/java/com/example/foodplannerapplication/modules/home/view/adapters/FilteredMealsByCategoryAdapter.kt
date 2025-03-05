@@ -44,7 +44,7 @@ class FilteredMealsByCategoryAdapter(
             holder.mealFavorite.setOnClickListener {
                 currentItem.isFavorite = !currentItem.isFavorite
                 listener.onFilteredMealsFavoriteClick(currentItem)
-                notifyItemChanged(position) // تحديث العنصر فقط بدلًا من تحديث القائمة كلها
+                notifyItemChanged(position)
             }
         }
 

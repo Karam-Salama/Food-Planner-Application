@@ -24,6 +24,14 @@ interface APIService {
     @GET("categories.php")
     suspend fun getCategories(): CategoryResponse
 
+    // https://www.themealdb.com/api/json/v1/1/list.php?a=list
+    @GET("list.php?a=list")
+    suspend fun getAreas(): AreaResponse
+
+    // https://www.themealdb.com/api/json/v1/1/list.php?i=list
+    @GET("list.php?i=list")
+    suspend fun getIngredients(): IngredientsResponse
+
     // https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     @GET("filter.php")
     suspend fun getMealsByCategory(@Query("c") category: String?): FilterdMealsResponse
@@ -32,13 +40,10 @@ interface APIService {
     @GET("filter.php")
     suspend fun getMealsByArea(@Query("a") area: String?): FilterdMealsResponse
 
-    // https://www.themealdb.com/api/json/v1/1/list.php?a=list
-    @GET("list.php?a=list")
-    suspend fun getAreas(): AreaResponse
+    // https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken
+    @GET("filter.php")
+    suspend fun getMealsByIngredient(@Query("i") ingredient: String?): FilterdMealsResponse
 
-    // https://www.themealdb.com/api/json/v1/1/list.php?i=list
-    @GET("list.php?i=list")
-    suspend fun getIngredients(): IngredientsResponse
 }
 
 object RetrofitHelper {
