@@ -4,6 +4,7 @@ package com.example.foodplannerapplication.modules.home.model.server.services
 import com.example.foodplannerapplication.modules.home.model.server.models.AreaResponse
 import com.example.foodplannerapplication.modules.home.model.server.models.CategoryResponse
 import com.example.foodplannerapplication.core.model.FilterdMealsResponse
+import com.example.foodplannerapplication.modules.home.model.server.models.IngredientsResponse
 import com.example.foodplannerapplication.modules.home.model.server.models.RandomMealResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,6 +24,14 @@ interface APIService {
     @GET("categories.php")
     suspend fun getCategories(): CategoryResponse
 
+    // https://www.themealdb.com/api/json/v1/1/list.php?a=list
+    @GET("list.php?a=list")
+    suspend fun getAreas(): AreaResponse
+
+    // https://www.themealdb.com/api/json/v1/1/list.php?i=list
+    @GET("list.php?i=list")
+    suspend fun getIngredients(): IngredientsResponse
+
     // https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef
     @GET("filter.php")
     suspend fun getMealsByCategory(@Query("c") category: String?): FilterdMealsResponse
@@ -31,9 +40,10 @@ interface APIService {
     @GET("filter.php")
     suspend fun getMealsByArea(@Query("a") area: String?): FilterdMealsResponse
 
-    // https://www.themealdb.com/api/json/v1/1/list.php?a=list
-    @GET("list.php?a=list")
-    suspend fun getAreas(): AreaResponse
+    // https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken
+    @GET("filter.php")
+    suspend fun getMealsByIngredient(@Query("i") ingredient: String?): FilterdMealsResponse
+
 }
 
 object RetrofitHelper {

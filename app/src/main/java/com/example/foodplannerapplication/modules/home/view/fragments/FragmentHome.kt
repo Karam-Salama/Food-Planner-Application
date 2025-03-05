@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,12 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
-import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
+import com.example.foodplannerapplication.core.viewmodel.DashboardViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.Dispatchers
@@ -35,11 +34,9 @@ import kotlinx.coroutines.withContext
 class FragmentHome : Fragment() {
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoryAdapter: CategoryAdapter
-    private var categories: List<CategoryModel?>? = null
 
     private lateinit var areaRecyclerView: RecyclerView
     private lateinit var areaAdapter: AreaAdapter
-    private var areas: List<AreaModel?>? = null
 
     private lateinit var mealTitle: TextView
     private lateinit var mealImage: ShapeableImageView
@@ -48,6 +45,9 @@ class FragmentHome : Fragment() {
     private lateinit var randomMealLayout: ConstraintLayout
 
     private lateinit var addMealFab: FloatingActionButton
+
+    private lateinit var dashboardViewModel: DashboardViewModel
+
 
     // ================================ onCreateView ===============================================
     override fun onCreateView(
@@ -62,15 +62,30 @@ class FragmentHome : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpViewModel()
         initViews(view)
         setUpListeners()
         setupActionBar()
         setupNavigationDrawer(view)
         setupFab(view)
-        fetchRandomMealFromApi()
+        observeViewModel()
         setupRecyclerViews(view)
-        fetchCategoriesFromApi()
-        fetchAreasFromApi()
+
+        fetchRandomMealFromApi()
+    }
+
+    // ================================= setUpViewModel ============================================
+    private fun setUpViewModel() {
+        dashboardViewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+    }
+
+    private fun observeViewModel() {
+        dashboardViewModel.categories.observe(viewLifecycleOwner) {
+            categoryAdapter.updateCategories(it)
+        }
+        dashboardViewModel.areas.observe(viewLifecycleOwner) {
+            areaAdapter.updateAreas(it)
+        }
     }
 
     // ================================= Setup ActionBar ===========================================
@@ -170,37 +185,4 @@ class FragmentHome : Fragment() {
         findNavController().navigate(actionFragmentHomeToFilteredMealsByAreaFragment)
     }
 
-    private fun fetchCategoriesFromApi() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val response = RetrofitHelper.retrofitService.getCategories()
-                val categories = response.categories.orEmpty()
-                Log.d("===>", "=================== Categories: ${categories.size} =================")
-                withContext(Dispatchers.Main) {
-                    categoryAdapter.updateCategories(categories)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Log.e("===>", "Error Fetching Categories", e)
-                }
-            }
-        }
-    }
-
-    private fun fetchAreasFromApi(){
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val response = RetrofitHelper.retrofitService.getAreas()
-                val areas = response.meals.orEmpty()
-                Log.d("===>", "=================== Areas: ${areas.size} =================")
-                withContext(Dispatchers.Main) {
-                    areaAdapter.updateAreas(areas)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Log.e("===>", "Error Fetching Areas", e)
-                }
-            }
-        }
-    }
 }
