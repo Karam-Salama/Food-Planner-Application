@@ -79,5 +79,6 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
             weeklyPlansViewModel.removePlan(addMealModel)
         }
     }
+
 }
 
