@@ -24,7 +24,7 @@ class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
         fetchPlans()
     }
 
-    private fun fetchPlans() {
+    fun fetchPlans() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val list = addMealDao.getAllPlans()

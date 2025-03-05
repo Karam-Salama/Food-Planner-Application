@@ -7,18 +7,13 @@
     android:background="@color/lightGrey"
     tools:context=".modules.plans.view.WeeklyPlansFragment">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_regular"
-        android:text="Plans Fragment"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rc_weekly_plans"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
