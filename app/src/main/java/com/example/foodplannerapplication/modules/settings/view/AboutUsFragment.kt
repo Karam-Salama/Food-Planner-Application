@@ -37,13 +37,13 @@ class AboutUsFragment : Fragment() {
 
     private fun setListeners() {
         ivFacebookIcon.setOnClickListener {
-            // openLink("https://www.facebook.com/YOUR_USERNAME")
+            openLink("https://www.facebook.com/karam.slama.56")
         }
         ivInstagramIcon.setOnClickListener {
-            // openLink("https://www.instagram.com/YOUR_USERNAME")
+            openLink("https://www.instagram.com/karasalama/")
         }
         ivLinkedinIcon.setOnClickListener {
-            // openLink("https://www.linkedin.com/in/YOUR_USERNAME")
+            openLink("https://www.linkedin.com/in/karam-salama/")
         }
 
     }

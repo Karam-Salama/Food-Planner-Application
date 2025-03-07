@@ -95,6 +95,14 @@
     <string name="linkedIn">Follow me on LinkedIn</string>
     <string name="facebook">Follow me on Facebook</string>
     <string name="instagram">Follow me on Instagram</string>
+    <string name="mail_mail_com">mail@mail.com</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="edit_name">Edit Name</string>
+    <string name="edit_email">Edit Email</string>
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 
     <string-array name="meal_types">
         <item>Breakfast</item>
