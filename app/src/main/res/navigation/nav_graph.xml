@@ -45,7 +45,23 @@
         android:id="@+id/fragmentSetting"
         android:name="com.example.foodplannerapplication.modules.settings.view.FragmentSetting"
         android:label="Settings"
-        tools:layout="@layout/fragment_setting"/>
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_fragmentSetting_to_personalInformationFragment"
+            app:destination="@id/personalInformationFragment" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_fragmentWeeklyPlans"
+            app:destination="@id/fragmentWeeklyPlans" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_fragmentFavorite"
+            app:destination="@id/fragmentFavorite" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragmentDashboard"
@@ -124,5 +140,20 @@
         android:name="com.example.foodplannerapplication.modules.plans.view.WeeklyPlansFragment"
         android:label="fragment_weekly_plans"
         tools:layout="@layout/fragment_weekly_plans" />
+    <fragment
+        android:id="@+id/personalInformationFragment"
+        android:name="com.example.foodplannerapplication.modules.settings.view.PersonalInformationFragment"
+        android:label="fragment_personal_information"
+        tools:layout="@layout/fragment_personal_information" />
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.example.foodplannerapplication.modules.settings.view.AboutUsFragment"
+        android:label="fragment_about_us"
+        tools:layout="@layout/fragment_about_us" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.foodplannerapplication.modules.auth.view.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
 
 </navigation>

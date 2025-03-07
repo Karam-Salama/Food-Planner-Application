@@ -78,6 +78,23 @@
     <string name="general">General</string>
     <string name="personal_information">Personal Information</string>
     <string name="todo">TODO</string>
+    <string name="do_you_want_to_logout">Do you want to Logout?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+
+
+    <string name="about_us">About Us</string>
+
+    <string name="about_description" formatted="false">
+    This app was fully developed by me\n
+    to help users manage their meals efficiently.\n
+    Every feature, from design to development,\n
+    was built with dedication and passion.
+    </string>
+
+    <string name="linkedIn">Follow me on LinkedIn</string>
+    <string name="facebook">Follow me on Facebook</string>
+    <string name="instagram">Follow me on Instagram</string>
 
     <string-array name="meal_types">
         <item>Breakfast</item>

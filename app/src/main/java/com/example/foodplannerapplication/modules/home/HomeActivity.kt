@@ -61,6 +61,8 @@ class HomeActivity : AppCompatActivity() {
                 R.id.filteredMealsByCategoryFragment ->View.GONE
                 R.id.filteredMealsByAreaFragment ->View.GONE
                 R.id.mealDatailsFragment ->View.GONE
+                R.id.personalInformationFragment ->View.GONE
+                R.id.aboutUsFragment ->View.GONE
                 else -> View.VISIBLE
             }
             invalidateOptionsMenu()
@@ -107,6 +109,12 @@ class HomeActivity : AppCompatActivity() {
                     toolbar.subtitle = ""
                 } R.id.filteredMealsByAreaFragment -> {
                     toolbar.title = "Filtered Meals"
+                    toolbar.subtitle = ""
+                } R.id.personalInformationFragment -> {
+                    toolbar.title = "Personal Information"
+                    toolbar.subtitle = ""
+                } R.id.aboutUsFragment -> {
+                    toolbar.title = "About Us"
                     toolbar.subtitle = ""
                 }
                 else -> {
