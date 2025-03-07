@@ -28,9 +28,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/grey"
+        app:hintTextColor="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/tv_personal_info"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:theme="@style/EditTextCursorTheme">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
@@ -61,9 +64,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/grey"
+        app:hintTextColor="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/name_input_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:theme="@style/EditTextCursorTheme">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_email"
@@ -107,10 +113,13 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/grey"
+        app:hintTextColor="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/tv_change_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:endIconMode="password_toggle">
+        app:endIconMode="password_toggle"
+        android:theme="@style/EditTextCursorTheme">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_current_password"
@@ -127,10 +136,13 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/grey"
+        app:hintTextColor="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/current_password_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:endIconMode="password_toggle">
+        app:endIconMode="password_toggle"
+        android:theme="@style/EditTextCursorTheme">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_new_password"
@@ -147,10 +159,13 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/grey"
+        app:hintTextColor="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/new_password_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:endIconMode="password_toggle">
+        app:endIconMode="password_toggle"
+        android:theme="@style/EditTextCursorTheme">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_confirm_password"

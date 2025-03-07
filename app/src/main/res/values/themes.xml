@@ -39,5 +39,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="EditTextCursorTheme" parent="ThemeOverlay.MaterialComponents.TextInputEditText">
+        <item name="colorControlActivated">@color/black</item>
+    </style>
+
 
 </resources>
