@@ -18,7 +18,7 @@ import com.google.android.material.imageview.ShapeableImageView
 class WeeklyPlansAdapter(
     var weeklyMeals : List<AddMealModel?>?,
     private val context: Context,
-    var listener: ICommonFilteredMealListener) : RecyclerView.Adapter<WeeklyPlansAdapter.WeeklyPlansViewHolder>() {
+    var listener: IWeeklyPlansListener) : RecyclerView.Adapter<WeeklyPlansAdapter.WeeklyPlansViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyPlansViewHolder {
@@ -41,10 +41,10 @@ class WeeklyPlansAdapter(
             holder.mealDate.text = formattedDate
 
              holder.mealTime.text = currentItem.timeMealPlan
-        }
 
-        holder.itemView.setOnClickListener {
-            listener.onFilteredMealsClick(currentItem?.idMealPlan.toString())
+            holder.ivDelete.setOnClickListener {
+                listener.onDeleteWeeklyPlansClick(currentItem)
+            }
         }
     }
 
@@ -60,5 +60,6 @@ class WeeklyPlansAdapter(
         val mealCategory: TextView = itemView.findViewById(R.id.tv_mealCategory)
         val mealDate : TextView = itemView.findViewById(R.id.tv_mealDate)
         val mealTime : TextView = itemView.findViewById(R.id.tv_mealTime)
+        val ivDelete : ImageView = itemView.findViewById(R.id.iv_trashIcon)
     }
 }

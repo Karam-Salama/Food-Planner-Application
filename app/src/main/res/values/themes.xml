@@ -35,6 +35,13 @@
         <item name="android:background">@drawable/chip_selector</item>
     </style>
 
+    <style name="CustomDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="EditTextCursorTheme" parent="ThemeOverlay.MaterialComponents.TextInputEditText">
+        <item name="colorControlActivated">@color/black</item>
+    </style>
 
 
 </resources>
