@@ -6,6 +6,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
@@ -14,11 +15,12 @@ import com.example.foodplannerapplication.core.utils.functions.hideStatusAndNavB
 import com.example.foodplannerapplication.core.utils.classes.Constants
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 
-
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var startButton: Button
     private lateinit var rotatedImage: ImageView
     private lateinit var rotateAnimation: Animation
+
+    private lateinit var tvSkip: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         rotatedImage = findViewById(R.id.imageView_dish3)
         startButton = findViewById(R.id.startButton)
+        tvSkip = findViewById(R.id.tv_skip)
 
         // add animation file to image
         rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate)
@@ -41,5 +44,7 @@ class OnboardingActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+
+        tvSkip.setOnClickListener() {}
     }
 }
