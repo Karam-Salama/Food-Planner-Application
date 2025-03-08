@@ -12,23 +12,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.utils.functions.Validation
 import com.example.foodplannerapplication.modules.home.HomeActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var edtFullName: EditText
-    private lateinit var edtPhone: EditText
-    private lateinit var edtEmail: EditText
-    private lateinit var edtPassword: EditText
-    private lateinit var edtConfirmPassword: EditText
+
+    private lateinit var etFullName: TextInputEditText
+    private lateinit var etPhone: TextInputEditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
+    private lateinit var etConfirmPassword: TextInputEditText
+
     private lateinit var tvLogin: TextView
     private lateinit var btnSignUp: Button
-    private lateinit var errorName: TextView
-    private lateinit var errorPhone: TextView
-    private lateinit var errorEmail: TextView
-    private lateinit var errorPassword: TextView
-    private lateinit var errorConfirmPassword: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +34,13 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         // Initialize views
-        edtFullName = findViewById(R.id.edt_Name)
-        edtPhone = findViewById(R.id.edt_Phone)
-        edtEmail = findViewById(R.id.edt_Email)
-        edtPassword = findViewById(R.id.edt_Password)
-        edtConfirmPassword = findViewById(R.id.edt_confirmPassword)
+        etFullName = findViewById(R.id.edt_Name)
+        etPhone = findViewById(R.id.edt_Phone)
+        etEmail = findViewById(R.id.edt_Email)
+        etPassword = findViewById(R.id.edt_Password)
+        etConfirmPassword = findViewById(R.id.edt_confirmPassword)
         btnSignUp = findViewById(R.id.btn_signUp)
         tvLogin = findViewById(R.id.tv_login)
-
-        // Initialize error views
-        errorName = findViewById(R.id.error_name)
-        errorPhone = findViewById(R.id.error_phone)
-        errorEmail = findViewById(R.id.error_email)
-        errorPassword = findViewById(R.id.error_password)
-        errorConfirmPassword = findViewById(R.id.error_confirmPassword)
 
         // Set onClickListeners
         tvLogin.setOnClickListener { finish() }
@@ -57,47 +48,47 @@ class RegisterActivity : AppCompatActivity() {
         btnSignUp.setOnClickListener {
             if (validateInputs()) {
                 createUserWithEmailAndPassword(
-                    email = edtEmail.text.toString().trim(),
-                    password = edtPassword.text.toString().trim()
+                    email = etEmail.text.toString().trim(),
+                    password = etPassword.text.toString().trim()
                 )
             }
         }
     }
 
     private fun validateInputs(): Boolean {
-        val fullName = edtFullName.text.toString().trim()
-        val phone = edtPhone.text.toString().trim()
-        val email = edtEmail.text.toString().trim()
-        val password = edtPassword.text.toString().trim()
-        val confirmPassword = edtConfirmPassword.text.toString().trim()
+        val fullName = etFullName.text.toString().trim()
+        val phone = etPhone.text.toString().trim()
+        val email = etEmail.text.toString().trim()
+        val password = etPassword.text.toString().trim()
+        val confirmPassword = etConfirmPassword.text.toString().trim()
 
         var isValid = true
 
         val nameError = Validation.validateName(fullName)
-        errorName.text = nameError
+        etFullName.error = nameError
         if (nameError != null) isValid = false
 
         val phoneError = Validation.validatePhone(phone)
-        errorPhone.text = phoneError
+        etPhone.error = phoneError
         if (phoneError != null) isValid = false
 
         val emailError = Validation.validateEmail(email)
-        errorEmail.text = emailError
+        etEmail.error = emailError
         if (emailError != null) isValid = false
 
         val passwordError = Validation.validatePassword(password)
-        errorPassword.text = passwordError
+        etPassword.error = passwordError
         if (passwordError != null) isValid = false
 
         val confirmPasswordError = Validation.validateConfirmPassword(confirmPassword, password)
-        errorConfirmPassword.text = confirmPasswordError
+        etConfirmPassword.error = confirmPasswordError
         if (confirmPasswordError != null) isValid = false
 
         return isValid
     }
 
     private fun createUserWithEmailAndPassword(email: String, password: String) {
-        val fullName = edtFullName.text.toString().trim()
+        val fullName = etFullName.text.toString().trim()
         val TAG = "RegisterActivity"
 
         Firebase.auth.createUserWithEmailAndPassword(email, password)

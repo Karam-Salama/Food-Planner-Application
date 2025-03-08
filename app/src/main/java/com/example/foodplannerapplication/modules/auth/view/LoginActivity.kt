@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -23,12 +24,12 @@ import com.google.firebase.ktx.Firebase
 class LoginActivity : AppCompatActivity() {
     private lateinit var tvSignup: TextView
     private lateinit var tvForgetPassword: TextView
-    private lateinit var edtEmail: EditText
-    private lateinit var edtPassword: EditText
+
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
+
     private lateinit var btnLogin: Button
     private lateinit var btnGoogleLogin: Button
-    private lateinit var errorEmail: TextView
-    private lateinit var errorPassword: TextView
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -53,12 +54,15 @@ class LoginActivity : AppCompatActivity() {
 
         tvSignup = findViewById(R.id.tv_signup)
         tvForgetPassword = findViewById(R.id.tv_forgetPassword)
-        edtEmail = findViewById(R.id.edt_Email)
-        edtPassword = findViewById(R.id.edt_Password)
+
+        etEmail = findViewById(R.id.edt_Email)
+        etPassword = findViewById(R.id.edt_Password)
+
+
         btnLogin = findViewById(R.id.btn_login)
+
         btnGoogleLogin = findViewById(R.id.btn_google)
-        errorEmail = findViewById(R.id.error_login_email)
-        errorPassword = findViewById(R.id.error_login_password)
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
@@ -78,8 +82,8 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             if (validateInputs()) {
                 signInWithEmailAndPassword(
-                    edtEmail.text.toString().trim(),
-                    edtPassword.text.toString().trim()
+                    etEmail.text.toString().trim(),
+                    etPassword.text.toString().trim()
                 )
             }
         }
@@ -90,16 +94,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateInputs(): Boolean {
-        val email = edtEmail.text.toString().trim()
-        val password = edtPassword.text.toString().trim()
+        val email = etEmail.text.toString().trim()
+        val password = etPassword.text.toString().trim()
         var isValid = true
 
         val emailError = Validation.validateEmail(email)
-        errorEmail.text = emailError
+        etEmail.error = emailError
         if (emailError != null) isValid = false
 
         val passwordError = Validation.validatePassword(password)
-        errorPassword.text = passwordError
+        etPassword.error = passwordError
         if (passwordError != null) isValid = false
 
         return isValid

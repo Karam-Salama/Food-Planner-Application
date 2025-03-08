@@ -104,6 +104,8 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="skip">skip</string>
+    <string name="verification_prompt">Don\'t worry, just enter your email, and we\'ll send a link to verify your account.</string>
+
 
     <string-array name="meal_types">
         <item>Breakfast</item>

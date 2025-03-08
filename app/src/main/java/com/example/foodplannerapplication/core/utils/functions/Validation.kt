@@ -16,7 +16,7 @@ object Validation {
     fun validatePhone(phone: String): String? {
         return when {
             phone.isEmpty() -> "Phone number is required."
-            !phone.matches(Regex("^(?:\\+20|0)?1[0-9]{9}$")) -> "Invalid phone number format."
+            !phone.matches(Regex("^(010|011|012|015)\\d{8}$")) -> "Invalid phone number format."
             else -> null
         }
     }
