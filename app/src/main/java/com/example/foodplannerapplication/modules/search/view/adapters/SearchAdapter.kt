@@ -7,24 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.utils.classes.Constants
 import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
 import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
 import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 import android.util.Log
+import com.example.foodplannerapplication.modules.search.view.ICommonSearchFilteredListener
 
 class SearchAdapter(
     private val context: Context,
-    private val listener: ICommonFilteredMealListener
+    private val listener: ICommonSearchFilteredListener
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     enum class ItemType { MEAL, INGREDIENT, AREA, CATEGORY }
@@ -90,6 +89,7 @@ class SearchAdapter(
 
         holder.mealTitle.text = item.strMeal
         holder.itemView.setOnClickListener { listener.onFilteredMealsClick(item.idMeal) }
+
     }
 
     private fun bindIngredient(holder: IngredientViewHolder, currentItem: String) {
@@ -118,7 +118,7 @@ class SearchAdapter(
                 .error(R.drawable.error_ic)
                 .into(holder.areaFlag)
 
-            holder.itemView.setOnClickListener { listener.onFilteredMealsClick(currentItem.strArea) }
+            holder.itemView.setOnClickListener { listener.openMealsActivityByArea(currentItem.strArea) }
 
         }
     }
@@ -138,7 +138,7 @@ class SearchAdapter(
         }
 
         holder.categoryTitle.text = currentItem.strCategory
-        holder.itemView.setOnClickListener { listener.onFilteredMealsClick(currentItem.strCategory) }
+        holder.itemView.setOnClickListener { listener.openMealsActivityByCategory(currentItem.strCategory) }
     }
 
     fun updateList(newItems: List<Any>) = submitList(newItems)

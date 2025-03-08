@@ -6,15 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
 import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
 import com.example.foodplannerapplication.core.viewmodel.DashboardViewModel
@@ -23,11 +19,9 @@ import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.search.view.adapters.SearchAdapter
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.launch
 
-class FragmentSearch : Fragment(), ICommonFilteredMealListener {
+class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
     private lateinit var viewModel: DashboardViewModel
     private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
     private lateinit var searchAdapter: SearchAdapter
@@ -42,7 +36,8 @@ class FragmentSearch : Fragment(), ICommonFilteredMealListener {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView).apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = SearchAdapter(requireContext(), this@FragmentSearch).also { searchAdapter = it }
+            adapter = SearchAdapter(requireContext(), this@FragmentSearch)
+            searchAdapter = adapter as SearchAdapter
         }
 
         setupChips(view)
@@ -75,12 +70,18 @@ class FragmentSearch : Fragment(), ICommonFilteredMealListener {
         addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
     }
 
-    override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
-        lifecycleScope.launch {
-            addToFavoriteViewModel.saveFilteredMeals(filteredMealsModel)
-        }
+    override fun openMealsActivityByCategory(category: String?) {
+        val actionFragmentSearchToFilteredMealsByCategoryFragment =
+            FragmentSearchDirections.actionFragmentSearchToFilteredMealsByCategoryFragment(category)
+        findNavController().navigate(actionFragmentSearchToFilteredMealsByCategoryFragment)
     }
-    override fun onFilteredMealsClick(mealId: String?) {
 
+    override fun openMealsActivityByArea(area: String?) {
+        val actionFragmentSearchToFilteredMealsByAreaFragment =
+            FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment()
+        findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
+    }
+
+    override fun onFilteredMealsClick(mealId: String?) {
     }
 }

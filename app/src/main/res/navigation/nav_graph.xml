@@ -39,7 +39,14 @@
         android:id="@+id/fragmentSearch"
         android:name="com.example.foodplannerapplication.modules.search.view.FragmentSearch"
         android:label="Search"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_fragmentSearch_to_filteredMealsByCategoryFragment"
+            app:destination="@id/filteredMealsByCategoryFragment" />
+        <action
+            android:id="@+id/action_fragmentSearch_to_filteredMealsByAreaFragment"
+            app:destination="@id/filteredMealsByAreaFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragmentSetting"
