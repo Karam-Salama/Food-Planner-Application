@@ -10,33 +10,38 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        app:boxStrokeColor="@color/primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:hint="@string/search"
-        app:startIconDrawable="@drawable/search_icon"
-        app:startIconTint="@color/primary"
-        app:layout_constraintStart_toStartOf="parent"
+        android:theme="@style/EditTextCursorTheme"
+        app:boxStrokeColor="@color/grey"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/search_icon"
+        app:startIconTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_meals_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edt_background"
             android:inputType="text"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:background="@drawable/edt_background"/>
+            android:textSize="16sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroup"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="-10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
@@ -45,17 +50,23 @@
         <com.google.android.material.chip.Chip
             android:id="@+id/chipCountries"
             style="@style/CustomChipStyle"
-            android:text="@string/countries"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/countries" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipCategories"
             style="@style/CustomChipStyle"
-            android:text="@string/categories"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/categories" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipIngredients"
             style="@style/CustomChipStyle"
-            android:text="@string/ingredients"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ingredients" />
 
     </com.google.android.material.chip.ChipGroup>
 

@@ -41,9 +41,4 @@ object CountryFlagMapper {
             Character.toChars(127397 + it.code).concatToString()
         }.joinToString("")
     }
-
-    fun getFlagUrl(area: String?): String {
-        val countryCode = AREA_TO_COUNTRY_CODE[area] ?: return ""
-        return "https://flagcdn.com/w320/${countryCode.lowercase()}.png"
-    }
 }

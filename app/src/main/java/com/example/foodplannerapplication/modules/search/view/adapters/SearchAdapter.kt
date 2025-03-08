@@ -47,9 +47,9 @@ class SearchAdapter(
 
         val inflater = LayoutInflater.from(parent.context)
         val view = when (viewType) {
-            ItemType.MEAL.ordinal -> inflater.inflate(R.layout.filtered_meals_by_category_item, parent, false)
+            ItemType.MEAL.ordinal -> inflater.inflate(R.layout.search_filtered_item, parent, false)
             ItemType.INGREDIENT.ordinal, ItemType.CATEGORY.ordinal -> inflater.inflate(R.layout.category_list_item, parent, false)
-            ItemType.AREA.ordinal -> inflater.inflate(R.layout.area_list_item, parent, false)
+            ItemType.AREA.ordinal -> inflater.inflate(R.layout.sec_edt_area_list_item, parent, false)
             else -> throw IllegalArgumentException("Unknown view type")
         }
         return createViewHolder(view, viewType)
@@ -89,15 +89,6 @@ class SearchAdapter(
         }
 
         holder.mealTitle.text = item.strMeal
-        holder.mealFavorite.apply {
-            setImageResource(if (item.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_border)
-            setColorFilter(ContextCompat.getColor(context, if (item.isFavorite) R.color.red else R.color.black))
-            setOnClickListener {
-                item.isFavorite = !item.isFavorite
-                listener.onFilteredMealsFavoriteClick(item)
-                notifyItemChanged(position)
-            }
-        }
         holder.itemView.setOnClickListener { listener.onFilteredMealsClick(item.idMeal) }
     }
 
@@ -111,11 +102,25 @@ class SearchAdapter(
             .placeholder(R.drawable.placeholder_ic)
             .error(R.drawable.error_ic)
             .into(holder.ingredientImage)
+
+        holder.itemView.setOnClickListener { listener.onFilteredMealsClick(currentItem) }
     }
 
     private fun bindArea(holder: AreaViewHolder, currentItem: AreaModel) {
-        holder.areaTitle.text = currentItem.strArea
-        holder.areaFlag.text = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
+        if (currentItem != null) {
+            holder.areaTitle.text = currentItem.strArea
+            val countryCode = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
+            val flagUrl = "https://www.themealdb.com/images/icons/flags/big/64/${countryCode}.png"
+
+            Glide.with(holder.itemView.context)
+                .load(flagUrl)
+                .placeholder(R.drawable.placeholder_ic)
+                .error(R.drawable.error_ic)
+                .into(holder.areaFlag)
+
+            holder.itemView.setOnClickListener { listener.onFilteredMealsClick(currentItem.strArea) }
+
+        }
     }
 
     private fun bindCategory(holder: CategoryViewHolder, currentItem: CategoryModel) {
@@ -133,6 +138,7 @@ class SearchAdapter(
         }
 
         holder.categoryTitle.text = currentItem.strCategory
+        holder.itemView.setOnClickListener { listener.onFilteredMealsClick(currentItem.strCategory) }
     }
 
     fun updateList(newItems: List<Any>) = submitList(newItems)
@@ -140,7 +146,6 @@ class SearchAdapter(
     class MealViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mealTitle: TextView = view.findViewById(R.id.tv_mealName)
         val mealImage: ShapeableImageView = view.findViewById(R.id.si_mealImage)
-        val mealFavorite: ImageView = view.findViewById(R.id.iv_favorite)
     }
 
     class IngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -150,7 +155,7 @@ class SearchAdapter(
 
     class AreaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val areaTitle: TextView = view.findViewById(R.id.tv_areaTitle)
-        val areaFlag: TextView = view.findViewById(R.id.tv_flag)
+        val areaFlag: ImageView = view.findViewById(R.id.iv_flag)
     }
 
     class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {

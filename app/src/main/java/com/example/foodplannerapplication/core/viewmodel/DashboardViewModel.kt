@@ -98,7 +98,7 @@ class DashboardViewModel : ViewModel() {
                     FilteredMealModel(
                         idMeal = "",
                         strMeal = area.strArea ?: "",
-                        strMealThumb = "",
+                        strMealThumb = CountryFlagMapper.getFlagUrl(area.strArea ?: ""),
                         isFavorite = false
                     )
                 }

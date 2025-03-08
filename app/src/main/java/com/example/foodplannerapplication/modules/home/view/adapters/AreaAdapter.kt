@@ -1,6 +1,7 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ class AreaAdapter(private var areas: List<AreaModel?>?,
         if (currentItem != null) {
             holder.areaTitle.text = currentItem.strArea
             holder.areaFlag.text = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
-
+            Log.d("Glide Debug", "=================== Loading Area Flag URL: ${CountryFlagMapper.getFlagEmoji(currentItem.strArea)} ==================== ")
             holder.itemView.setOnClickListener {
                 onAreaClick(currentItem.strArea)
             }
