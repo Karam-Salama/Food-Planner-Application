@@ -43,28 +43,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_meal_image" />
 
-        <EditText
-            android:id="@+id/edt_meal_calories"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="Meal Calories"
-            android:background="@drawable/edt_background"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_meal_name" />
-
         <Spinner
             android:id="@+id/spinner_meal_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/edt_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/edt_background"
-            app:layout_constraintTop_toBottomOf="@+id/edt_meal_calories"/>
+            app:layout_constraintTop_toBottomOf="@+id/edt_meal_name" />
 
         <EditText
             android:id="@+id/edt_meal_date"
@@ -79,48 +66,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner_meal_type" />
 
-        <EditText
-            android:id="@+id/edt_meal_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Meal Time"
-            android:focusable="false"
-            android:clickable="true"
-            android:background="@drawable/edt_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_meal_date" />
-
-        <EditText
-            android:id="@+id/edt_meal_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Meal Description"
-            android:background="@drawable/edt_background"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:maxLines="4"
-            android:gravity="top|start"
-            android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_meal_time" />
-
         <Button
             android:id="@+id/btn_save_meal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginTop="100dp"
             android:background="@drawable/button_background"
             android:text="Add Meal"
             app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_meal_description" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_meal_date" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

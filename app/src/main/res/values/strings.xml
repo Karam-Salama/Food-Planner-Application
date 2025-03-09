@@ -118,5 +118,6 @@
     <string name="facebook_app_id">4081644225387550</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">e377b0d6fd6196ad5d1f3f550e85461f</string>
+    <string name="add_to_plan">Add to Plan</string>
 
 </resources>

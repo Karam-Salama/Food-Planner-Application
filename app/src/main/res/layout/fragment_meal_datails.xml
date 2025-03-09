@@ -28,18 +28,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/RoundCorner" />
 
-        <ImageButton
-            android:id="@+id/saveBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:padding="2dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/favorite_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/si_mealImage" />
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_mealDetails"
             android:layout_width="match_parent"
@@ -178,7 +166,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="50dp"
             android:background="@drawable/button_background"
-            android:text="Add to Plan"
+            android:text="@string/add_to_plan"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

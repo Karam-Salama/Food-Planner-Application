@@ -32,6 +32,7 @@
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_mealCategory"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_mealName"
         app:srcCompat="@drawable/trash_4121380" />
 
     <TextView
@@ -39,39 +40,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/iv_mealImage"
         app:layout_constraintTop_toTopOf="@+id/iv_mealImage" />
-
-    <TextView
-        android:id="@+id/tv_mealTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_mealDate" />
-
-    <TextView
-        android:id="@+id/tv_mealCalories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/iv_mealImage"
-        app:layout_constraintTop_toBottomOf="@+id/tv_mealName" />
 
     <TextView
         android:id="@+id/tv_mealDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/iv_mealImage"
-        app:layout_constraintTop_toBottomOf="@+id/tv_mealCalories" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_mealName" />
+
     <TextView
         android:id="@+id/tv_mealCategory"
         android:layout_width="wrap_content"
@@ -79,5 +62,5 @@
         android:layout_marginEnd="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_mealCalories" />
+        app:layout_constraintTop_toTopOf="@+id/tv_mealDate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -22,13 +23,20 @@ import com.example.foodplannerapplication.core.model.FilteredMealModel
 import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
 import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
+import com.example.foodplannerapplication.core.utils.helpers.DateUtils
+import com.example.foodplannerapplication.core.utils.helpers.MealDateTimePickerHelper
+import com.example.foodplannerapplication.core.utils.helpers.MealValidator
 import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
 import com.example.foodplannerapplication.core.viewmodel.MyFactory
+import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
+import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.IngredientsAdapter
+import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -43,6 +51,9 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
 
     // view model
     private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
+    private lateinit var addMealViewModel: AddMealViewModel
+    private lateinit var dateTimePickerHelper: MealDateTimePickerHelper
+
 
     // ui components
     private lateinit var mealImage: ShapeableImageView
@@ -53,7 +64,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     private lateinit var rcMealIngredients: RecyclerView
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var mealSource: TextView
-    private lateinit var favoriteButton: ImageButton
+    private  lateinit var btnAddToPlan: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,12 +77,12 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        dateTimePickerHelper = MealDateTimePickerHelper(requireContext())
         initViews(view)
         setUpViewModel()
         setUpRecyclerView(view)
         extractedDataFromViewModel()
         observeMealDetails()
-
     }
 
     private fun initViews(view: View) {
@@ -81,14 +92,19 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
         mealInstructions = view.findViewById(R.id.tv_mealInstructions)
         youtubePlayerView = view.findViewById(R.id.youtubePlayerView)
         mealSource = view.findViewById(R.id.tv_txtNeedToKnowMore)
-        favoriteButton = view.findViewById(R.id.saveBtn)
+        btnAddToPlan = view.findViewById(R.id.btn_addToPlan)
     }
 
     private fun setUpViewModel() {
         var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
         var myFactory = MyFactory(dao, RetrofitHelper)
         addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
+
+        val daoAddMeal = AddMealDatabase.getDatabase(requireContext()).getAddMealDao()
+        val factory = com.example.foodplannerapplication.modules.home.viewmodel.MyFactory(daoAddMeal)
+        addMealViewModel = ViewModelProvider(this, factory).get(AddMealViewModel::class.java)
     }
+
 
     private fun extractedDataFromViewModel() {
         lifecycleScope.launch {
@@ -107,6 +123,10 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     }
 
     private fun observeMealDetails() {
+        addMealViewModel.message.observe(viewLifecycleOwner) {
+            Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
+        }
+
         addToFavoriteViewModel.mealDetails.observe(viewLifecycleOwner) { meal ->
             meal?.let {
                 it.strMealThumb?.let { loadMealImage(it) }
@@ -116,6 +136,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
                 loadYouTubeVideo(it)
                 showIngredients(it)
                 setupMealSourceLink(it)
+                setUpListeners(it)
             }
         }
     }
@@ -187,4 +208,31 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     override fun onFilteredMealsClick(mealId: String?) {
         TODO("Not yet implemented")
     }
+
+    private fun setUpListeners(filteredMeals: MealModel) {
+        btnAddToPlan.setOnClickListener {
+            dateTimePickerHelper.showDatePicker() { selectedDate ->
+                val dateInMillis = DateUtils.convertDateToLong(selectedDate)
+
+                val mealPlan = filteredMeals.strMeal?.let { name ->
+                    filteredMeals.strMealThumb?.let { thumb ->
+                        filteredMeals.strCategory?.let { category ->
+                            AddMealModel(
+                                thumbMealPlan = thumb,
+                                nameMealPlan = name,
+                                categoryMealPlan = category,
+                                dateMealPlan = dateInMillis,
+                            )
+                        }
+                    }
+                }
+                if (mealPlan?.let { it1 -> MealValidator.isValid(it1) } == true) {
+                    addMealViewModel.addPlan(mealPlan)
+                } else {
+                    Snackbar.make(requireView(), "Invalid Meal Data", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 }

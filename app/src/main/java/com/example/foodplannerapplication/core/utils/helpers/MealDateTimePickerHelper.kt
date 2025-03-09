@@ -10,12 +10,21 @@ import android.widget.EditText
 class MealDateTimePickerHelper(private val context: Context) {
 
     @SuppressLint("SetTextI18n")
-    fun showDatePicker(editText: EditText) {
+    fun showDatePicker(editText: EditText?) {
         val calendar = Calendar.getInstance()
         DatePickerDialog(context, { _, year, month, day ->
-            editText.setText("$day/${month + 1}/$year")
+            editText?.setText("$day/${month + 1}/$year")
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
+
+    fun showDatePicker(onDateSelected: (String) -> Unit) {
+        val calendar = Calendar.getInstance()
+        DatePickerDialog(context, { _, year, month, day ->
+            val selectedDate = "$day/${month + 1}/$year"
+            onDateSelected(selectedDate)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+    }
+
 
     @SuppressLint("DefaultLocale")
     fun showTimePicker(editText: EditText) {

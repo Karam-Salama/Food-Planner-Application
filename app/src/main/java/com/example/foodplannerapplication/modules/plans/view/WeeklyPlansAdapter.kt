@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.utils.helpers.DateUtils
 import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
 import com.google.android.material.imageview.ShapeableImageView
@@ -35,12 +34,10 @@ class WeeklyPlansAdapter(
             Glide.with(context).load(currentItem.thumbMealPlan).into(holder.mealImage)
             holder.mealTitle.text = currentItem.nameMealPlan
             holder.mealCategory.text = currentItem.categoryMealPlan
-            holder.mealCalories.text = "${ currentItem.caloriesMealPlan.toString() } Calories"
 
             val formattedDate = DateUtils.convertLongToDate(currentItem.dateMealPlan)
             holder.mealDate.text = formattedDate
 
-             holder.mealTime.text = currentItem.timeMealPlan
 
             holder.ivDelete.setOnClickListener {
                 listener.onDeleteWeeklyPlansClick(currentItem)
@@ -56,10 +53,8 @@ class WeeklyPlansAdapter(
     class WeeklyPlansViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mealImage: ShapeableImageView = itemView.findViewById(R.id.iv_mealImage)
         val mealTitle: TextView = itemView.findViewById(R.id.tv_mealName)
-        val mealCalories: TextView = itemView.findViewById(R.id.tv_mealCalories)
         val mealCategory: TextView = itemView.findViewById(R.id.tv_mealCategory)
         val mealDate : TextView = itemView.findViewById(R.id.tv_mealDate)
-        val mealTime : TextView = itemView.findViewById(R.id.tv_mealTime)
         val ivDelete : ImageView = itemView.findViewById(R.id.iv_trashIcon)
     }
 }

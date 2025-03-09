@@ -9,7 +9,7 @@ object DateUtils {
         return sdf.parse(date)?.time ?: 0L
     }
 
-    fun convertLongToDate(timeInMillis: Long): String {
+    fun convertLongToDate(timeInMillis: Long?): String {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return sdf.format(timeInMillis)
     }

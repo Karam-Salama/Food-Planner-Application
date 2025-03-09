@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.foodplannerapplication.modules.home.model.cache.dao.AddMealDao
 import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
 
-@Database(entities = [AddMealModel::class], version = 3)
+@Database(entities = [AddMealModel::class], version = 5)
 abstract class AddMealDatabase : RoomDatabase() {
     abstract fun getAddMealDao(): AddMealDao
 

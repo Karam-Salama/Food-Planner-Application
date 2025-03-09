@@ -9,9 +9,6 @@ data class AddMealModel(
     val idMealPlan: Int = 0,
     val thumbMealPlan: String,
     val nameMealPlan: String,
-    val caloriesMealPlan: Int,
     val categoryMealPlan: String,
-    val dateMealPlan: Long,
-    val timeMealPlan: String,
-    val descriptionMealPlan: String,
+    val dateMealPlan: Long?,
 )

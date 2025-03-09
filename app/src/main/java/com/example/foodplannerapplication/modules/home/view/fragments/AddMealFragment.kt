@@ -1,16 +1,9 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +16,6 @@ import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.utils.helpers.DateUtils
@@ -35,12 +27,7 @@ import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMea
 import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
 import com.example.foodplannerapplication.modules.home.viewmodel.MyFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+
 class AddMealFragment : Fragment() {
     private lateinit var addMealViewModel: AddMealViewModel
     private lateinit var dateTimePickerHelper: MealDateTimePickerHelper
@@ -49,11 +36,8 @@ class AddMealFragment : Fragment() {
 
     private lateinit var ivMealImage: ImageView
     private lateinit var edtMealName: EditText
-    private lateinit var edtMealCalories: EditText
     private lateinit var mealCategorySpinner: Spinner
     private lateinit var edtMealDate: EditText
-    private lateinit var edtMealTime: EditText
-    private lateinit var edtMealDescription: EditText
     private lateinit var btnSaveMeal: Button
 
     override fun onCreateView(
@@ -78,18 +62,14 @@ class AddMealFragment : Fragment() {
     private fun initViews(view: View) {
         ivMealImage = view.findViewById(R.id.iv_meal_image)
         edtMealName = view.findViewById(R.id.edt_meal_name)
-        edtMealCalories = view.findViewById(R.id.edt_meal_calories)
         mealCategorySpinner = view.findViewById(R.id.spinner_meal_type)
         edtMealDate = view.findViewById(R.id.edt_meal_date)
-        edtMealTime = view.findViewById(R.id.edt_meal_time)
-        edtMealDescription = view.findViewById(R.id.edt_meal_description)
         btnSaveMeal = view.findViewById(R.id.btn_save_meal)
     }
 
     private fun setUpListeners() {
         ivMealImage.setOnClickListener { openGallery() }
         edtMealDate.setOnClickListener { dateTimePickerHelper.showDatePicker(edtMealDate) }
-        edtMealTime.setOnClickListener { dateTimePickerHelper.showTimePicker(edtMealTime) }
         btnSaveMeal.setOnClickListener { saveMeal() }
     }
 
@@ -109,13 +89,10 @@ class AddMealFragment : Fragment() {
 
     private fun saveMeal() {
         val mealName = edtMealName.text.toString().trim()
-        val mealCalories = edtMealCalories.text.toString().trim().toIntOrNull() ?: 0
         val selectedCategory = mealCategorySpinner.selectedItem.toString()
         val selectedDate = edtMealDate.text.toString().trim()
-        val selectedTime = edtMealTime.text.toString().trim()
-        val mealDescription = edtMealDescription.text.toString().trim()
 
-        if (mealName.isEmpty() || selectedDate.isEmpty() || selectedTime.isEmpty()) {
+        if (mealName.isEmpty() || selectedDate.isEmpty()) {
             Snackbar.make(requireView(), "Please fill all required fields", Snackbar.LENGTH_SHORT).show()
             return
         }
@@ -126,11 +103,8 @@ class AddMealFragment : Fragment() {
         val mealPlan = AddMealModel(
             thumbMealPlan = imagePath,
             nameMealPlan = mealName,
-            caloriesMealPlan = mealCalories,
             categoryMealPlan = selectedCategory,
             dateMealPlan = dateInMillis,
-            timeMealPlan = selectedTime,
-            descriptionMealPlan = mealDescription
         )
 
         if (MealValidator.isValid(mealPlan)) {
