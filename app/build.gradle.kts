@@ -76,4 +76,7 @@ dependencies {
 
     // lifecycle
     implementation(libs.lifecycle.viewmodel)
+
+    // facebook login
+    implementation(libs.facebook.login)
 }
