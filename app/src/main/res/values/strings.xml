@@ -119,5 +119,6 @@
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">e377b0d6fd6196ad5d1f3f550e85461f</string>
     <string name="add_to_plan">Add to Plan</string>
+    <string name="you_need_to_log_in_to_access_this_feature">You need to log in to access this feature.</string>
 
 </resources>

@@ -14,6 +14,7 @@ import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelp
 import com.example.foodplannerapplication.core.utils.functions.hideStatusAndNavBar.hideStatusAndNavBar
 import com.example.foodplannerapplication.core.utils.classes.Constants
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
+import com.example.foodplannerapplication.modules.home.HomeActivity
 
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var startButton: Button
@@ -45,6 +46,10 @@ class OnboardingActivity : AppCompatActivity() {
             finish()
         }
 
-        tvSkip.setOnClickListener() {}
+        tvSkip.setOnClickListener() {
+            CacheHelper.saveData(Constants.OnBording_SKIP_KEY, true)
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
     }
 }

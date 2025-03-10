@@ -20,13 +20,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
+import com.example.foodplannerapplication.core.utils.classes.Constants
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
 import com.example.foodplannerapplication.core.viewmodel.DashboardViewModel
+import com.example.foodplannerapplication.modules.auth.view.LoginActivity
+import com.example.foodplannerapplication.modules.home.HomeActivity
+import com.example.foodplannerapplication.modules.onboarding.view.OnboardingActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -107,7 +115,17 @@ class FragmentHome : Fragment() {
     private fun setupFab(view: View) {
         addMealFab = view.findViewById(R.id.add_meal_fab)
         addMealFab.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentHome_to_addMealFragment)
+            val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+
+            if (isAuthSkipClicked) {
+                if (Firebase.auth.currentUser == null) {
+                    DialogHelper.showLoginRequiredDialog(requireContext())
+                } else {
+                    findNavController().navigate(R.id.action_fragmentHome_to_addMealFragment)
+                }
+            } else {
+                findNavController().navigate(R.id.action_fragmentHome_to_addMealFragment)
+            }
         }
     }
 
@@ -120,9 +138,20 @@ class FragmentHome : Fragment() {
 
     private fun setUpListeners() {
         randomMealLayout.setOnClickListener {
-            val actionFragmentHomeToRandomMealDetailFragment =
-                FragmentHomeDirections.actionFragmentHomeToMealDatailsFragment(mealOfTheDay?.idMeal)
-            findNavController().navigate(actionFragmentHomeToRandomMealDetailFragment)
+            val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+            if (isAuthSkipClicked) {
+                if (Firebase.auth.currentUser == null) {
+                    DialogHelper.showLoginRequiredDialog(requireContext())
+                } else {
+                    val actionFragmentHomeToRandomMealDetailFragment =
+                        FragmentHomeDirections.actionFragmentHomeToMealDatailsFragment(mealOfTheDay?.idMeal)
+                    findNavController().navigate(actionFragmentHomeToRandomMealDetailFragment)
+                }
+            } else {
+                val actionFragmentHomeToRandomMealDetailFragment =
+                    FragmentHomeDirections.actionFragmentHomeToMealDatailsFragment(mealOfTheDay?.idMeal)
+                findNavController().navigate(actionFragmentHomeToRandomMealDetailFragment)
+            }
         }
     }
 
@@ -175,14 +204,39 @@ class FragmentHome : Fragment() {
 
 
     private fun openMealsActivityByCategory(category: String?) {
-        val actionFragmentHomeToFilteredMealsByCategoryFragment =
-            FragmentHomeDirections.actionFragmentHomeToFilteredMealsByCategoryFragment(category)
-        findNavController().navigate(actionFragmentHomeToFilteredMealsByCategoryFragment)
+        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+
+        if (isAuthSkipClicked) {
+            if (Firebase.auth.currentUser == null) {
+                DialogHelper.showLoginRequiredDialog(requireContext())
+            } else {
+                val actionFragmentHomeToFilteredMealsByCategoryFragment =
+                    FragmentHomeDirections.actionFragmentHomeToFilteredMealsByCategoryFragment(category)
+                findNavController().navigate(actionFragmentHomeToFilteredMealsByCategoryFragment)
+            }
+        } else {
+            val actionFragmentHomeToFilteredMealsByCategoryFragment =
+                FragmentHomeDirections.actionFragmentHomeToFilteredMealsByCategoryFragment(category)
+            findNavController().navigate(actionFragmentHomeToFilteredMealsByCategoryFragment)
+        }
     }
     private fun openMealsActivityByArea(area: String?) {
-        val actionFragmentHomeToFilteredMealsByAreaFragment =
-            FragmentHomeDirections.actionFragmentHomeToFilteredMealsByAreaFragment(area)
-        findNavController().navigate(actionFragmentHomeToFilteredMealsByAreaFragment)
+
+        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+
+        if (isAuthSkipClicked) {
+            if (Firebase.auth.currentUser == null) {
+                DialogHelper.showLoginRequiredDialog(requireContext())
+            } else {
+                val actionFragmentHomeToFilteredMealsByAreaFragment =
+                    FragmentHomeDirections.actionFragmentHomeToFilteredMealsByAreaFragment(area)
+                findNavController().navigate(actionFragmentHomeToFilteredMealsByAreaFragment)
+            }
+        } else {
+            val actionFragmentHomeToFilteredMealsByAreaFragment =
+                FragmentHomeDirections.actionFragmentHomeToFilteredMealsByAreaFragment(area)
+            findNavController().navigate(actionFragmentHomeToFilteredMealsByAreaFragment)
+        }
     }
 
 }

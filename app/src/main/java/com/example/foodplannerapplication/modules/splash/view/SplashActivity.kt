@@ -7,13 +7,16 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.example.foodplannerapplication.modules.onboarding.view.OnboardingActivity
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
 import com.example.foodplannerapplication.core.utils.functions.hideStatusAndNavBar.hideStatusAndNavBar
 import com.example.foodplannerapplication.core.utils.classes.Constants
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 import com.example.foodplannerapplication.modules.home.HomeActivity
+import com.example.foodplannerapplication.modules.home.view.fragments.FragmentHomeDirections
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -31,8 +34,9 @@ class SplashActivity : AppCompatActivity() {
         // Initialize CacheHelper
         CacheHelper.init(this)
         val isOnboardingCompleted = CacheHelper.getBoolean(Constants.OnBoarding_KEY, false)
+        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
 
-        if (isOnboardingCompleted) {
+        if (isOnboardingCompleted || isAuthSkipClicked) {
             // Check if the user is logged in and email is verified
             if (Firebase.auth.currentUser != null) {
                 delayedNavigate(HomeActivity::class.java)
