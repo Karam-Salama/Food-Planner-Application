@@ -17,22 +17,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp">
 
-        <TextView
-            android:id="@+id/tv_skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="@string/skip"
-            android:textColor="@color/grey"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/imageView_dish1"
             android:layout_width="129dp"
@@ -67,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:orientation="vertical"
@@ -81,38 +65,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="@string/onboarding_title"
                 android:textColor="@color/black"
-                android:textSize="24sp"
-                android:fontFamily="@font/poppins_semibold"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_onboarding_subTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="36dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/poppins_medium"
                 android:text="@string/onboarding_body"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:fontFamily="@font/poppins_medium"
+                android:textSize="16sp"
                 android:textStyle="normal" />
 
             <Button
                 android:id="@+id/startButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/onboarding_button"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/button_background"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/onboarding_button"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:fontFamily="@font/inter_medium"
                 app:backgroundTint="@null" />
+
+            <TextView
+                android:id="@+id/tv_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
+                android:text="@string/skip"
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="20dp"/>
+                android:layout_height="20dp" />
 
         </LinearLayout>
 

@@ -29,10 +29,6 @@ class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
             try {
                 val list = addMealDao.getAllPlans()
                 _mealsPlanList.postValue(list)
-
-                if (list.isEmpty()) {
-                    _message.postValue("Your Plan is Empty")
-                }
             } catch (e: Exception) {
                 Log.e("ViewModel", "Error Fetching Plans", e)
             }

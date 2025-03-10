@@ -113,7 +113,6 @@ class AddToFavoriteViewModel(private val dao: FavoritesDao, var retrofitHelper: 
             viewModelScope.launch(Dispatchers.IO) {
                 val list =  dao.getAllFavorites()
                 if (list.isNullOrEmpty()) {
-                    _message.postValue("NO Favorites Found")
                     _filteredMealsList.postValue(emptyList())
                 } else {
                     withContext(Dispatchers.Main) {
