@@ -1,19 +1,23 @@
 package com.example.foodplannerapplication.modules.plans.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.FilteredMealModel
 import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
 import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
@@ -29,6 +33,11 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
     private lateinit var weeklyPlansAdapter: WeeklyPlansAdapter
     private lateinit var weeklyPlansViewModel: AddMealViewModel
 
+    private lateinit var lottieEmptyView: LottieAnimationView
+    private lateinit var tvNoPlans: TextView
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,10 +48,16 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews(view)
         setupRecyclerView(view)
         setUpViewModel()
         extractedDataFromViewModel()
         observeViewModel()
+    }
+
+    private fun initViews(view: View) {
+        lottieEmptyView = view.findViewById(R.id.lottie_empty_view)
+        tvNoPlans = view.findViewById(R.id.tv_no_plans)
     }
 
     private fun setupRecyclerView(view: View) {
@@ -67,16 +82,29 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun observeViewModel() {
         weeklyPlansViewModel.mealsPlanList.observe(viewLifecycleOwner) { newList ->
-            weeklyPlansAdapter.weeklyMeals = newList.toList()
-            weeklyPlansAdapter.notifyDataSetChanged()
+            if (newList.isNullOrEmpty()) {
+                rcWeeklyPlans.visibility = View.GONE
+                lottieEmptyView.visibility = View.VISIBLE
+                tvNoPlans.visibility = View.VISIBLE
+            } else {
+                rcWeeklyPlans.visibility = View.VISIBLE
+                lottieEmptyView.visibility = View.GONE
+                tvNoPlans.visibility = View.GONE
+                weeklyPlansAdapter.weeklyMeals = newList.toList()
+                weeklyPlansAdapter.notifyDataSetChanged()
+            }
         }
     }
 
+
     override fun onDeleteWeeklyPlansClick(addMealModel: AddMealModel) {
-        lifecycleScope.launch {
-            weeklyPlansViewModel.removePlan(addMealModel)
+        DialogHelper.showDeleteConfirmationDialog(requireContext()) {
+            lifecycleScope.launch {
+                weeklyPlansViewModel.removePlan(addMealModel)
+            }
         }
     }
 }

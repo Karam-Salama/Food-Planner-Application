@@ -37,5 +37,28 @@ object DialogHelper {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
     }
+
+    fun showDeleteConfirmationDialog(context: Context, onConfirmDelete: () -> Unit) {
+        val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.dialog_delete_confirmation, null)
+
+        val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
+        val btnDelete = dialogView.findViewById<Button>(R.id.btn_delete)
+
+        val dialog = builder.setView(dialogView).create()
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnDelete.setOnClickListener {
+            onConfirmDelete.invoke()
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+    }
 }
 

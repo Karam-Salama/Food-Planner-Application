@@ -120,5 +120,9 @@
     <string name="facebook_client_token">e377b0d6fd6196ad5d1f3f550e85461f</string>
     <string name="add_to_plan">Add to Plan</string>
     <string name="you_need_to_log_in_to_access_this_feature">You need to log in to access this feature.</string>
+    <string name="no_weekly_plans_available">No weekly plans available</string>
+    <string name="no_favorite_meals">No favorite meals</string>
+    <string name="are_you_sure_you_want_to_delete_this_meal">Are you sure you want to delete this meal?</string>
+    <string name="delete">Delete</string>
 
 </resources>

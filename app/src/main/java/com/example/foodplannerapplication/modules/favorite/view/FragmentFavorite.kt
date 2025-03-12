@@ -1,19 +1,23 @@
 package com.example.foodplannerapplication.modules.favorite.view
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.FilteredMealModel
 import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
 import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
@@ -26,6 +30,9 @@ class FragmentFavorite : Fragment() , ICommonFilteredMealListener {
     private lateinit var rvFavorite: RecyclerView
     private lateinit var favoriteAdapter: FilteredMealsByAreaAdapter
     private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
+
+    private lateinit var lottieEmptyFavorites: LottieAnimationView
+    private lateinit var tvNoFavorites: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +59,9 @@ class FragmentFavorite : Fragment() , ICommonFilteredMealListener {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = favoriteAdapter
         }
+
+        lottieEmptyFavorites = view.findViewById(R.id.lottie_empty_favorites)
+        tvNoFavorites = view.findViewById(R.id.tv_no_favorites)
     }
 
     private fun setUpViewModel() {
@@ -66,12 +76,21 @@ class FragmentFavorite : Fragment() , ICommonFilteredMealListener {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun observeViewModel() {
         addToFavoriteViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
-            favoriteAdapter.filteredMeals = newList.toList()
-            favoriteAdapter.notifyDataSetChanged()
+            if (newList.isNullOrEmpty()) {
+                rvFavorite.visibility = View.GONE
+                lottieEmptyFavorites.visibility = View.VISIBLE
+                tvNoFavorites.visibility = View.VISIBLE
+            } else {
+                rvFavorite.visibility = View.VISIBLE
+                lottieEmptyFavorites.visibility = View.GONE
+                tvNoFavorites.visibility = View.GONE
+                favoriteAdapter.filteredMeals = newList.toList()
+                favoriteAdapter.notifyDataSetChanged()
+            }
         }
-
 
         addToFavoriteViewModel.message.observe(viewLifecycleOwner) {
             Snackbar.make(rvFavorite, it, Snackbar.LENGTH_SHORT).show()
@@ -79,8 +98,10 @@ class FragmentFavorite : Fragment() , ICommonFilteredMealListener {
     }
 
     override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
-        lifecycleScope.launch {
-            addToFavoriteViewModel.removeFilteredMeals(filteredMealsModel)
+        DialogHelper.showDeleteConfirmationDialog(requireContext()) {
+            lifecycleScope.launch {
+                addToFavoriteViewModel.removeFilteredMeals(filteredMealsModel)
+            }
         }
     }
 
