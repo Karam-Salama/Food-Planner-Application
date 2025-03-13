@@ -68,6 +68,7 @@ class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
         noInternetAnimation = view.findViewById(R.id.noInternetAnimation)
         noInternetText = view.findViewById(R.id.noInternetText)
         mainContentLayout = view.findViewById(R.id.main_content_canstraint_layout)
+
     }
 
     override fun onResume() {
