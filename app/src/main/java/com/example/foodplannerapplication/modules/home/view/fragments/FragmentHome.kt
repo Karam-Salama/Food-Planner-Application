@@ -1,5 +1,9 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
 
+import android.content.Context
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,11 +22,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
 import com.example.foodplannerapplication.core.utils.classes.Constants
 import com.example.foodplannerapplication.core.utils.classes.DialogHelper
+import com.example.foodplannerapplication.core.utils.classes.NetworkReceiver
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
@@ -56,6 +62,11 @@ class FragmentHome : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
+    private lateinit var networkReceiver: NetworkReceiver
+    private lateinit var noInternetAnimation: LottieAnimationView
+    private lateinit var noInternetText: TextView
+    private lateinit var mainContentLayout: View
+
 
     // ================================ onCreateView ===============================================
     override fun onCreateView(
@@ -80,6 +91,33 @@ class FragmentHome : Fragment() {
         setupRecyclerViews(view)
 
         fetchRandomMealFromApi()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        networkReceiver = NetworkReceiver { isConnected ->
+            handleInternetChange(isConnected)
+        }
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        requireContext().registerReceiver(networkReceiver, intentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(networkReceiver)
+    }
+
+    private fun handleInternetChange(isConnected: Boolean) {
+        if (isConnected) {
+            noInternetAnimation.visibility = View.GONE
+            noInternetText.visibility = View.GONE
+            mainContentLayout.visibility = View.VISIBLE
+        } else {
+            noInternetAnimation.visibility = View.VISIBLE
+            noInternetText.visibility = View.VISIBLE
+            mainContentLayout.visibility = View.GONE
+            addMealFab.visibility = View.GONE
+        }
     }
 
     // ================================= setUpViewModel ============================================
@@ -134,6 +172,11 @@ class FragmentHome : Fragment() {
         mealTitle = view.findViewById(R.id.mealTitle)
         mealImage = view.findViewById(R.id.mealImage)
         randomMealLayout = view.findViewById(R.id.mealContainer)
+
+        noInternetAnimation = view.findViewById(R.id.noInternetAnimation)
+        noInternetText = view.findViewById(R.id.noInternetText)
+        mainContentLayout = view.findViewById(R.id.main_content_canstraint_layout)
+
     }
 
     private fun setUpListeners() {
