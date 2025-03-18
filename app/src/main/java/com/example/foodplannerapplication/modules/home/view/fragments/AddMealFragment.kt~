@@ -16,22 +16,17 @@ import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.utils.helpers.DateUtils
 import com.example.foodplannerapplication.core.utils.helpers.MealDateTimePickerHelper
 import com.example.foodplannerapplication.core.utils.helpers.MealImageHandler
 import com.example.foodplannerapplication.core.utils.helpers.MealValidator
-import com.example.foodplannerapplication.core.utils.notifications.MealReminderWorker
 import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
 import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
 import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
 import com.example.foodplannerapplication.modules.home.viewmodel.MyFactory
 import com.google.android.material.snackbar.Snackbar
-import java.util.concurrent.TimeUnit
 
 class AddMealFragment : Fragment() {
     private lateinit var addMealViewModel: AddMealViewModel
@@ -119,20 +114,6 @@ class AddMealFragment : Fragment() {
             scheduleMealNotification(dateInMillis)
         } else {
             Snackbar.make(requireView(), "Invalid Meal Data", Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
-    // ✅ دالة جدولة WorkManager
-    private fun scheduleMealNotification(mealTimeMillis: Long) {
-        val delay = mealTimeMillis - System.currentTimeMillis()
-
-        if (delay > 0) { // تأكد أن الوقت المستقبلي صحيح
-            val workRequest = OneTimeWorkRequestBuilder<MealReminderWorker>()
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS) // انتظر حتى يحين وقت الوجبة
-                .setInputData(workDataOf("meal_time" to mealTimeMillis)) // تمرير وقت الوجبة إلى Worker
-                .build()
-
-            WorkManager.getInstance(requireContext()).enqueue(workRequest)
         }
     }
 

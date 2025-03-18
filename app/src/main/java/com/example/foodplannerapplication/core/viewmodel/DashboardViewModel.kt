@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 enum class FilterType {
     COUNTRIES, CATEGORIES, INGREDIENTS
 }
-
 class DashboardViewModel : ViewModel() {
 
     private val _categories = MutableLiveData<List<CategoryModel>>()
@@ -33,12 +32,10 @@ class DashboardViewModel : ViewModel() {
     private val _searchQuery = MutableLiveData<String>()
     val searchQuery: LiveData<String> get() = _searchQuery
 
-    private val _filteredData = MutableLiveData<List<FilteredMealModel>>()
-    val filteredData: LiveData<List<FilteredMealModel>> get() = _filteredData
+    private val _filteredData = MutableLiveData<List<Any>>()
+    val filteredData: LiveData<List<Any>> get() = _filteredData
 
-
-    // 🔹 تحديد الفلتر الحالي (Countries, Categories, Ingredients)
-    private var selectedFilterType: FilterType = FilterType.CATEGORIES
+    var selectedFilterType: FilterType = FilterType.COUNTRIES
 
     init {
         fetchCategories()
@@ -92,45 +89,16 @@ class DashboardViewModel : ViewModel() {
     private fun filterData() {
         val query = _searchQuery.value.orEmpty().lowercase()
 
-        val filteredList: List<FilteredMealModel> = when (selectedFilterType) {
+        val filteredList: List<Any> = when (selectedFilterType) {
             FilterType.COUNTRIES -> _areas.value?.filter { it.strArea?.lowercase()?.contains(query) == true }
-                ?.map { area ->
-                    FilteredMealModel(
-                        idMeal = "",
-                        strMeal = area.strArea ?: "",
-                        strMealThumb = CountryFlagMapper.getFlagUrl(area.strArea ?: ""),
-                        isFavorite = false
-                    )
-                }
-
             FilterType.CATEGORIES -> _categories.value?.filter { it.strCategory?.lowercase()?.contains(query) == true }
-                ?.map { category ->
-                    FilteredMealModel(
-                        idMeal = "",
-                        strMeal = category.strCategory ?: "",
-                        strMealThumb = category.strCategoryThumb ?: "",
-                        isFavorite = false
-                    )
-                }
-
             FilterType.INGREDIENTS -> _ingredients.value?.filter { it.strIngredient?.lowercase()?.contains(query) == true }
-                ?.map { ingredient ->
-                    FilteredMealModel(
-                        idMeal = "",
-                        strMeal = ingredient.strIngredient ?: "",
-                        strMealThumb = "https://www.themealdb.com/images/ingredients/${ingredient.strIngredient?.replace(" ", "%20")}-Small.png",
-                        isFavorite = false
-                    )
-                }
-
-            else -> emptyList()
         } ?: emptyList()
 
         _filteredData.postValue(filteredList)
     }
-
-
 }
+
 
 class MyHomeFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

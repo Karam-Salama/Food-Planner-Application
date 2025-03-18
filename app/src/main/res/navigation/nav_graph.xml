@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_fragmentSearch_to_filteredMealsByAreaFragment"
             app:destination="@id/filteredMealsByAreaFragment" />
+        <action
+            android:id="@+id/action_fragmentSearch_to_filteredMealsByIngredientFragment"
+            app:destination="@id/filteredMealsByIngredientFragment" />
     </fragment>
 
     <fragment
@@ -162,5 +165,19 @@
         android:name="com.example.foodplannerapplication.modules.auth.view.LoginActivity"
         android:label="activity_login"
         tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/filteredMealsByIngredientFragment"
+        android:name="com.example.foodplannerapplication.modules.search.view.FilteredMealsByIngredientFragment"
+        android:label="fragment_filtered_meals_by_ingredient"
+        tools:layout="@layout/fragment_filtered_meals_by_ingredient" >
+        <argument
+            android:name="ingredientName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="chicken" />
+        <action
+            android:id="@+id/action_filteredMealsByIngredientFragment_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
 
 </navigation>

@@ -79,4 +79,7 @@ dependencies {
 
     // facebook login
     implementation(libs.facebook.login)
+
+    // work manager
+    implementation(libs.work.manager)
 }

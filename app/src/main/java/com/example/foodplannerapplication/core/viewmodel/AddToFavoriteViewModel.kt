@@ -43,6 +43,25 @@ class AddToFavoriteViewModel(private val dao: FavoritesDao, var retrofitHelper: 
         }
     }
 
+    suspend fun getFilteredMealsByIngredient(ingredientName: String?) {
+        try {
+            val response = RetrofitHelper.retrofitService.getMealsByIngredient(ingredientName)
+            val filteredMeals = response.meals?.filterNotNull()?.mapNotNull {
+                it.idMeal?.let { id -> it.copy(idMeal = id) }
+            } ?: emptyList()
+
+            viewModelScope.launch {
+                if (filteredMeals.isEmpty()) {
+                    _message.postValue("Couldn't Fetch Filtered Meals")
+                } else {
+                    _filteredMealsList.postValue(filteredMeals)
+                }
+            }
+        } catch (e: Exception) {
+            _message.postValue("Error Fetching Filtered Meals")
+        }
+    }
+
     suspend fun getFilteredMealsByArea(areaName: String?) {
         try {
             val response = RetrofitHelper.retrofitService.getMealsByArea(areaName)

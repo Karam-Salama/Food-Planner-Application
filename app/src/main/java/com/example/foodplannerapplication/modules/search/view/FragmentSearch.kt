@@ -58,7 +58,7 @@ class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
 
     private fun setUpRecyclerView(view: View) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView).apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = SearchAdapter(requireContext(), this@FragmentSearch)
             searchAdapter = adapter as SearchAdapter
         }
@@ -128,9 +128,16 @@ class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
 
     override fun openMealsActivityByArea(area: String?) {
         val actionFragmentSearchToFilteredMealsByAreaFragment =
-            FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment()
+            FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment(area)
         findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
     }
 
-    override fun onFilteredMealsClick(mealId: String?) {}
+    override fun openMealsActivityByIngredient(ingredient: String?) {
+        val actionFragmentSearchToFilteredMealsByIngredientFragment =
+        FragmentSearchDirections.actionFragmentSearchToFilteredMealsByIngredientFragment(ingredient)
+        findNavController().navigate(actionFragmentSearchToFilteredMealsByIngredientFragment)
+    }
+
+    override fun onFilteredMealsClick(mealId: String?) {
+    }
 }

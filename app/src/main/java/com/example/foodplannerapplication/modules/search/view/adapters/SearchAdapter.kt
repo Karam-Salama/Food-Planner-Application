@@ -19,6 +19,7 @@ import com.example.foodplannerapplication.modules.home.model.server.models.AreaM
 import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 import android.util.Log
+import com.example.foodplannerapplication.modules.home.model.server.models.IngredientModel
 import com.example.foodplannerapplication.modules.search.view.ICommonSearchFilteredListener
 
 class SearchAdapter(
@@ -34,7 +35,7 @@ class SearchAdapter(
 
         return when (item) {
             is FilteredMealModel -> ItemType.MEAL.ordinal
-            is String -> ItemType.INGREDIENT.ordinal
+            is IngredientModel -> ItemType.INGREDIENT.ordinal
             is AreaModel -> ItemType.AREA.ordinal
             is CategoryModel -> ItemType.CATEGORY.ordinal
             else -> throw IllegalArgumentException("Unknown item type")
@@ -48,7 +49,7 @@ class SearchAdapter(
         val view = when (viewType) {
             ItemType.MEAL.ordinal -> inflater.inflate(R.layout.search_filtered_item, parent, false)
             ItemType.INGREDIENT.ordinal, ItemType.CATEGORY.ordinal -> inflater.inflate(R.layout.category_list_item, parent, false)
-            ItemType.AREA.ordinal -> inflater.inflate(R.layout.sec_edt_area_list_item, parent, false)
+            ItemType.AREA.ordinal -> inflater.inflate(R.layout.area_list_item, parent, false)
             else -> throw IllegalArgumentException("Unknown view type")
         }
         return createViewHolder(view, viewType)
@@ -64,16 +65,14 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MealViewHolder -> bindMeal(holder, getItem(position) as FilteredMealModel, position)
-            is IngredientViewHolder -> bindIngredient(holder, getItem(position) as String)
+            is MealViewHolder -> bindMeal(holder, getItem(position) as FilteredMealModel)
+            is IngredientViewHolder -> bindIngredient(holder, getItem(position) as IngredientModel)
             is AreaViewHolder -> bindArea(holder, getItem(position) as AreaModel)
             is CategoryViewHolder -> bindCategory(holder, getItem(position) as CategoryModel)
         }
     }
 
-    private fun bindMeal(holder: MealViewHolder, item: FilteredMealModel, position: Int) {
-        Log.d("BindMeal Debug", "bindMeal is called for position: $position")
-
+    private fun bindMeal(holder: MealViewHolder, item: FilteredMealModel) {
         val imageUrl = item.strMealThumb
         Log.d("Glide Debug", "Loading Meal Image URL: $imageUrl")
 
@@ -92,34 +91,24 @@ class SearchAdapter(
 
     }
 
-    private fun bindIngredient(holder: IngredientViewHolder, currentItem: String) {
-        val imageUrl = "${Constants.INGREDIENTS_IMAGES_URL}${currentItem}.png"
+    private fun bindIngredient(holder: IngredientViewHolder, ingredient: IngredientModel) {
+        val imageUrl = "${Constants.INGREDIENTS_IMAGES_URL}${ingredient.strIngredient}.png"
         Log.d("Glide Debug", "Loading Ingredient Image URL: $imageUrl")
 
-        holder.ingredientTitle.text = currentItem
+        holder.ingredientTitle.text = ingredient.strIngredient
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .placeholder(R.drawable.placeholder_ic)
-            .error(R.drawable.error_ic)
             .into(holder.ingredientImage)
 
-        holder.itemView.setOnClickListener { listener.onFilteredMealsClick(currentItem) }
+        holder.itemView.setOnClickListener { listener.openMealsActivityByIngredient(ingredient.strIngredient) }
     }
 
     private fun bindArea(holder: AreaViewHolder, currentItem: AreaModel) {
         if (currentItem != null) {
             holder.areaTitle.text = currentItem.strArea
-            val countryCode = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
-            val flagUrl = "https://www.themealdb.com/images/icons/flags/big/64/${countryCode}.png"
-
-            Glide.with(holder.itemView.context)
-                .load(flagUrl)
-                .placeholder(R.drawable.placeholder_ic)
-                .error(R.drawable.error_ic)
-                .into(holder.areaFlag)
-
+            holder.areaFlag.text = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
             holder.itemView.setOnClickListener { listener.openMealsActivityByArea(currentItem.strArea) }
-
         }
     }
 
@@ -155,7 +144,7 @@ class SearchAdapter(
 
     class AreaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val areaTitle: TextView = view.findViewById(R.id.tv_areaTitle)
-        val areaFlag: ImageView = view.findViewById(R.id.iv_flag)
+        val areaFlag: TextView = view.findViewById(R.id.tv_flag)
     }
 
     class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
