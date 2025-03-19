@@ -8,7 +8,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.core.utils.functions.Validation
 import com.example.foodplannerapplication.modules.home.HomeActivity
 import com.facebook.AccessToken
@@ -142,9 +144,10 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    Toast.makeText(this, "Login successfully.", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    DialogHelper.showLoginConfirmationDialog(this){
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    }
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     Toast.makeText(this, "Login failed.", Toast.LENGTH_SHORT).show()
@@ -158,9 +161,10 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithGoogle:success")
-                    Toast.makeText(this, "Google Sign-In successful", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    DialogHelper.showLoginConfirmationDialog(this){
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    }
                 } else {
                     Log.e(TAG, "signInWithGoogle:failure", task.exception)
                     Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_LONG).show()
@@ -231,9 +235,10 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithFacebook:success")
-                    Toast.makeText(this, "Facebook Sign-In successful", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    DialogHelper.showLoginConfirmationDialog(this){
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    }
                 } else {
                     Log.e(TAG, "signInWithFacebook:failure", task.exception)
                     Toast.makeText(this, "Facebook Sign-In failed", Toast.LENGTH_LONG).show()

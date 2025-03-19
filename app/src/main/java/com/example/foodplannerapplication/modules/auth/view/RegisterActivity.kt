@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodplannerapplication.R
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.core.utils.functions.Validation
 import com.example.foodplannerapplication.modules.home.HomeActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -104,8 +105,9 @@ class RegisterActivity : AppCompatActivity() {
                         ?.addOnCompleteListener { profileTask ->
                             if (profileTask.isSuccessful) {
                                 Log.d(TAG, "User profile updated.")
-                                Toast.makeText(this, "Sign up successful.", Toast.LENGTH_LONG).show()
-                                startActivity(Intent(this, HomeActivity::class.java))
+                                DialogHelper.showRegisterConfirmationDialog(this){
+                                    startActivity(Intent(this, HomeActivity::class.java))
+                                }
                             } else {
                                 Log.w(TAG, "User profile update failed.", profileTask.exception)
                             }
