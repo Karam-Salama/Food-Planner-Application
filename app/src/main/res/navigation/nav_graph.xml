@@ -144,6 +144,9 @@
             app:nullable="true"
             android:defaultValue="52772"
             app:argType="string" />
+        <action
+            android:id="@+id/action_mealDatailsFragment_to_filteredMealsByIngredientFragment"
+            app:destination="@id/filteredMealsByIngredientFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragmentWeeklyPlans"

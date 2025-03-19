@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,8 +34,10 @@ import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMea
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
+import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.IngredientsAdapter
 import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
+import com.example.foodplannerapplication.modules.search.view.FragmentSearchDirections
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -114,12 +117,20 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
 
     private fun setUpRecyclerView(view: View){
         rcMealIngredients = view.findViewById(R.id.rc_Ingredients)
-        ingredientsAdapter = IngredientsAdapter(listOf(), requireContext())
+        ingredientsAdapter = IngredientsAdapter(listOf(), requireContext()) {
+            ingredient -> openMealsActivityByIngredient(ingredient)
+        }
+
         rcMealIngredients.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = ingredientsAdapter
         }
+    }
+    private fun openMealsActivityByIngredient(ingredient: String?) {
+        val actionMealDatailsFragmentToFilteredMealsByIngredientFragment =
+            MealDatailsFragmentDirections.actionMealDatailsFragmentToFilteredMealsByIngredientFragment(ingredient)
+        findNavController().navigate(actionMealDatailsFragmentToFilteredMealsByIngredientFragment)
     }
 
     private fun observeMealDetails() {

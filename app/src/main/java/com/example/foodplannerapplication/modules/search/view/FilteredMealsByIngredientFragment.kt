@@ -96,9 +96,7 @@ class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListene
 
     override fun onFilteredMealsClick(mealId: String?) {
         val actionFilteredMealsByIngredientFragmentToMealDatailsFragment =
-            FilteredMealsByIngredientFragmentDirections.actionFilteredMealsByIngredientFragmentToMealDatailsFragment(
-                mealId
-            )
+            FilteredMealsByIngredientFragmentDirections.actionFilteredMealsByIngredientFragmentToMealDatailsFragment(mealId)
         findNavController().navigate(actionFilteredMealsByIngredientFragmentToMealDatailsFragment)
     }
 
