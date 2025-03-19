@@ -16,15 +16,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
+import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
+import com.example.foodplannerapplication.core.utils.classes.Constants
+import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.core.utils.classes.NetworkReceiver
 import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
 import com.example.foodplannerapplication.core.viewmodel.DashboardViewModel
 import com.example.foodplannerapplication.core.viewmodel.FilterType
 import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
+import com.example.foodplannerapplication.modules.home.view.fragments.FragmentHomeDirections
 import com.example.foodplannerapplication.modules.search.view.adapters.SearchAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
     private lateinit var viewModel: DashboardViewModel
@@ -121,23 +127,59 @@ class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
     }
 
     override fun openMealsActivityByCategory(category: String?) {
-        val actionFragmentSearchToFilteredMealsByCategoryFragment =
-            FragmentSearchDirections.actionFragmentSearchToFilteredMealsByCategoryFragment(category)
-        findNavController().navigate(actionFragmentSearchToFilteredMealsByCategoryFragment)
+        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+
+        if (isAuthSkipClicked) {
+            if (Firebase.auth.currentUser == null) {
+                DialogHelper.showLoginRequiredDialog(requireContext())
+            } else {
+                val actionFragmentSearchToFilteredMealsByCategoryFragment =
+                    FragmentSearchDirections.actionFragmentSearchToFilteredMealsByCategoryFragment(category)
+                findNavController().navigate(actionFragmentSearchToFilteredMealsByCategoryFragment)
+            }
+        } else {
+            val actionFragmentSearchToFilteredMealsByCategoryFragment =
+                FragmentSearchDirections.actionFragmentSearchToFilteredMealsByCategoryFragment(category)
+            findNavController().navigate(actionFragmentSearchToFilteredMealsByCategoryFragment)
+        }
     }
 
     override fun openMealsActivityByArea(area: String?) {
-        val actionFragmentSearchToFilteredMealsByAreaFragment =
-            FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment(area)
-        findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
+        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+
+        if (isAuthSkipClicked) {
+            if (Firebase.auth.currentUser == null) {
+                DialogHelper.showLoginRequiredDialog(requireContext())
+            } else {
+                val actionFragmentSearchToFilteredMealsByAreaFragment =
+                    FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment(area)
+                findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
+            }
+        } else {
+            val actionFragmentSearchToFilteredMealsByAreaFragment =
+                FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment(area)
+            findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
+        }
+
     }
 
     override fun openMealsActivityByIngredient(ingredient: String?) {
-        val actionFragmentSearchToFilteredMealsByIngredientFragment =
-        FragmentSearchDirections.actionFragmentSearchToFilteredMealsByIngredientFragment(ingredient)
-        findNavController().navigate(actionFragmentSearchToFilteredMealsByIngredientFragment)
+        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
+
+        if (isAuthSkipClicked) {
+            if (Firebase.auth.currentUser == null) {
+                DialogHelper.showLoginRequiredDialog(requireContext())
+            } else {
+                val actionFragmentSearchToFilteredMealsByIngredientFragment =
+                    FragmentSearchDirections.actionFragmentSearchToFilteredMealsByIngredientFragment(ingredient)
+                findNavController().navigate(actionFragmentSearchToFilteredMealsByIngredientFragment)
+            }
+        } else {
+            val actionFragmentSearchToFilteredMealsByIngredientFragment =
+                FragmentSearchDirections.actionFragmentSearchToFilteredMealsByIngredientFragment(ingredient)
+            findNavController().navigate(actionFragmentSearchToFilteredMealsByIngredientFragment)
+        }
     }
 
-    override fun onFilteredMealsClick(mealId: String?) {
-    }
+    override fun onFilteredMealsClick(mealId: String?) {}
 }

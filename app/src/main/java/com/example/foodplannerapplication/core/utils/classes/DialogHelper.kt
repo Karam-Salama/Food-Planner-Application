@@ -9,9 +9,13 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.fragment.findNavController
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 import com.example.foodplannerapplication.modules.auth.view.RegisterActivity
+import com.example.foodplannerapplication.modules.settings.view.FragmentSettingDirections
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 object DialogHelper {
 
@@ -111,6 +115,29 @@ object DialogHelper {
 
         btnOkay.setOnClickListener {
             onConfirmForgetedPassword.invoke()
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+    }
+
+    fun showLogoutDialog(context: Context, onConfirmLogout: () -> Unit){
+        val builder = androidx.appcompat.app.AlertDialog.Builder(context, R.style.CustomDialogTheme)
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.dialog_logout, null)
+
+        val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
+        val btnConfirm = dialogView.findViewById<Button>(R.id.btn_confirm)
+
+        val dialog = builder.setView(dialogView).create()
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirm.setOnClickListener {
+            onConfirmLogout.invoke()
             dialog.dismiss()
         }
 
