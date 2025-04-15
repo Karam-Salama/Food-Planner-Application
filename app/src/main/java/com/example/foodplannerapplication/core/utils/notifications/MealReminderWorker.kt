@@ -10,16 +10,15 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.home.HomeActivity
-import com.example.foodplannerapplication.modules.plans.view.WeeklyPlansFragment
-import com.example.foodplannerapplication.modules.search.view.FragmentSearch
+
 
 class MealReminderWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        val mealTime = inputData.getLong("meal_time", 0L) // استرجاع وقت الوجبة
+        val mealTime = inputData.getLong("meal_time", 0L)
         val currentTime = System.currentTimeMillis()
 
-        if (currentTime >= mealTime) { // تأكد أن الوقت الحالي هو وقت الإشعار
+        if (currentTime >= mealTime) {
             showNotification()
         }
 
@@ -27,10 +26,10 @@ class MealReminderWorker(context: Context, workerParams: WorkerParameters) : Wor
     }
 
     private fun showNotification() {
-        val mealTime = inputData.getLong("meal_time", 0L) // الحصول على وقت الوجبة
+        val mealTime = inputData.getLong("meal_time", 0L)
         val currentTime = System.currentTimeMillis()
 
-        if (currentTime >= mealTime) { // تأكد أن الوقت الحالي هو الوقت المناسب للإشعار
+        if (currentTime >= mealTime) {
             val channelId = "meal_reminder_channel"
             val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

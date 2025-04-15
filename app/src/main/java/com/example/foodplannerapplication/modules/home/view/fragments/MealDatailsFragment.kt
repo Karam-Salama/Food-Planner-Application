@@ -27,6 +27,7 @@ import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
 import com.example.foodplannerapplication.core.utils.helpers.DateUtils
 import com.example.foodplannerapplication.core.utils.helpers.MealDateTimePickerHelper
 import com.example.foodplannerapplication.core.utils.helpers.MealValidator
+import com.example.foodplannerapplication.core.utils.notifications.SchedulerMealNotification
 import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
 import com.example.foodplannerapplication.core.viewmodel.MyFactory
 import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
@@ -222,28 +223,65 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
 
     private fun setUpListeners(filteredMeals: MealModel) {
         btnAddToPlan.setOnClickListener {
-            dateTimePickerHelper.showDatePicker() { selectedDate ->
-                val dateInMillis = DateUtils.convertDateToLong(selectedDate)
+            dateTimePickerHelper.showFullDateTimePicker(
+                onDateTimeSelected = { dateTimeInMillis ->
+                    val mealPlan = createMealPlan(filteredMeals, dateTimeInMillis)
 
-                val mealPlan = filteredMeals.strMeal?.let { name ->
-                    filteredMeals.strMealThumb?.let { thumb ->
-                        filteredMeals.strCategory?.let { category ->
-                            AddMealModel(
-                                thumbMealPlan = thumb,
-                                nameMealPlan = name,
-                                categoryMealPlan = category,
-                                dateMealPlan = dateInMillis,
-                            )
-                        }
+                    if (mealPlan?.let { it1 -> MealValidator.isValid(it1) } == true) {
+                        addMealViewModel.addPlan(mealPlan)
+                        scheduleMealNotification(filteredMeals.strMeal, dateTimeInMillis)
+                        showSuccessMessage()
+                    } else {
+                        showErrorMessage()
                     }
+                },
+                onTimePickerShown = {
+                    // يمكنك إضافة أي كود إضافي عند عرض TimePicker هنا
+                    Log.d("DateTimePicker", "Time picker shown")
+                },
+                onDatePickerShown = {
+                    // يمكنك إضافة أي كود إضافي عند عرض DatePicker هنا
+                    Log.d("DateTimePicker", "Date picker shown")
                 }
-                if (mealPlan?.let { it1 -> MealValidator.isValid(it1) } == true) {
-                    addMealViewModel.addPlan(mealPlan)
-                } else {
-                    Snackbar.make(requireView(), "Invalid Meal Data", Snackbar.LENGTH_SHORT).show()
+            )
+        }
+    }
+
+    private fun createMealPlan(meal: MealModel, dateTime: Long): AddMealModel? {
+        return meal.strMeal?.let { name ->
+            meal.strMealThumb?.let { thumb ->
+                meal.strCategory?.let { category ->
+                    AddMealModel(
+                        thumbMealPlan = thumb,
+                        nameMealPlan = name,
+                        categoryMealPlan = category,
+                        dateMealPlan = dateTime,
+                    )
                 }
             }
         }
+    }
+
+    private fun scheduleMealNotification(mealName: String?, dateTime: Long) {
+        mealName?.let {
+            SchedulerMealNotification.scheduleMealNotification(
+                requireContext(),
+                dateTime,
+                it
+            )
+        }
+    }
+
+    private fun showSuccessMessage() {
+        Snackbar.make(
+            requireView(),
+            "تمت إضافة الوجبة مع التذكير في الوقت المحدد",
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
+
+    private fun showErrorMessage() {
+        Snackbar.make(requireView(), "بيانات الوجبة غير صالحة", Snackbar.LENGTH_SHORT).show()
     }
 
 }

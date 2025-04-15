@@ -5,28 +5,30 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 object SchedulerMealNotification {
+    fun scheduleMealNotification(
+        context: Context,
+        notificationTimeInMillis: Long, // تغيير من Int إلى Long
+        mealName: String
+    ) {
+        val currentTime = System.currentTimeMillis()
 
-    fun scheduleMealNotification(context: Context, hour: Int, minute: Int) {
-        val calendar = Calendar.getInstance()
-        val now = Calendar.getInstance()
-
-        calendar.set(Calendar.HOUR_OF_DAY, hour)
-        calendar.set(Calendar.MINUTE, minute)
-        calendar.set(Calendar.SECOND, 0)
-
-        // إذا كان الوقت المختار أقل من الوقت الحالي، اجعله للغد
-        if (calendar.before(now)) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        if (notificationTimeInMillis <= currentTime) {
+            return
         }
 
-        val delay = calendar.timeInMillis - now.timeInMillis
+        val delay = notificationTimeInMillis - currentTime
+
+        val inputData = workDataOf(
+            "meal_name" to mealName
+        )
 
         val workRequest = OneTimeWorkRequestBuilder<MealReminderWorker>()
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+            .setInputData(inputData)
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
-            "meal_reminder",
+            "meal_reminder_${notificationTimeInMillis}",
             ExistingWorkPolicy.REPLACE,
             workRequest
         )

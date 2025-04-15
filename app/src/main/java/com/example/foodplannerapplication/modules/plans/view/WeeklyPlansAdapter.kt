@@ -35,9 +35,8 @@ class WeeklyPlansAdapter(
             holder.mealTitle.text = currentItem.nameMealPlan
             holder.mealCategory.text = currentItem.categoryMealPlan
 
-            val formattedDate = DateUtils.convertLongToDate(currentItem.dateMealPlan)
-            holder.mealDate.text = formattedDate
-
+            // استخدم الدالة الجديدة هنا
+            holder.mealDate.text = DateUtils.convertLongToFormattedDateTime(currentItem.dateMealPlan)
 
             holder.ivDelete.setOnClickListener {
                 listener.onDeleteWeeklyPlansClick(currentItem)
