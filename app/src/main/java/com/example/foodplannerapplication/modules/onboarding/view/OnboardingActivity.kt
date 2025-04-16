@@ -9,47 +9,72 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
 import com.example.foodplannerapplication.core.utils.functions.hideStatusAndNavBar.hideStatusAndNavBar
 import com.example.foodplannerapplication.core.utils.classes.Constants
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 import com.example.foodplannerapplication.modules.home.HomeActivity
+import com.example.foodplannerapplication.modules.onboarding.model.OnboardingRepository
+import com.example.foodplannerapplication.modules.onboarding.viewmodel.OnboardingViewModel
+import com.example.foodplannerapplication.modules.onboarding.viewmodel.OnboardingViewModelFactory
 
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var startButton: Button
     private lateinit var rotatedImage: ImageView
     private lateinit var rotateAnimation: Animation
-
     private lateinit var tvSkip: TextView
+    private lateinit var viewModel: OnboardingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_onboarding)
 
-        // hide status bar and navigation bar
         hideStatusAndNavBar()
+        CacheHelper.init(this)
+        setupViews()
+        setupAnimations()
+        setupViewModel()
+        observeNavigationEvents()
+        setupClickListeners()
+    }
 
+    private fun setupViews() {
         rotatedImage = findViewById(R.id.imageView_dish3)
         startButton = findViewById(R.id.startButton)
         tvSkip = findViewById(R.id.tv_skip)
+    }
 
-        // add animation file to image
+    private fun setupAnimations() {
         rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate)
         rotatedImage.startAnimation(rotateAnimation)
+    }
 
-        // start register activity & save data in shared preferences
-        startButton.setOnClickListener {
-            CacheHelper.saveData(Constants.OnBoarding_KEY, true)
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
+    private fun setupViewModel() {
+        val repository = OnboardingRepository(CacheHelper)
+        viewModel = ViewModelProvider(this, OnboardingViewModelFactory(repository)
+        ).get(OnboardingViewModel::class.java)
+    }
 
-        tvSkip.setOnClickListener() {
-            CacheHelper.saveData(Constants.OnBording_SKIP_KEY, true)
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+    private fun observeNavigationEvents() {
+        viewModel.navigationEvent.observe(this) { destination ->
+            when (destination) {
+                OnboardingViewModel.NavigationDestination.Login -> navigateTo(LoginActivity::class.java)
+                OnboardingViewModel.NavigationDestination.Home -> navigateTo(HomeActivity::class.java)
+                null -> { /* Do nothing */ }
+            }
         }
+    }
+
+    private fun setupClickListeners() {
+        startButton.setOnClickListener { viewModel.handleStartButtonClick() }
+        tvSkip.setOnClickListener { viewModel.handleSkipButtonClick() }
+    }
+
+    private fun navigateTo(destination: Class<*>) {
+        startActivity(Intent(this, destination))
+        finish()
     }
 }
