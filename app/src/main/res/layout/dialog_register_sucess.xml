@@ -38,12 +38,12 @@
 
         <Button
             android:id="@+id/btn_ok"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_button_outline"
+            android:background="@drawable/bg_button_filled"
             app:backgroundTint="@null"
             android:text="@string/ok"
-            android:textColor="@color/primary"
+            android:textColor="@color/white"
             android:textSize="13sp"
             android:fontFamily="@font/poppins_semibold"
             android:layout_margin="8dp"

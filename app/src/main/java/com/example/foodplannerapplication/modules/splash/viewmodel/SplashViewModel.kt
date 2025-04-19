@@ -9,6 +9,7 @@ import com.example.foodplannerapplication.modules.splash.model.SplashRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 class SplashViewModel(private val repository: SplashRepository) : ViewModel() {
 
     sealed class NavigationDestination {
@@ -25,10 +26,18 @@ class SplashViewModel(private val repository: SplashRepository) : ViewModel() {
             delay(3000)
 
             _navigationEvent.postValue(
-                when {
-                    repository.shouldShowOnboarding() -> NavigationDestination.Onboarding
-                    repository.isUserLoggedIn() -> NavigationDestination.Home
-                    else -> NavigationDestination.Login
+                if (repository.shouldShowOnboarding()){
+                    NavigationDestination.Onboarding
+                } else {
+                    if (!repository.isUserLoggedIn()){
+                        NavigationDestination.Login
+                    } else {
+                        if (!repository.isEmailVerified()){
+                            NavigationDestination.Login
+                        } else {
+                            NavigationDestination.Home
+                        }
+                    }
                 }
             )
         }

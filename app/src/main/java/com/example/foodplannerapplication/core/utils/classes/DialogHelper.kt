@@ -7,17 +7,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
-import androidx.navigation.fragment.findNavController
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
-import com.example.foodplannerapplication.modules.auth.view.RegisterActivity
-import com.example.foodplannerapplication.modules.settings.view.FragmentSettingDirections
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
-object DialogHelper {
+object  DialogHelper {
 
     fun showLoginRequiredDialog(context: Context) {
         val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
@@ -34,7 +31,6 @@ object DialogHelper {
         }
 
         btnLogin.setOnClickListener {
-            // الانتقال إلى شاشة تسجيل الدخول
             startActivity(context, Intent(context, LoginActivity::class.java), null)
             dialog.dismiss()
         }
@@ -139,6 +135,50 @@ object DialogHelper {
         btnConfirm.setOnClickListener {
             onConfirmLogout.invoke()
             dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+    }
+
+    fun showGenericDialog(
+        context: Context,
+        message: String,
+        positiveButtonText: String = "OK",
+        onPositiveAction: (() -> Unit)? = null,
+        negativeButtonText: String? = null,
+        onNegativeAction: (() -> Unit)? = null,
+        cancelable: Boolean = true
+    ) {
+        val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
+        val inflater = LayoutInflater.from(context)
+        val dialogView = inflater.inflate(R.layout.dialog_generic, null) // ستحتاج لإنشاء هذا الـ layout
+
+        val tvMessage = dialogView.findViewById<TextView>(R.id.tv_message)
+        val btnPositive = dialogView.findViewById<Button>(R.id.btn_positive)
+        val btnNegative = dialogView.findViewById<Button>(R.id.btn_negative)
+
+        tvMessage.text = message
+        btnPositive.text = positiveButtonText
+
+        val dialog = builder.setView(dialogView).create()
+
+        dialog.setCancelable(cancelable)
+
+        btnPositive.setOnClickListener {
+            onPositiveAction?.invoke()
+            dialog.dismiss()
+        }
+
+        if (negativeButtonText != null) {
+            btnNegative.visibility = View.VISIBLE
+            btnNegative.text = negativeButtonText
+            btnNegative.setOnClickListener {
+                onNegativeAction?.invoke()
+                dialog.dismiss()
+            }
+        } else {
+            btnNegative.visibility = View.GONE
         }
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

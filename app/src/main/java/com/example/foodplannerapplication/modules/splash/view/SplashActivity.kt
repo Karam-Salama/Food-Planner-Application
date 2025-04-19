@@ -3,26 +3,19 @@ package com.example.foodplannerapplication.modules.splash.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.example.foodplannerapplication.modules.onboarding.view.OnboardingActivity
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
 import com.example.foodplannerapplication.core.utils.functions.hideStatusAndNavBar.hideStatusAndNavBar
-import com.example.foodplannerapplication.core.utils.classes.Constants
-import com.example.foodplannerapplication.core.utils.classes.DialogHelper
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 import com.example.foodplannerapplication.modules.home.HomeActivity
-import com.example.foodplannerapplication.modules.home.view.fragments.FragmentHomeDirections
 import com.example.foodplannerapplication.modules.splash.model.SplashRepository
 import com.example.foodplannerapplication.modules.splash.viewmodel.SplashViewModel
 import com.example.foodplannerapplication.modules.splash.viewmodel.SplashViewModelFactory
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -62,5 +55,4 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 }
-
 

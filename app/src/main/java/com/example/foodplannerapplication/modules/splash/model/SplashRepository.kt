@@ -15,4 +15,8 @@ class SplashRepository(private val cacheHelper: CacheHelper) {
     fun isUserLoggedIn(): Boolean {
         return Firebase.auth.currentUser != null
     }
+
+    fun isEmailVerified(): Boolean {
+        return Firebase.auth.currentUser?.isEmailVerified == true
+    }
 }
