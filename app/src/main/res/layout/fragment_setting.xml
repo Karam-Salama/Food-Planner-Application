@@ -18,11 +18,11 @@
             android:id="@+id/iv_imageProfile"
             android:layout_width="73dp"
             android:layout_height="73dp"
-            android:contentDescription="@string/todo"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/person"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/user"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

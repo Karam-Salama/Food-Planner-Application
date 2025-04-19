@@ -66,6 +66,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner_meal_type" />
 
+        <EditText
+            android:id="@+id/edt_meal_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Meal Time"
+            android:focusable="false"
+            android:clickable="true"
+            android:background="@drawable/edt_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_meal_date" />
+
         <Button
             android:id="@+id/btn_save_meal"
             android:layout_width="match_parent"
@@ -76,7 +89,7 @@
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_meal_date" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_meal_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
