@@ -28,7 +28,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var tvLogin: TextView
     private lateinit var btnSignUp: Button
     private lateinit var viewModel: RegisterViewModel
-    private var loadingSnackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +60,8 @@ class RegisterActivity : AppCompatActivity() {
                 viewModel.registerUser(
                     email = etEmail.text.toString().trim(),
                     password = etPassword.text.toString().trim(),
-                    fullName = etFullName.text.toString().trim()
+                    fullName = etFullName.text.toString().trim(),
+                    phone = etPhone.text.toString().trim() // إضافة رقم الهاتف
                 )
             }
         }

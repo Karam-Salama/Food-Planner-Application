@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.foodplannerapplication.modules.auth.models.AuthRepository
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
@@ -14,19 +15,29 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
 
     sealed class RegistrationState {
         data class Loading(val message: String = "Loading...") : RegistrationState()
-        data class Success(val message: String) : RegistrationState()
+        data class Success(val user: FirebaseUser, val message: String) : RegistrationState()
         data class Error(val message: String) : RegistrationState()
     }
 
-    fun registerUser(email: String, password: String, fullName: String) {
+    fun registerUser(
+        email: String,
+        password: String,
+        fullName: String,
+        phone: String? = null
+    ) {
         _registrationState.value = RegistrationState.Loading("Registering your account...")
         viewModelScope.launch {
-            val result = authRepository.registerWithEmail(email, password, fullName)
+            val result = authRepository.registerWithEmail(email, password, fullName, phone)
             _registrationState.postValue(
                 if (result.isSuccess) {
-                    RegistrationState.Success("Please check your email to verify your account")
+                    RegistrationState.Success(
+                        user = result.getOrNull()!!,
+                        message = "Please check your email to verify your account"
+                    )
                 } else {
-                    RegistrationState.Error(result.exceptionOrNull()?.message ?: "Registration failed")
+                    RegistrationState.Error(
+                        result.exceptionOrNull()?.message ?: "Registration failed"
+                    )
                 }
             )
         }
