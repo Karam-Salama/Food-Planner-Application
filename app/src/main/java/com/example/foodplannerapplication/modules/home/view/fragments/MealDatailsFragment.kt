@@ -1,16 +1,16 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
-
-import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +24,6 @@ import com.example.foodplannerapplication.core.model.FilteredMealModel
 import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
 import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
 import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
-import com.example.foodplannerapplication.core.utils.helpers.DateUtils
 import com.example.foodplannerapplication.core.utils.helpers.MealDateTimePickerHelper
 import com.example.foodplannerapplication.core.utils.helpers.MealValidator
 import com.example.foodplannerapplication.core.utils.notifications.SchedulerMealNotification
@@ -34,20 +33,16 @@ import com.example.foodplannerapplication.modules.home.model.cache.database.AddM
 import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
 import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
 import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
-import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
-import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.IngredientsAdapter
 import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
-import com.example.foodplannerapplication.modules.search.view.FragmentSearchDirections
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
+import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 
 class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     // arguments
@@ -58,11 +53,12 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     private lateinit var addMealViewModel: AddMealViewModel
     private lateinit var dateTimePickerHelper: MealDateTimePickerHelper
 
-
     // ui components
     private lateinit var mealImage: ShapeableImageView
     private lateinit var mealTitle: TextView
     private lateinit var mealCategory: TextView
+    private lateinit var mealCalImgView: ImageView
+    private lateinit var mealFavImgView: ImageView
     private lateinit var mealInstructions: TextView
     private lateinit var youtubePlayerView: YouTubePlayerView
     private lateinit var rcMealIngredients: RecyclerView
@@ -70,11 +66,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     private lateinit var mealSource: TextView
     private  lateinit var btnAddToPlan: Button
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_meal_datails, container, false)
     }
 
@@ -97,6 +89,8 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
         youtubePlayerView = view.findViewById(R.id.youtubePlayerView)
         mealSource = view.findViewById(R.id.tv_txtNeedToKnowMore)
         btnAddToPlan = view.findViewById(R.id.btn_addToPlan)
+        mealCalImgView = view.findViewById(R.id.iv_calendar)
+        mealFavImgView = view.findViewById(R.id.iv_fav)
     }
 
     private fun setUpViewModel() {
@@ -108,7 +102,6 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
         val factory = com.example.foodplannerapplication.modules.home.viewmodel.MyFactory(daoAddMeal)
         addMealViewModel = ViewModelProvider(this, factory).get(AddMealViewModel::class.java)
     }
-
 
     private fun extractedDataFromViewModel() {
         lifecycleScope.launch {
@@ -128,6 +121,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
             adapter = ingredientsAdapter
         }
     }
+
     private fun openMealsActivityByIngredient(ingredient: String?) {
         val actionMealDatailsFragmentToFilteredMealsByIngredientFragment =
             MealDatailsFragmentDirections.actionMealDatailsFragmentToFilteredMealsByIngredientFragment(ingredient)
@@ -220,13 +214,12 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     override fun onFilteredMealsClick(mealId: String?) {
         TODO("Not yet implemented")
     }
-
+    
     private fun setUpListeners(filteredMeals: MealModel) {
         btnAddToPlan.setOnClickListener {
             dateTimePickerHelper.showFullDateTimePicker(
                 onDateTimeSelected = { dateTimeInMillis ->
                     val mealPlan = createMealPlan(filteredMeals, dateTimeInMillis)
-
                     if (mealPlan?.let { it1 -> MealValidator.isValid(it1) } == true) {
                         addMealViewModel.addPlan(mealPlan)
                         scheduleMealNotification(filteredMeals.strMeal, dateTimeInMillis)
@@ -235,15 +228,83 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
                         showErrorMessage()
                     }
                 },
-                onTimePickerShown = {
-                    // يمكنك إضافة أي كود إضافي عند عرض TimePicker هنا
-                    Log.d("DateTimePicker", "Time picker shown")
-                },
-                onDatePickerShown = {
-                    // يمكنك إضافة أي كود إضافي عند عرض DatePicker هنا
-                    Log.d("DateTimePicker", "Date picker shown")
-                }
+                onTimePickerShown = {Log.d("DateTimePicker", "Time picker shown")},
+                onDatePickerShown = {Log.d("DateTimePicker", "Date picker shown")}
             )
+        }
+        mealCalImgView.setOnClickListener {
+            dateTimePickerHelper.showFullDateTimePicker(
+                onDateTimeSelected = { dateTimeInMillis ->
+                    filteredMeals.strMeal?.let { mealName ->
+                        addToDeviceCalendar(mealName, dateTimeInMillis)
+                    }
+                },
+                onTimePickerShown = {Log.d("DateTimePicker", "Time picker shown")},
+                onDatePickerShown = {Log.d("DateTimePicker", "Date picker shown")}
+            )
+        }
+
+        mealFavImgView.setOnClickListener {
+            toggleFavoriteStatus(filteredMeals)
+        }
+        filteredMeals.idMeal?.let { updateFavoriteIcon(it) }
+    }
+
+    private fun toggleFavoriteStatus(meal: MealModel) {
+        val filteredMeal = meal.idMeal?.let {
+            FilteredMealModel(
+                strMeal = meal.strMeal,
+                strMealThumb = meal.strMealThumb,
+                idMeal = it
+            )
+        }
+
+        lifecycleScope.launch {
+            if (meal.idMeal?.let { isMealFavorite(it) } == true) {
+                addToFavoriteViewModel.removeFilteredMeals(filteredMeal)
+                mealFavImgView.setImageResource(R.drawable.ic_favorite_border)
+                Snackbar.make(requireView(), "Removed from favorites", Snackbar.LENGTH_SHORT).show()
+            } else {
+                addToFavoriteViewModel.saveFilteredMeals(filteredMeal)
+                mealFavImgView.setImageResource(R.drawable.ic_favorite_filled)
+                Snackbar.make(requireView(), "Added to favorites", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private suspend fun isMealFavorite(mealId: String): Boolean {
+        return addToFavoriteViewModel.filteredMealsList.value?.any { it?.idMeal == mealId } ?: false
+    }
+
+    private fun updateFavoriteIcon(mealId: String) {
+        lifecycleScope.launch {
+            val isFavorite = isMealFavorite(mealId)
+            mealFavImgView.setImageResource(
+                if (isFavorite) R.drawable.ic_favorite_filled
+                else R.drawable.ic_favorite_border
+            )
+        }
+    }
+
+    private fun addToDeviceCalendar(title: String?, startMillis: Long) {
+        title?.let {
+            val endMillis = startMillis + TimeUnit.HOURS.toMillis(1)
+
+            val intent = Intent(Intent.ACTION_INSERT).apply {
+                data = CalendarContract.Events.CONTENT_URI
+                putExtra(CalendarContract.Events.TITLE, title)
+                putExtra(CalendarContract.Events.DESCRIPTION, "Meal Reminder")
+                putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
+                putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+                putExtra(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
+            }
+
+            try {
+                startActivity(intent)
+                Snackbar.make(requireView(), "Opening calendar to add event", Snackbar.LENGTH_SHORT).show()
+            } catch (e: ActivityNotFoundException) {
+                Snackbar.make(requireView(), "No calendar app found", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -275,13 +336,12 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     private fun showSuccessMessage() {
         Snackbar.make(
             requireView(),
-            "تمت إضافة الوجبة مع التذكير في الوقت المحدد",
+            "Meal added to plan successfully",
             Snackbar.LENGTH_LONG
         ).show()
     }
 
     private fun showErrorMessage() {
-        Snackbar.make(requireView(), "بيانات الوجبة غير صالحة", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), "Error adding meal to plan", Snackbar.LENGTH_SHORT).show()
     }
-
 }

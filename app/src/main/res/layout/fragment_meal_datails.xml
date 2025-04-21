@@ -25,8 +25,8 @@
             android:src="@drawable/placeholder_ic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/RoundCorner" />
+            app:shapeAppearanceOverlay="@style/RoundCorner"
+            tools:ignore="MissingConstraints" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_mealDetails"
@@ -46,38 +46,60 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp">
 
+                <LinearLayout
+                    android:id="@+id/ll_meal_fav_and_calender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_calendar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/baseline_calendar_today_24" />
+                    <ImageView
+                        android:id="@+id/iv_fav"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/favorite_icon" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tv_mealName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/poppins_bold"
-                    android:textAlignment="center"
                     android:paddingHorizontal="20dp"
+                    android:textAlignment="center"
                     android:textColor="@color/primary"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_meal_fav_and_calender"
                     tools:text="Egyptian Koshari" />
 
                 <TextView
                     android:id="@+id/tv_mealCategory"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/black"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintEnd_toEndOf="@id/tv_mealName"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_mealName"
                     app:layout_constraintTop_toBottomOf="@id/tv_mealName"
                     tools:text="Dinner From EG" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.card.MaterialCardView>
-
         <TextView
             android:id="@+id/tv_txtInstructions"
             android:layout_width="wrap_content"

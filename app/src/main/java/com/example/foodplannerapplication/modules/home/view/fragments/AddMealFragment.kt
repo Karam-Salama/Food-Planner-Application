@@ -3,15 +3,21 @@ package com.example.foodplannerapplication.modules.home.view.fragments
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
@@ -42,6 +48,10 @@ class AddMealFragment : Fragment() {
     private lateinit var edtMealDate: EditText
     private lateinit var edtMealTime: EditText
     private lateinit var btnSaveMeal: Button
+
+    companion object {
+        private const val CALENDAR_PERMISSION_REQUEST_CODE = 100
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,7 +135,7 @@ class AddMealFragment : Fragment() {
             },
             hour,
             minute,
-            false // استخدم false لعرض AM/PM
+            false
         )
         timePickerDialog.show()
     }
@@ -160,11 +170,9 @@ class AddMealFragment : Fragment() {
         val dateTimeStr = "$selectedDate $selectedTime"
         val dateInMillis = DateUtils.convertDateTimeToLong(dateTimeStr)
 
-        // التحقق من أن الوقت في المستقبل
-        if (dateInMillis <= System.currentTimeMillis()) {
-            Snackbar.make(requireView(), "Please select a future time", Snackbar.LENGTH_SHORT).show()
-            return
-        }
+        // للتأكد من القيمة
+        Log.d("AddMealFragment", "Date in millis: $dateInMillis")
+        Toast.makeText(requireContext(), "Date: ${Date(dateInMillis)}", Toast.LENGTH_SHORT).show()
 
         val imagePath = mealImageHandler.getImagePath(ivMealImage)
         val mealPlan = AddMealModel(
@@ -178,8 +186,30 @@ class AddMealFragment : Fragment() {
             addMealViewModel.addPlan(mealPlan)
             scheduleMealNotification(dateInMillis, mealName)
             Snackbar.make(requireView(), "Meal added successfully", Snackbar.LENGTH_SHORT).show()
+
+            // استخدم النية الضمنية بدلاً من الإضافة المباشرة
+            addToDeviceCalendar(mealName, dateInMillis)
         } else {
             Snackbar.make(requireView(), "Invalid meal data", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun addToDeviceCalendar(title: String, startMillis: Long) {
+        val endMillis = startMillis + TimeUnit.HOURS.toMillis(1)
+
+        val intent = Intent(Intent.ACTION_INSERT).apply {
+            data = CalendarContract.Events.CONTENT_URI
+            putExtra(CalendarContract.Events.TITLE, title)
+            putExtra(CalendarContract.Events.DESCRIPTION, "Meal Reminder")
+            putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
+            putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+            putExtra(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
+        }
+
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), "No calendar app found", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -221,6 +251,22 @@ class AddMealFragment : Fragment() {
                         .load(imageUri)
                         .into(ivMealImage)
                 }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CALENDAR_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // الصلاحية ممنوحة، يمكنك متابعة إضافة الحدث
+                Toast.makeText(requireContext(), "Calendar permission granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Calendar permission is required", Toast.LENGTH_SHORT).show()
             }
         }
     }
