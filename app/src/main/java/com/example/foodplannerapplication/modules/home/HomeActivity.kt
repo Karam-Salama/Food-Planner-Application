@@ -31,15 +31,12 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
-
         initViews()
         setSupportActionBar(toolbar)
-
         initNav()
         toggle = setupActionBarDrawerToggle()
         handleLeadingToolbarIcon()
         handleLeadingToolbarTitle()
-
         NavigationUI.setupWithNavController(navView, navController)
         bottomNavigationView.setupWithNavController(navController)
     }

@@ -1,7 +1,7 @@
 package com.example.foodplannerapplication.modules.onboarding.model
 
-import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
-import com.example.foodplannerapplication.core.utils.classes.Constants
+import com.example.foodplannerapplication.core.data.cache.CacheHelper
+import com.example.foodplannerapplication.core.utils.Constants
 
 class OnboardingRepository(private val cacheHelper: CacheHelper) {
     suspend fun setOnboardingCompleted() {

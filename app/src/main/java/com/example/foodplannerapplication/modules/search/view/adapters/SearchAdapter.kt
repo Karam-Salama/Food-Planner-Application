@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.utils.classes.Constants
-import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
-import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
-import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
+import com.example.foodplannerapplication.core.data.models.FilteredMealModel
+import com.example.foodplannerapplication.core.utils.Constants
+import com.example.foodplannerapplication.core.functions.CountryFlagMapper
+import com.example.foodplannerapplication.modules.home.model.AreaModel
+import com.example.foodplannerapplication.modules.home.model.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 import android.util.Log
-import com.example.foodplannerapplication.modules.home.model.server.models.IngredientModel
+import com.example.foodplannerapplication.modules.home.model.IngredientModel
 import com.example.foodplannerapplication.modules.search.view.ICommonSearchFilteredListener
 
 class SearchAdapter(

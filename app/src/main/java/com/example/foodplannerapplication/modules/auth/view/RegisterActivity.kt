@@ -8,13 +8,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.classes.DialogHelper
-import com.example.foodplannerapplication.core.utils.classes.SnackbarHelper
-import com.example.foodplannerapplication.core.utils.functions.Validation
+import com.example.foodplannerapplication.core.helpers.DialogHelper
+import com.example.foodplannerapplication.core.helpers.SnackbarHelper
+import com.example.foodplannerapplication.core.functions.Validation
 import com.example.foodplannerapplication.modules.auth.ViewModels.AuthViewModelFactory
 import com.example.foodplannerapplication.modules.auth.ViewModels.RegisterViewModel
 import com.example.foodplannerapplication.modules.auth.models.AuthRepository
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

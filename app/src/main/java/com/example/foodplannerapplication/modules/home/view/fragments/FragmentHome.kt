@@ -1,9 +1,6 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
-
-import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,18 +22,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
-import com.example.foodplannerapplication.core.utils.classes.Constants
-import com.example.foodplannerapplication.core.utils.classes.DialogHelper
-import com.example.foodplannerapplication.core.utils.classes.NetworkReceiver
-import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
-import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
+import com.example.foodplannerapplication.core.data.cache.CacheHelper
+import com.example.foodplannerapplication.core.utils.Constants
+import com.example.foodplannerapplication.core.helpers.DialogHelper
+import com.example.foodplannerapplication.core.helpers.NetworkReceiver
+import com.example.foodplannerapplication.modules.home.model.MealModel
+import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.AreaAdapter
 import com.example.foodplannerapplication.modules.home.view.adapters.CategoryAdapter
-import com.example.foodplannerapplication.core.viewmodel.DashboardViewModel
-import com.example.foodplannerapplication.modules.auth.view.LoginActivity
-import com.example.foodplannerapplication.modules.home.HomeActivity
-import com.example.foodplannerapplication.modules.onboarding.view.OnboardingActivity
+import com.example.foodplannerapplication.modules.home.viewmodel.DashboardViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.ktx.auth
@@ -48,31 +42,21 @@ import kotlinx.coroutines.withContext
 class FragmentHome : Fragment() {
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoryAdapter: CategoryAdapter
-
     private lateinit var areaRecyclerView: RecyclerView
     private lateinit var areaAdapter: AreaAdapter
-
     private lateinit var mealTitle: TextView
     private lateinit var mealImage: ShapeableImageView
     private var mealOfTheDay: MealModel? = null
-
     private lateinit var randomMealLayout: ConstraintLayout
-
     private lateinit var addMealFab: FloatingActionButton
-
     private lateinit var dashboardViewModel: DashboardViewModel
-
     private lateinit var networkReceiver: NetworkReceiver
     private lateinit var noInternetAnimation: LottieAnimationView
     private lateinit var noInternetText: TextView
     private lateinit var mainContentLayout: View
 
-
     // ================================ onCreateView ===============================================
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -89,7 +73,6 @@ class FragmentHome : Fragment() {
         setupFab(view)
         observeViewModel()
         setupRecyclerViews(view)
-
         fetchRandomMealFromApi()
     }
 
@@ -172,11 +155,9 @@ class FragmentHome : Fragment() {
         mealTitle = view.findViewById(R.id.mealTitle)
         mealImage = view.findViewById(R.id.mealImage)
         randomMealLayout = view.findViewById(R.id.mealContainer)
-
         noInternetAnimation = view.findViewById(R.id.noInternetAnimation)
         noInternetText = view.findViewById(R.id.noInternetText)
         mainContentLayout = view.findViewById(R.id.main_content_canstraint_layout)
-
     }
 
     private fun setUpListeners() {
@@ -245,7 +226,6 @@ class FragmentHome : Fragment() {
         }
     }
 
-
     private fun openMealsActivityByCategory(category: String?) {
         val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
 
@@ -263,6 +243,7 @@ class FragmentHome : Fragment() {
             findNavController().navigate(actionFragmentHomeToFilteredMealsByCategoryFragment)
         }
     }
+
     private fun openMealsActivityByArea(area: String?) {
 
         val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
@@ -281,5 +262,4 @@ class FragmentHome : Fragment() {
             findNavController().navigate(actionFragmentHomeToFilteredMealsByAreaFragment)
         }
     }
-
 }

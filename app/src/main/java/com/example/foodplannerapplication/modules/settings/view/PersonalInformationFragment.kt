@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.functions.Validation
+import com.example.foodplannerapplication.core.functions.Validation
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth

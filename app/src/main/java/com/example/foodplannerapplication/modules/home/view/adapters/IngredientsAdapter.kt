@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.classes.Constants
+import com.example.foodplannerapplication.core.utils.Constants
 import com.google.android.material.imageview.ShapeableImageView
 
 class IngredientsAdapter(private var ingredients: List<String>, private val context: Context,

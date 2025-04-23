@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
-import com.example.foodplannerapplication.core.utils.classes.Constants
 import com.example.foodplannerapplication.modules.onboarding.model.OnboardingRepository
 import kotlinx.coroutines.launch
 

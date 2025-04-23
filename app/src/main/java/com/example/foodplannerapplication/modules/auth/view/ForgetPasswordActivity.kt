@@ -4,20 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.classes.DialogHelper
-import com.example.foodplannerapplication.core.utils.classes.SnackbarHelper
-import com.example.foodplannerapplication.core.utils.functions.Validation
+import com.example.foodplannerapplication.core.helpers.DialogHelper
+import com.example.foodplannerapplication.core.helpers.SnackbarHelper
 import com.example.foodplannerapplication.modules.auth.ViewModels.ResetPasswordViewModel
 import com.example.foodplannerapplication.modules.auth.ViewModels.ResetPasswordViewModelFactory
 import com.example.foodplannerapplication.modules.auth.models.AuthRepository
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class ForgetPasswordActivity : AppCompatActivity() {
     private lateinit var btnResetPassword: Button

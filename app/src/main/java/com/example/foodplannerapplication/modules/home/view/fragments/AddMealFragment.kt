@@ -1,10 +1,8 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
-
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -17,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
@@ -25,14 +22,14 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.helpers.DateUtils
-import com.example.foodplannerapplication.core.utils.helpers.MealImageHandler
-import com.example.foodplannerapplication.core.utils.helpers.MealValidator
-import com.example.foodplannerapplication.core.utils.notifications.MealReminderWorker
-import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
-import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
-import com.example.foodplannerapplication.modules.home.viewmodel.MyFactory
+import com.example.foodplannerapplication.core.helpers.DateUtils
+import com.example.foodplannerapplication.core.helpers.MealImageHandler
+import com.example.foodplannerapplication.core.helpers.MealValidator
+import com.example.foodplannerapplication.core.notifications.MealReminderWorker
+import com.example.foodplannerapplication.modules.plans.models.database.AddMealDatabase
+import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealViewModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.MyFactory
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -41,7 +38,6 @@ class AddMealFragment : Fragment() {
     private lateinit var addMealViewModel: AddMealViewModel
     private lateinit var mealImageHandler: MealImageHandler
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
-
     private lateinit var ivMealImage: ImageView
     private lateinit var edtMealName: EditText
     private lateinit var mealCategorySpinner: Spinner
@@ -84,18 +80,9 @@ class AddMealFragment : Fragment() {
 
     private fun setUpListeners() {
         ivMealImage.setOnClickListener { openGallery() }
-
-        edtMealDate.setOnClickListener {
-            showDatePicker()
-        }
-
-        edtMealTime.setOnClickListener {
-            showTimePicker()
-        }
-
-        btnSaveMeal.setOnClickListener {
-            saveMeal()
-        }
+        edtMealDate.setOnClickListener {showDatePicker()}
+        edtMealTime.setOnClickListener {showTimePicker()}
+        btnSaveMeal.setOnClickListener {saveMeal()}
     }
 
     private fun showDatePicker() {
@@ -170,7 +157,6 @@ class AddMealFragment : Fragment() {
         val dateTimeStr = "$selectedDate $selectedTime"
         val dateInMillis = DateUtils.convertDateTimeToLong(dateTimeStr)
 
-        // للتأكد من القيمة
         Log.d("AddMealFragment", "Date in millis: $dateInMillis")
         Toast.makeText(requireContext(), "Date: ${Date(dateInMillis)}", Toast.LENGTH_SHORT).show()
 
@@ -186,8 +172,6 @@ class AddMealFragment : Fragment() {
             addMealViewModel.addPlan(mealPlan)
             scheduleMealNotification(dateInMillis, mealName)
             Snackbar.make(requireView(), "Meal added successfully", Snackbar.LENGTH_SHORT).show()
-
-            // استخدم النية الضمنية بدلاً من الإضافة المباشرة
             addToDeviceCalendar(mealName, dateInMillis)
         } else {
             Snackbar.make(requireView(), "Invalid meal data", Snackbar.LENGTH_SHORT).show()
@@ -263,7 +247,6 @@ class AddMealFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CALENDAR_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // الصلاحية ممنوحة، يمكنك متابعة إضافة الحدث
                 Toast.makeText(requireContext(), "Calendar permission granted", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "Calendar permission is required", Toast.LENGTH_SHORT).show()

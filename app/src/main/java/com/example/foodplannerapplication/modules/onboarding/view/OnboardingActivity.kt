@@ -11,9 +11,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
-import com.example.foodplannerapplication.core.utils.functions.hideStatusAndNavBar.hideStatusAndNavBar
-import com.example.foodplannerapplication.core.utils.classes.Constants
+import com.example.foodplannerapplication.core.data.cache.CacheHelper
+import com.example.foodplannerapplication.core.functions.hideStatusAndNavBar.hideStatusAndNavBar
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 import com.example.foodplannerapplication.modules.home.HomeActivity
 import com.example.foodplannerapplication.modules.onboarding.model.OnboardingRepository

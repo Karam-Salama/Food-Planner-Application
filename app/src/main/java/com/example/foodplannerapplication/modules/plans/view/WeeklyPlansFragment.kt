@@ -9,22 +9,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
-import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
-import com.example.foodplannerapplication.core.utils.classes.DialogHelper
-import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.core.viewmodel.MyFactory
-import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
-import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
-import com.example.foodplannerapplication.modules.home.view.adapters.FilteredMealsByAreaAdapter
-import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
+import com.example.foodplannerapplication.core.helpers.DialogHelper
+import com.example.foodplannerapplication.modules.plans.models.database.AddMealDatabase
+import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealViewModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.MyFactory
 import kotlinx.coroutines.launch
 
 
@@ -72,7 +65,7 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
 
     private fun setUpViewModel() {
         var dao = AddMealDatabase.getDatabase(requireContext()).getAddMealDao()
-        var myFactory = com.example.foodplannerapplication.modules.home.viewmodel.MyFactory(dao)
+        var myFactory = MyFactory(dao)
         weeklyPlansViewModel = ViewModelProvider(this, myFactory).get(AddMealViewModel::class.java)
     }
 

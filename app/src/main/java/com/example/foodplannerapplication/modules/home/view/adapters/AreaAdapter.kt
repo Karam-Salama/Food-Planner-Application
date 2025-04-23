@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
-import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
-import com.google.android.material.imageview.ShapeableImageView
+import com.example.foodplannerapplication.core.functions.CountryFlagMapper
+import com.example.foodplannerapplication.modules.home.model.AreaModel
 
 class AreaAdapter(private var areas: List<AreaModel?>?,
                   private val context: Context,

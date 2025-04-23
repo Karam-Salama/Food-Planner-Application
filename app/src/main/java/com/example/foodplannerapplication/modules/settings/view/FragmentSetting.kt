@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.cache.sharedprefs.CacheHelper
-import com.example.foodplannerapplication.core.utils.classes.Constants
-import com.example.foodplannerapplication.core.utils.classes.DialogHelper
+import com.example.foodplannerapplication.core.data.cache.CacheHelper
+import com.example.foodplannerapplication.core.utils.Constants
+import com.example.foodplannerapplication.core.helpers.DialogHelper
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 

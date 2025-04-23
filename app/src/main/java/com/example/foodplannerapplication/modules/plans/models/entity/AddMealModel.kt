@@ -1,0 +1,14 @@
+package com.example.foodplannerapplication.modules.plans.models.entity
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "Plans_table")
+data class AddMealModel(
+    @PrimaryKey(autoGenerate = true)
+    val idMealPlan: Int = 0,
+    val thumbMealPlan: String,
+    val nameMealPlan: String,
+    val categoryMealPlan: String,
+    val dateMealPlan: Long?,
+)

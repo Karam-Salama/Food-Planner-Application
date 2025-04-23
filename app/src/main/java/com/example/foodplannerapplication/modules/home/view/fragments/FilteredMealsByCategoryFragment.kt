@@ -1,7 +1,5 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
-
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,18 +11,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
-import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
-import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.core.viewmodel.MyFactory
-import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
+import com.example.foodplannerapplication.core.data.models.FilteredMealModel
+import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
+import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddToFavoriteViewModel
+import com.example.foodplannerapplication.modules.favorite.viewmodel.MyFactory
+import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.FilteredMealsByCategoryAdapter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 
 class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener {
     // arguments
@@ -42,7 +37,6 @@ class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_filtered_meals_by_category, container, false)
     }
 
@@ -83,8 +77,6 @@ class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener 
             filteredMealsByCategoryAdapter.filteredMeals = newList.toList()
             filteredMealsByCategoryAdapter.notifyDataSetChanged()
         }
-
-
         addToFavoriteViewModel.message.observe(viewLifecycleOwner) {
             Snackbar.make(rvFilteredMealsByCategory, it, Snackbar.LENGTH_SHORT).show()
         }
@@ -103,5 +95,4 @@ class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener 
             )
         findNavController().navigate(actionFilteredMealsByCategoryFragmentToMealDatailsFragment)
     }
-
 }

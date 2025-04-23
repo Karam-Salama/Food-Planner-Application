@@ -20,21 +20,21 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
-import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
-import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
-import com.example.foodplannerapplication.core.utils.helpers.MealDateTimePickerHelper
-import com.example.foodplannerapplication.core.utils.helpers.MealValidator
-import com.example.foodplannerapplication.core.utils.notifications.SchedulerMealNotification
-import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.core.viewmodel.MyFactory
-import com.example.foodplannerapplication.modules.home.model.cache.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.home.model.cache.entity.AddMealModel
-import com.example.foodplannerapplication.modules.home.model.server.models.MealModel
-import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
+import com.example.foodplannerapplication.core.data.models.FilteredMealModel
+import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
+import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
+import com.example.foodplannerapplication.core.functions.CountryFlagMapper
+import com.example.foodplannerapplication.core.helpers.MealDateTimePickerHelper
+import com.example.foodplannerapplication.core.helpers.MealValidator
+import com.example.foodplannerapplication.core.notifications.SchedulerMealNotification
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddToFavoriteViewModel
+import com.example.foodplannerapplication.modules.favorite.viewmodel.MyFactory
+import com.example.foodplannerapplication.modules.plans.models.database.AddMealDatabase
+import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
+import com.example.foodplannerapplication.modules.home.model.MealModel
+import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
 import com.example.foodplannerapplication.modules.home.view.adapters.IngredientsAdapter
-import com.example.foodplannerapplication.modules.home.viewmodel.AddMealViewModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
-class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
+class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
     // arguments
     private val MealDatailsFragmentArgs: MealDatailsFragmentArgs by navArgs()
 
@@ -99,7 +99,8 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
         addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
 
         val daoAddMeal = AddMealDatabase.getDatabase(requireContext()).getAddMealDao()
-        val factory = com.example.foodplannerapplication.modules.home.viewmodel.MyFactory(daoAddMeal)
+        val factory =
+            com.example.foodplannerapplication.modules.plans.viewmodel.MyFactory(daoAddMeal)
         addMealViewModel = ViewModelProvider(this, factory).get(AddMealViewModel::class.java)
     }
 
@@ -214,7 +215,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener{
     override fun onFilteredMealsClick(mealId: String?) {
         TODO("Not yet implemented")
     }
-    
+
     private fun setUpListeners(filteredMeals: MealModel) {
         btnAddToPlan.setOnClickListener {
             dateTimePickerHelper.showFullDateTimePicker(

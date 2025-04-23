@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.example.foodplannerapplication.modules.search.view.FragmentSearch"
+        android:name="com.example.foodplannerapplication.modules.search.view.fragments.FragmentSearch"
         android:label="Search"
         tools:layout="@layout/fragment_search">
         <action
@@ -170,7 +170,7 @@
         tools:layout="@layout/activity_login" />
     <fragment
         android:id="@+id/filteredMealsByIngredientFragment"
-        android:name="com.example.foodplannerapplication.modules.search.view.FilteredMealsByIngredientFragment"
+        android:name="com.example.foodplannerapplication.modules.search.view.fragments.FilteredMealsByIngredientFragment"
         android:label="fragment_filtered_meals_by_ingredient"
         tools:layout="@layout/fragment_filtered_meals_by_ingredient" >
         <argument

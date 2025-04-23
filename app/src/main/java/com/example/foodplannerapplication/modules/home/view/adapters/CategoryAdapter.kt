@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
+import com.example.foodplannerapplication.modules.home.model.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 
 class CategoryAdapter(
