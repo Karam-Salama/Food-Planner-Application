@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.auth.view
-
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -69,7 +68,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-
         initViews()
         setupGoogleSignIn()
         setupFacebookSignIn()
@@ -89,14 +87,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setUpListeners() {
-        tvSignup.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
-        }
-
-        tvForgetPassword.setOnClickListener {
-            startActivity(Intent(this, ForgetPasswordActivity::class.java))
-        }
-
+        tvSignup.setOnClickListener { startActivity(Intent(this, RegisterActivity::class.java))}
+        tvForgetPassword.setOnClickListener { startActivity(Intent(this, ForgetPasswordActivity::class.java))}
         btnLogin.setOnClickListener {
             if (validateInputs()) {
                 viewModel.loginWithEmail(

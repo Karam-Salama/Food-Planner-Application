@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.onboarding.view
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation

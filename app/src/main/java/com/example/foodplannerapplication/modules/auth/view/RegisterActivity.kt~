@@ -1,4 +1,5 @@
 package com.example.foodplannerapplication.modules.auth.view
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -31,6 +32,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
+
         setupViews()
         setupClickListeners()
         setupViewModel()
@@ -83,7 +85,10 @@ class RegisterActivity : AppCompatActivity() {
                     dismissLoadingSnackbar()
                     showErrorSnackbar(state.message)
                 }
-                else -> {}
+
+                else -> {
+
+                }
             }
         }
     }

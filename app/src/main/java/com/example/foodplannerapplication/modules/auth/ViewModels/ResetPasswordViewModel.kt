@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.auth.ViewModels
-
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,13 +23,10 @@ class ResetPasswordViewModel(private val authRepository: AuthRepository) : ViewM
         viewModelScope.launch {
             val result = authRepository.sendPasswordResetEmail(email)
             if (result.isSuccess) {
-                _resetState.postValue(ResetPasswordState.Success(
-                    "Reset link sent to $email."
-                ))
+                _resetState.postValue(ResetPasswordState.Success("Reset link sent to $email."))
             } else {
                 val errorMsg = result.exceptionOrNull()?.message ?: "Unknown error"
                 _resetState.postValue(ResetPasswordState.Error(errorMsg))
-
                 Log.e("ResetPassword", "+++++++++++++ Error: $errorMsg +++++++++++++++")
             }
         }

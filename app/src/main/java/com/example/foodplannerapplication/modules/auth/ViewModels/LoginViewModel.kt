@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.auth.ViewModels
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

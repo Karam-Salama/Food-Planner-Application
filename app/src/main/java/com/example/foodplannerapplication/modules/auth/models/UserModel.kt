@@ -1,6 +1,5 @@
 package com.example.foodplannerapplication.modules.auth.models
 
-// ملف جديد: UserModel.kt
 data class UserModel(
     val uid: String = "",
     val name: String = "",

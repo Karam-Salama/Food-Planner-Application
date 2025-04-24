@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.auth.ViewModels
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,27 +18,24 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
         data class Error(val message: String) : RegistrationState()
     }
 
-    fun registerUser(
-        email: String,
-        password: String,
-        fullName: String,
-        phone: String? = null
-    ) {
+    fun registerUser(fullName: String, phone: String? = null, email: String, password: String) {
         _registrationState.value = RegistrationState.Loading("Registering your account...")
         viewModelScope.launch {
-            val result = authRepository.registerWithEmail(email, password, fullName, phone)
-            _registrationState.postValue(
-                if (result.isSuccess) {
-                    RegistrationState.Success(
-                        user = result.getOrNull()!!,
-                        message = "Please check your email to verify your account"
-                    )
-                } else {
-                    RegistrationState.Error(
-                        result.exceptionOrNull()?.message ?: "Registration failed"
-                    )
-                }
-            )
+            val result = phone?.let { authRepository.registerWithEmail(fullName, it, email, password) }
+            if (result != null) {
+                _registrationState.postValue(
+                    if (result.isSuccess) {
+                        RegistrationState.Success(
+                            user = result.getOrNull()!!,
+                            message = "Please check your email to verify your account"
+                        )
+                    } else {
+                        RegistrationState.Error(
+                            result.exceptionOrNull()?.message ?: "Registration failed"
+                        )
+                    }
+                )
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.auth.view
-
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
@@ -24,7 +23,6 @@ class ForgetPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_forget_password)
-
         initViews()
         setupViewModel()
         observeResetState()
