@@ -69,7 +69,6 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeViewModel() {
         addMealToPlansViewModel.mealsPlanList.observe(viewLifecycleOwner) { newList ->
             if (newList.isNullOrEmpty()) {
@@ -85,7 +84,6 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
             }
         }
     }
-
 
     override fun onDeleteWeeklyPlansClick(addMealModel: AddMealModel) {
         DialogHelper.showDeleteConfirmationDialog(requireContext()) {

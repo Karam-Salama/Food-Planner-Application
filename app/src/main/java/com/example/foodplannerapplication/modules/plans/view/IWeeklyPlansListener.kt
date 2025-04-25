@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.plans.view
-
 import com.example.foodplannerapplication.modules.plans.models.AddMealModel
 
 interface  IWeeklyPlansListener{

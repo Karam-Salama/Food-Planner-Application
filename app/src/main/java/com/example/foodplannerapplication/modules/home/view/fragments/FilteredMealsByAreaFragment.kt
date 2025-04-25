@@ -45,7 +45,7 @@ class FilteredMealsByAreaFragment : Fragment(), ICommonFilteredMealListener {
 
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByArea = view.findViewById(R.id.rv_filteredMealsByArea)
-        filteredMealsByAreaAdapter = FilteredMealsByAreaAdapter(null, requireContext(), this)
+        filteredMealsByAreaAdapter = FilteredMealsByAreaAdapter(null, requireContext(), false, this)
         rvFilteredMealsByArea.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 2)

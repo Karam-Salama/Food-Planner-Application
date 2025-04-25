@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +12,11 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.data.models.FilteredMealModel
 import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
 import com.google.android.material.imageview.ShapeableImageView
+
 class FilteredMealsByAreaAdapter(
     var filteredMeals: List<FilteredMealModel?>?,
     private val context: Context,
+    private val isFavoriteScreen: Boolean = false,
     var listener: ICommonFilteredMealListener
 ) : RecyclerView.Adapter<FilteredMealsByAreaAdapter.FilteredMealsByAreaViewHolder>() {
 
@@ -31,20 +32,25 @@ class FilteredMealsByAreaAdapter(
             Glide.with(context).load(currentItem.strMealThumb).into(holder.mealImage)
             holder.mealTitle.text = currentItem.strMeal
 
-            // تحديث الأيقونة بناءً على حالة isFavorite
-            if (currentItem.isFavorite) {
+            if (isFavoriteScreen) {
                 holder.mealFavorite.setImageResource(R.drawable.ic_favorite_filled)
                 holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.red))
             } else {
-                holder.mealFavorite.setImageResource(R.drawable.ic_favorite_border)
-                holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.black))
+                if (currentItem.isFavorite) {
+                    holder.mealFavorite.setImageResource(R.drawable.ic_favorite_filled)
+                    holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.red))
+                } else {
+                    holder.mealFavorite.setImageResource(R.drawable.ic_favorite_border)
+                    holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.black))
+                }
             }
 
-            // عند النقر على الأيقونة، تحديث الحالة
             holder.mealFavorite.setOnClickListener {
-                currentItem.isFavorite = !currentItem.isFavorite
+                if (!isFavoriteScreen) {
+                    currentItem.isFavorite = !currentItem.isFavorite
+                    notifyItemChanged(position)
+                }
                 listener.onFilteredMealsFavoriteClick(currentItem)
-                notifyItemChanged(position) // تحديث العنصر فقط بدلًا من تحديث القائمة كلها
             }
         }
 

@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.plans.view
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,33 +16,26 @@ import com.google.android.material.imageview.ShapeableImageView
 class WeeklyPlansAdapter(
     var weeklyMeals : List<AddMealModel?>?,
     private val context: Context,
-    var listener: IWeeklyPlansListener) : RecyclerView.Adapter<WeeklyPlansAdapter.WeeklyPlansViewHolder>() {
-
+    var listener: IWeeklyPlansListener
+    ) : RecyclerView.Adapter<WeeklyPlansAdapter.WeeklyPlansViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyPlansViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.weekly_plans_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.weekly_plans_item, parent, false)
         return WeeklyPlansViewHolder(itemView)
     }
 
-
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: WeeklyPlansViewHolder, position: Int) {
         val currentItem = weeklyMeals?.get(position)
         if (currentItem != null) {
             Glide.with(context).load(currentItem.thumbMealPlan).into(holder.mealImage)
             holder.mealTitle.text = currentItem.nameMealPlan
             holder.mealCategory.text = currentItem.categoryMealPlan
-
-            // استخدم الدالة الجديدة هنا
             holder.mealDate.text = DateUtils.convertLongToFormattedDateTime(currentItem.dateMealPlan)
-
             holder.ivDelete.setOnClickListener {
                 listener.onDeleteWeeklyPlansClick(currentItem)
             }
         }
     }
-
 
     override fun getItemCount(): Int {
         return weeklyMeals?.size ?: 0

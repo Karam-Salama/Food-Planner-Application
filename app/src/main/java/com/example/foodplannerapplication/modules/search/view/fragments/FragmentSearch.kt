@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
-import com.example.foodplannerapplication.core.data.cache.CacheHelper
 import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
-import com.example.foodplannerapplication.core.utils.Constants
 import com.example.foodplannerapplication.core.helpers.DialogHelper
 import com.example.foodplannerapplication.core.helpers.NetworkReceiver
 import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModel

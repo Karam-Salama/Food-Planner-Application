@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,10 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.utils.Constants
 import com.google.android.material.imageview.ShapeableImageView
 
-class IngredientsAdapter(private var ingredients: List<String>, private val context: Context,
-                         private val onIngredientClick: (String?) -> Unit) : RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder>() {
+class IngredientsAdapter(
+    private var ingredients: List<String>,
+    private val onIngredientClick: (String?) -> Unit)
+    : RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.category_list_item, parent, false)

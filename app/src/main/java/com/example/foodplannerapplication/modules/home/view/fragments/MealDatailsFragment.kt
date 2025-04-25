@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -109,7 +110,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
 
     private fun setUpRecyclerView(view: View){
         rcMealIngredients = view.findViewById(R.id.rc_Ingredients)
-        ingredientsAdapter = IngredientsAdapter(listOf(), requireContext()) {
+        ingredientsAdapter = IngredientsAdapter(listOf()) {
             ingredient -> openMealsActivityByIngredient(ingredient)
         }
 
@@ -261,16 +262,18 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
             if (meal.idMeal?.let { isMealFavorite(it) } == true) {
                 addToFavoriteViewModel.removeFilteredMeals(filteredMeal)
                 mealFavImgView.setImageResource(R.drawable.ic_favorite_border)
+                mealFavImgView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black))
                 Snackbar.make(requireView(), "Removed from favorites", Snackbar.LENGTH_SHORT).show()
             } else {
                 addToFavoriteViewModel.saveFilteredMeals(filteredMeal)
                 mealFavImgView.setImageResource(R.drawable.ic_favorite_filled)
+                mealFavImgView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red))
                 Snackbar.make(requireView(), "Added to favorites", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
 
-    private suspend fun isMealFavorite(mealId: String): Boolean {
+    private fun isMealFavorite(mealId: String): Boolean {
         return addToFavoriteViewModel.filteredMealsList.value?.any { it?.idMeal == mealId } ?: false
     }
 
@@ -280,6 +283,12 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
             mealFavImgView.setImageResource(
                 if (isFavorite) R.drawable.ic_favorite_filled
                 else R.drawable.ic_favorite_border
+            )
+            mealFavImgView.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (isFavorite) R.color.red else R.color.black
+                )
             )
         }
     }

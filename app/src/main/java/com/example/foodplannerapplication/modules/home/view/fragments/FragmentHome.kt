@@ -200,7 +200,7 @@ class FragmentHome : Fragment() {
 
     private fun setupAreaRecyclerView(view: View) {
         areaRecyclerView = view.findViewById(R.id.rv_areas)
-        areaAdapter = AreaAdapter(emptyList(), requireContext()) { area ->
+        areaAdapter = AreaAdapter(emptyList()) { area ->
             if (shouldShowLoginDialog()) {
                 DialogHelper.showLoginRequiredDialog(requireContext())
             } else {

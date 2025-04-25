@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,11 +10,11 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.functions.CountryFlagMapper
 import com.example.foodplannerapplication.modules.home.data.model.AreaModel
 
-class AreaAdapter(private var areas: List<AreaModel?>?,
-                  private val context: Context,
-                  private val onAreaClick: (String?) -> Unit)
+class AreaAdapter(
+    private var areas: List<AreaModel?>?,
+    private val onAreaClick: (String?) -> Unit,
+    )
     : RecyclerView.Adapter<AreaAdapter.AreaViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.area_list_item, parent, false)

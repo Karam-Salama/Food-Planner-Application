@@ -1,11 +1,9 @@
 package com.example.foodplannerapplication.modules.favorite.models
-
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.foodplannerapplication.core.data.models.FilteredMealModel
-
 
 @Database(entities = [FilteredMealModel::class], version = 2)
 abstract class FavoritesDatabase : RoomDatabase() {

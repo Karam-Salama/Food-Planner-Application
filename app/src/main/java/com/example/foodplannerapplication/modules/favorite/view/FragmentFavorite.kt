@@ -46,7 +46,7 @@ class FragmentFavorite : Fragment() , ICommonFilteredMealListener {
 
     private fun initViews(view: View) {
         rvFavorite = view.findViewById(R.id.rc_favorite_meals)
-        favoriteAdapter = FilteredMealsByAreaAdapter(null, requireContext(), this)
+        favoriteAdapter = FilteredMealsByAreaAdapter(null, requireContext(), true, this)
         rvFavorite.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -78,13 +78,11 @@ class FragmentFavorite : Fragment() , ICommonFilteredMealListener {
                 rvFavorite.visibility = View.VISIBLE
                 lottieEmptyFavorites.visibility = View.GONE
                 tvNoFavorites.visibility = View.GONE
-                favoriteAdapter.filteredMeals = newList.toList()
+                // تأكد من تعيين isFavorite = true لكل عنصر
+                val favoriteList = newList.map { it?.copy(isFavorite = true) }
+                favoriteAdapter.filteredMeals = favoriteList
                 favoriteAdapter.notifyDataSetChanged()
             }
-        }
-
-        addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) {
-            Snackbar.make(rvFavorite, it, Snackbar.LENGTH_SHORT).show()
         }
     }
 

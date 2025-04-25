@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.plans.models
-
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert

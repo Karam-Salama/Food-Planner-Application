@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater

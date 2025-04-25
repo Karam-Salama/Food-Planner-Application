@@ -91,5 +91,6 @@ class HomeAndSearchViewModel(private val repository: HomeRepository) : ViewModel
     }
 
     fun isGuestUser(): Boolean = repository.isGuestUser()
+
     fun isUserLoggedIn(): Boolean = repository.isUserLoggedIn()
 }

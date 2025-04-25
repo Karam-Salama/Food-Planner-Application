@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.search.view.fragments
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,20 +24,14 @@ import kotlinx.coroutines.launch
 class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListener {
     // arguments
     private val filteredMealsByIngredientArgs: FilteredMealsByIngredientFragmentArgs by navArgs()
-
     // view model
     private lateinit var addMealToFavoritesViewModel: AddMealToFavoritesViewModel
-
     // ui components
     private lateinit var filteredMealsByIngredientAdapter: FilteredMealsByIngredientAdapter
     private lateinit var rvFilteredMealsByIngredient: RecyclerView
     private lateinit var filteredMeals: List<FilteredMealModel?>
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_filtered_meals_by_ingredient, container, false)
     }
 
@@ -53,7 +46,6 @@ class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListene
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByIngredient = view.findViewById(R.id.rv_filteredMealsByIngredient)
         filteredMealsByIngredientAdapter = FilteredMealsByIngredientAdapter(null, requireContext(), this)
-
         rvFilteredMealsByIngredient.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -78,8 +70,6 @@ class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListene
             filteredMealsByIngredientAdapter.filteredMeals = newList.toList()
             filteredMealsByIngredientAdapter.notifyDataSetChanged()
         }
-
-
         addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) {
             Snackbar.make(rvFilteredMealsByIngredient, it, Snackbar.LENGTH_SHORT).show()
         }
@@ -96,5 +86,4 @@ class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListene
             FilteredMealsByIngredientFragmentDirections.actionFilteredMealsByIngredientFragmentToMealDatailsFragment(mealId)
         findNavController().navigate(actionFilteredMealsByIngredientFragmentToMealDatailsFragment)
     }
-
 }

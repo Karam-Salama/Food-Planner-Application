@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +13,10 @@ import com.example.foodplannerapplication.core.data.models.FilteredMealModel
 import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
 import com.google.android.material.imageview.ShapeableImageView
 
-class FilteredMealsByIngredientAdapter(var filteredMeals: List<FilteredMealModel?>?,
-                                       private val context: Context,
-                                       var listener: ICommonFilteredMealListener
+class FilteredMealsByIngredientAdapter(
+    var filteredMeals: List<FilteredMealModel?>?,
+    private val context: Context,
+    var listener: ICommonFilteredMealListener
 ) : RecyclerView.Adapter<FilteredMealsByIngredientAdapter.IngredientViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
