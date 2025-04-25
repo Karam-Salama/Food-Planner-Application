@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.core.functions
-
 import android.util.Patterns
 
 object Validation {

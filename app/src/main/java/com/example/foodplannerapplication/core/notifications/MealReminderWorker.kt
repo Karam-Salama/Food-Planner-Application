@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.core.notifications
-
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,17 +10,13 @@ import androidx.work.WorkerParameters
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.home.HomeActivity
 
-
 class MealReminderWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
-
     override fun doWork(): Result {
         val mealTime = inputData.getLong("meal_time", 0L)
         val currentTime = System.currentTimeMillis()
-
         if (currentTime >= mealTime) {
             showNotification()
         }
-
         return Result.success()
     }
 
@@ -54,5 +49,4 @@ class MealReminderWorker(context: Context, workerParams: WorkerParameters) : Wor
             notificationManager.notify(1, notification)
         }
     }
-
 }

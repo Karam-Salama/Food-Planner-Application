@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.core.helpers
-
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
@@ -15,7 +14,6 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.auth.view.LoginActivity
 
 object  DialogHelper {
-
     fun showLoginRequiredDialog(context: Context) {
         val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
         val inflater = LayoutInflater.from(context)
@@ -55,62 +53,6 @@ object  DialogHelper {
 
         btnDelete.setOnClickListener {
             onConfirmDelete.invoke()
-            dialog.dismiss()
-        }
-
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-    }
-
-    @SuppressLint("MissingInflatedId")
-    fun showLoginConfirmationDialog(context: Context, onConfirmLogin: () -> Unit) {
-        val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
-        val inflater = LayoutInflater.from(context)
-        val dialogView = inflater.inflate(R.layout.dialog_login_sucess, null)
-
-        val btnOkay = dialogView.findViewById<Button>(R.id.btn_ok)
-
-        val dialog = builder.setView(dialogView).create()
-
-        btnOkay.setOnClickListener {
-            onConfirmLogin.invoke()
-            dialog.dismiss()
-        }
-
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-    }
-
-    fun showRegisterConfirmationDialog(context: Context, onConfirmRegistered: () -> Unit) {
-        val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
-        val inflater = LayoutInflater.from(context)
-        val dialogView = inflater.inflate(R.layout.dialog_register_sucess, null)
-
-        val btnOkay = dialogView.findViewById<Button>(R.id.btn_ok)
-
-        val dialog = builder.setView(dialogView).create()
-
-        btnOkay.setOnClickListener {
-            onConfirmRegistered.invoke()
-            dialog.dismiss()
-        }
-
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-    }
-
-    @SuppressLint("MissingInflatedId")
-    fun showForgetPasswordConfirmationDialog(context: Context, onConfirmForgetedPassword: () -> Unit) {
-        val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
-        val inflater = LayoutInflater.from(context)
-        val dialogView = inflater.inflate(R.layout.dialog_forget_password_sucess, null)
-
-        val btnOkay = dialogView.findViewById<Button>(R.id.btn_ok)
-
-        val dialog = builder.setView(dialogView).create()
-
-        btnOkay.setOnClickListener {
-            onConfirmForgetedPassword.invoke()
             dialog.dismiss()
         }
 

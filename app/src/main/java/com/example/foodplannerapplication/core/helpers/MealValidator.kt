@@ -2,10 +2,7 @@ import com.example.foodplannerapplication.core.helpers.DateTimeValidator
 import com.example.foodplannerapplication.modules.plans.models.AddMealModel
 
 object MealValidator {
-    /**
-     * Validates all meal fields including date/time
-     * @return Pair where first is isValid (Boolean) and second is error message (String?)
-     */
+
     fun validate(meal: AddMealModel?): Pair<Boolean, String?> {
         if (meal == null) return Pair(false, "Meal cannot be null")
 

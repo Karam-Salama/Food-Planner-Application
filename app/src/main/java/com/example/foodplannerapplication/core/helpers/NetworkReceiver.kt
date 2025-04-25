@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.core.helpers
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent

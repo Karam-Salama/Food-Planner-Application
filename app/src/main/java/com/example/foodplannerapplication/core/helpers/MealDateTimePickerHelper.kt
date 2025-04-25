@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.core.helpers
-
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -9,12 +8,7 @@ import android.widget.EditText
 import java.util.Date
 
 class MealDateTimePickerHelper(private val context: Context) {
-
-    fun showFullDateTimePicker(
-        onDateTimeSelected: (Long) -> Unit,
-        onTimePickerShown: () -> Unit = {},
-        onDatePickerShown: () -> Unit = {}
-    ) {
+    fun showFullDateTimePicker( onDateTimeSelected: (Long) -> Unit, onTimePickerShown: () -> Unit = {}, onDatePickerShown: () -> Unit = {}) {
         showDatePickerCalendar(
             onDateSelected = { selectedDate ->
                 onDatePickerShown()
@@ -43,10 +37,7 @@ class MealDateTimePickerHelper(private val context: Context) {
         }
     }
 
-    private fun showDatePickerCalendar(
-        onDateSelected: (Date) -> Unit,
-        onDatePickerShown: () -> Unit = {}
-    ) {
+    private fun showDatePickerCalendar( onDateSelected: (Date) -> Unit, onDatePickerShown: () -> Unit = {}) {
         val calendar = Calendar.getInstance()
         val dialog = DatePickerDialog(
             context,
@@ -64,11 +55,7 @@ class MealDateTimePickerHelper(private val context: Context) {
         dialog.show()
     }
 
-    @SuppressLint("DefaultLocale")
-    private fun showTimePickerWithAmPm(
-        onTimeSelected: (hour12: Int, minute: Int, isPm: Boolean) -> Unit,
-        onTimePickerShown: () -> Unit = {}
-    ) {
+    private fun showTimePickerWithAmPm(onTimePickerShown: () -> Unit = {}, onTimeSelected: (hour12: Int, minute: Int, isPm: Boolean) -> Unit) {
         val calendar = Calendar.getInstance()
         var isPm = calendar.get(Calendar.AM_PM) == Calendar.PM
 
@@ -81,7 +68,7 @@ class MealDateTimePickerHelper(private val context: Context) {
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
-            false // استخدام نظام 24 ساعة داخلياً
+            false
         )
         dialog.setOnShowListener { onTimePickerShown() }
         dialog.show()
@@ -94,22 +81,4 @@ class MealDateTimePickerHelper(private val context: Context) {
             else -> hour24 - 12
         }
     }
-
-    // باقي الدوال الحالية للتوافق مع الأكواد القديمة
-    @SuppressLint("SetTextI18n")
-    fun showDatePicker(editText: EditText) {
-        showDatePickerString { dateString ->
-            editText.setText(dateString)
-        }
-    }
-
-    fun showDatePickerString(onDateSelected: (String) -> Unit) {
-        val calendar = Calendar.getInstance()
-        DatePickerDialog(context, { _, year, month, day ->
-            val selectedDate = "$day/${month + 1}/$year"
-            onDateSelected(selectedDate)
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
-    }
-
-
 }

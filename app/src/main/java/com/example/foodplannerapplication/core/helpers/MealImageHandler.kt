@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.core.helpers
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -9,12 +8,6 @@ import com.bumptech.glide.Glide
 import java.io.File
 
 class MealImageHandler(private val context: Context) {
-    fun setImage(imageView: ImageView, uri: Uri) {
-        Glide.with(imageView.context)
-            .load(uri)
-            .into(imageView)
-    }
-
     fun getImagePath(imageView: ImageView): String {
         val bitmap = (imageView.drawable as? BitmapDrawable)?.bitmap ?: return ""
         val file = File(context.filesDir, "meal_${System.currentTimeMillis()}.jpg")

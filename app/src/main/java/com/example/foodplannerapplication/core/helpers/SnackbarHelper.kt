@@ -1,12 +1,10 @@
 package com.example.foodplannerapplication.core.helpers
-
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.example.foodplannerapplication.R
 import com.google.android.material.snackbar.Snackbar
 
 object SnackbarHelper {
-
     private var currentSnackbar: Snackbar? = null
 
     fun showSnackbar(
