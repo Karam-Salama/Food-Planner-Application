@@ -11,17 +11,24 @@
     android:padding="12dp"
     android:layout_margin="12dp"
     android:background="@drawable/bg_dialog">
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="@string/are_you_sure_you_want_to_delete_this_meal"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:paddingTop="12dp"
         app:layout_constraintBottom_toTopOf="parent"

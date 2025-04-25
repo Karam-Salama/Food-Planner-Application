@@ -14,11 +14,18 @@ import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealLi
 import com.google.android.material.imageview.ShapeableImageView
 
 class FilteredMealsByAreaAdapter(
-    var filteredMeals: List<FilteredMealModel?>?,
     private val context: Context,
     private val isFavoriteScreen: Boolean = false,
-    var listener: ICommonFilteredMealListener
+    private val listener: ICommonFilteredMealListener
 ) : RecyclerView.Adapter<FilteredMealsByAreaAdapter.FilteredMealsByAreaViewHolder>() {
+
+    private var mealsList: MutableList<FilteredMealModel> = mutableListOf()
+
+    fun updateList(newList: List<FilteredMealModel>) {
+        mealsList.clear()
+        mealsList.addAll(newList)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilteredMealsByAreaViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -27,42 +34,41 @@ class FilteredMealsByAreaAdapter(
     }
 
     override fun onBindViewHolder(holder: FilteredMealsByAreaViewHolder, position: Int) {
-        val currentItem = filteredMeals?.get(position)
-        if (currentItem != null) {
-            Glide.with(context).load(currentItem.strMealThumb).into(holder.mealImage)
-            holder.mealTitle.text = currentItem.strMeal
+        val currentItem = mealsList[position]
 
-            if (isFavoriteScreen) {
+        Glide.with(context)
+            .load(currentItem.strMealThumb)
+            .into(holder.mealImage)
+
+        holder.mealTitle.text = currentItem.strMeal
+
+        if (isFavoriteScreen) {
+            holder.mealFavorite.setImageResource(R.drawable.ic_favorite_filled)
+            holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.red))
+        } else {
+            if (currentItem.isFavorite) {
                 holder.mealFavorite.setImageResource(R.drawable.ic_favorite_filled)
                 holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.red))
             } else {
-                if (currentItem.isFavorite) {
-                    holder.mealFavorite.setImageResource(R.drawable.ic_favorite_filled)
-                    holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.red))
-                } else {
-                    holder.mealFavorite.setImageResource(R.drawable.ic_favorite_border)
-                    holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.black))
-                }
+                holder.mealFavorite.setImageResource(R.drawable.ic_favorite_border)
+                holder.mealFavorite.setColorFilter(ContextCompat.getColor(context, R.color.black))
             }
+        }
 
-            holder.mealFavorite.setOnClickListener {
-                if (!isFavoriteScreen) {
-                    currentItem.isFavorite = !currentItem.isFavorite
-                    notifyItemChanged(position)
-                }
-                listener.onFilteredMealsFavoriteClick(currentItem)
+        holder.mealFavorite.setOnClickListener {
+            if (!isFavoriteScreen) {
+                currentItem.isFavorite = !currentItem.isFavorite
+                notifyItemChanged(position)
             }
+            listener.onFilteredMealsFavoriteClick(currentItem)
         }
 
         holder.itemView.setOnClickListener {
-            listener.onFilteredMealsClick(currentItem?.idMeal)
+            listener.onFilteredMealsClick(currentItem.idMeal)
         }
     }
 
-
-    override fun getItemCount(): Int {
-        return filteredMeals?.size ?: 0
-    }
+    override fun getItemCount(): Int = mealsList.size
 
     class FilteredMealsByAreaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mealTitle: TextView = itemView.findViewById(R.id.tv_mealName)

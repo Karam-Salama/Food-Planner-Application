@@ -86,11 +86,16 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
     }
 
     override fun onDeleteWeeklyPlansClick(addMealModel: AddMealModel) {
-        DialogHelper.showDeleteConfirmationDialog(requireContext()) {
-            lifecycleScope.launch {
-                addMealToPlansViewModel.removePlan(addMealModel)
-            }
-        }
+        DialogHelper.showDeleteConfirmationDialog(
+            context = requireContext(),
+            message = "Are you sure you want to delete this meal from Plans?",
+            onConfirm = {
+                lifecycleScope.launch {
+                    addMealToPlansViewModel.removePlan(addMealModel)
+                }
+            },
+            onCancel = {}
+        )
     }
 }
 

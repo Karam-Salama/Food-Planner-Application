@@ -10,8 +10,17 @@ data class FilterdMealsResponse(
 @Entity(tableName = "Favorites_table")
 data class FilteredMealModel(
     @PrimaryKey(autoGenerate = false)
-    val idMeal: String,
-    val strMeal: String?,
-    val strMealThumb: String?,
+    val idMeal: String = "",
+    val strMeal: String? = null,
+    val strMealThumb: String? = null,
     var isFavorite: Boolean = false
-)
+){
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "idMeal" to idMeal,
+            "strMeal" to strMeal,
+            "strMealThumb" to strMealThumb,
+            "isFavorite" to isFavorite
+        )
+    }
+}

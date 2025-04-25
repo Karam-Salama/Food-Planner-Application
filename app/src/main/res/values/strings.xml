@@ -130,4 +130,6 @@
     <string name="ok">Ok</string>
     <string name="password_reset_email_sent_check_your_inbox">Password reset email sent. Check your inbox.</string>
 
+    <string name="delete_confirmation_title">Delete Confirmation</string>
+    <string name="delete_confirmation_message">Are you sure you want to delete this item?</string>
 </resources>

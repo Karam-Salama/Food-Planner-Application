@@ -1,9 +1,9 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,16 +22,13 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class FilteredMealsByAreaFragment : Fragment(), ICommonFilteredMealListener {
-    // arguments
-    private val FilteredMealsByAreaFragmentArgs: FilteredMealsByAreaFragmentArgs by navArgs()
-    // view model
+    private val args: FilteredMealsByAreaFragmentArgs by navArgs()
     private lateinit var addMealToFavoritesViewModel: AddMealToFavoritesViewModel
-    // ui components
-    private lateinit var filteredMealsByAreaAdapter: FilteredMealsByAreaAdapter
     private lateinit var rvFilteredMealsByArea: RecyclerView
-    private lateinit var filteredMeals: List<FilteredMealModel?>
+    private lateinit var adapter: FilteredMealsByAreaAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_filtered_meals_by_area, container, false)
     }
 
@@ -39,53 +36,60 @@ class FilteredMealsByAreaFragment : Fragment(), ICommonFilteredMealListener {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
         setUpViewModel()
-        extractedDataFromViewModel()
+        fetchData()
         observeViewModel()
     }
 
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByArea = view.findViewById(R.id.rv_filteredMealsByArea)
-        filteredMealsByAreaAdapter = FilteredMealsByAreaAdapter(null, requireContext(), false, this)
+        adapter = FilteredMealsByAreaAdapter(
+            context = requireContext(),
+            isFavoriteScreen = false,
+            listener = this
+        )
         rvFilteredMealsByArea.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = filteredMealsByAreaAdapter
+            adapter = this@FilteredMealsByAreaFragment.adapter
         }
     }
 
     private fun setUpViewModel() {
-        var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
-        var myFactory = AddMealToFavoritesViewModelFactory(dao, RetrofitHelper)
-        addMealToFavoritesViewModel = ViewModelProvider(this, myFactory).get(AddMealToFavoritesViewModel::class.java)
+        val dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
+        val factory = AddMealToFavoritesViewModelFactory(dao, RetrofitHelper)
+        addMealToFavoritesViewModel = ViewModelProvider(this, factory).get(AddMealToFavoritesViewModel::class.java)
     }
 
-    private fun extractedDataFromViewModel() {
+    private fun fetchData() {
         lifecycleScope.launch {
-            addMealToFavoritesViewModel.getFilteredMealsByArea(FilteredMealsByAreaFragmentArgs.areaName)
+            addMealToFavoritesViewModel.getFilteredMealsByArea(args.areaName)
         }
     }
 
     private fun observeViewModel() {
         addMealToFavoritesViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
-            filteredMealsByAreaAdapter.filteredMeals = newList.toList()
-            filteredMealsByAreaAdapter.notifyDataSetChanged()
+            adapter.updateList(newList.filterNotNull()) // تصفية القيم null إن وجدت
         }
-        addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) {
-            Snackbar.make(rvFilteredMealsByArea, it, Snackbar.LENGTH_SHORT).show()
+
+        addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Snackbar.make(rvFilteredMealsByArea, it, Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
         lifecycleScope.launch {
-            addMealToFavoritesViewModel.saveFilteredMeals(filteredMealsModel)
-        }
+                addMealToFavoritesViewModel.saveFilteredMeals(filteredMealsModel)
+            }
+
     }
 
     override fun onFilteredMealsClick(mealId: String?) {
-        val actionFilteredMealsByAreaFragmentToMealDatailsFragment =
-            FilteredMealsByAreaFragmentDirections.actionFilteredMealsByAreaFragmentToMealDatailsFragment(
-                mealId
-            )
-        findNavController().navigate(actionFilteredMealsByAreaFragmentToMealDatailsFragment)
+        mealId?.let {
+            val action = FilteredMealsByAreaFragmentDirections
+                .actionFilteredMealsByAreaFragmentToMealDatailsFragment(mealId)
+            findNavController().navigate(action)
+        }
     }
 }

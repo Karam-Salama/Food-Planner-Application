@@ -37,25 +37,44 @@ object  DialogHelper {
         dialog.show()
     }
 
-    fun showDeleteConfirmationDialog(context: Context, onConfirmDelete: () -> Unit) {
+    @SuppressLint("InflateParams", "MissingInflatedId")
+    fun showDeleteConfirmationDialog(
+        context: Context,
+        title: String = context.getString(R.string.delete_confirmation_title),
+        message: String = context.getString(R.string.delete_confirmation_message),
+        positiveButtonText: String = context.getString(R.string.delete),
+        negativeButtonText: String = context.getString(R.string.cancel),
+        onConfirm: () -> Unit,
+        onCancel: () -> Unit = {}
+    ) {
         val builder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
         val inflater = LayoutInflater.from(context)
         val dialogView = inflater.inflate(R.layout.dialog_delete_confirmation, null)
 
         val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
         val btnDelete = dialogView.findViewById<Button>(R.id.btn_delete)
+        val tvTitle = dialogView.findViewById<TextView>(R.id.tv_title)
+        val tvMessage = dialogView.findViewById<TextView>(R.id.tv_message)
+
+        // تعيين النصوص
+        tvTitle.text = title
+        tvMessage.text = message
+        btnDelete.text = positiveButtonText
+        btnCancel.text = negativeButtonText
 
         val dialog = builder.setView(dialogView).create()
 
         btnCancel.setOnClickListener {
+            onCancel()
             dialog.dismiss()
         }
 
         btnDelete.setOnClickListener {
-            onConfirmDelete.invoke()
+            onConfirm() // سيتم تنفيذ هذا عند الضغط على OK فقط
             dialog.dismiss()
         }
 
+        dialog.setCancelable(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
     }
