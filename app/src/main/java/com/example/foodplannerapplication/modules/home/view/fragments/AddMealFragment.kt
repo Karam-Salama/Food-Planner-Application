@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.helpers.DateUtils
 import com.example.foodplannerapplication.core.helpers.MealImageHandler
-import com.example.foodplannerapplication.core.helpers.MealValidator
 import com.example.foodplannerapplication.core.notifications.MealReminderWorker
 import com.example.foodplannerapplication.modules.plans.models.AddMealModel
 import com.example.foodplannerapplication.modules.plans.models.AddMealToPlansDatabase
@@ -155,13 +154,14 @@ class AddMealFragment : Fragment() {
             categoryMealPlan = selectedCategory,
             dateMealPlan = dateInMillis,
         )
-
-        if (MealValidator.isValid(mealPlan)) {
+        val (isValid, message) = MealValidator.validate(mealPlan)
+        if (isValid) {
             addMealToPlansViewModel.addPlan(mealPlan)
             scheduleMealNotification(dateInMillis, mealName)
             Snackbar.make(requireView(), "Meal added successfully", Snackbar.LENGTH_SHORT).show()
         } else {
-            Snackbar.make(requireView(), "Invalid meal data", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), message ?: "Date & Time must be in the future", Snackbar.LENGTH_SHORT).show()
+
         }
     }
 

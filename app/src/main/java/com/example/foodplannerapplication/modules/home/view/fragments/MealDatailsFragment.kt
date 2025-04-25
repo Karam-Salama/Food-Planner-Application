@@ -26,7 +26,6 @@ import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealLi
 import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
 import com.example.foodplannerapplication.core.functions.CountryFlagMapper
 import com.example.foodplannerapplication.core.helpers.MealDateTimePickerHelper
-import com.example.foodplannerapplication.core.helpers.MealValidator
 import com.example.foodplannerapplication.core.notifications.SchedulerMealNotification
 import com.example.foodplannerapplication.modules.plans.models.AddMealModel
 import com.example.foodplannerapplication.modules.home.data.model.MealModel
@@ -219,12 +218,14 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
             dateTimePickerHelper.showFullDateTimePicker(
                 onDateTimeSelected = { dateTimeInMillis ->
                     val mealPlan = createMealPlan(filteredMeals, dateTimeInMillis)
-                    if (mealPlan?.let { it1 -> MealValidator.isValid(it1) } == true) {
+                    val (isValid, message) = MealValidator.validate(mealPlan)
+                    if (isValid && mealPlan != null) {
                         addMealToPlansViewModel.addPlan(mealPlan)
                         scheduleMealNotification(filteredMeals.strMeal, dateTimeInMillis)
                         showSuccessMessage()
                     } else {
                         showErrorMessage()
+
                     }
                 },
                 onTimePickerShown = {Log.d("DateTimePicker", "Time picker shown")},
@@ -349,6 +350,6 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
     }
 
     private fun showErrorMessage() {
-        Snackbar.make(requireView(), "Error adding meal to plan", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), "Date & Time must be in the future", Snackbar.LENGTH_SHORT).show()
     }
 }
