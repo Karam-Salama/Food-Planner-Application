@@ -15,9 +15,9 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.data.models.FilteredMealModel
 import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
 import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
-import com.example.foodplannerapplication.modules.favorite.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.modules.favorite.viewmodel.MyFactory
 import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModel
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModelFactory
 import com.example.foodplannerapplication.modules.home.view.adapters.FilteredMealsByIngredientAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListene
     private val filteredMealsByIngredientArgs: FilteredMealsByIngredientFragmentArgs by navArgs()
 
     // view model
-    private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
+    private lateinit var addMealToFavoritesViewModel: AddMealToFavoritesViewModel
 
     // ui components
     private lateinit var filteredMealsByIngredientAdapter: FilteredMealsByIngredientAdapter
@@ -63,31 +63,31 @@ class FilteredMealsByIngredientFragment : Fragment(), ICommonFilteredMealListene
 
     private fun setUpViewModel() {
         var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
-        var myFactory = MyFactory(dao, RetrofitHelper)
-        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
+        var myFactory = AddMealToFavoritesViewModelFactory(dao, RetrofitHelper)
+        addMealToFavoritesViewModel = ViewModelProvider(this, myFactory).get(AddMealToFavoritesViewModel::class.java)
     }
 
     private fun extractedDataFromViewModel() {
         lifecycleScope.launch {
-            addToFavoriteViewModel.getFilteredMealsByIngredient(filteredMealsByIngredientArgs.ingredientName)
+            addMealToFavoritesViewModel.getFilteredMealsByIngredient(filteredMealsByIngredientArgs.ingredientName)
         }
     }
 
     private fun observeViewModel() {
-        addToFavoriteViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
+        addMealToFavoritesViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
             filteredMealsByIngredientAdapter.filteredMeals = newList.toList()
             filteredMealsByIngredientAdapter.notifyDataSetChanged()
         }
 
 
-        addToFavoriteViewModel.message.observe(viewLifecycleOwner) {
+        addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) {
             Snackbar.make(rvFilteredMealsByIngredient, it, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
         lifecycleScope.launch {
-            addToFavoriteViewModel.saveFilteredMeals(filteredMealsModel)
+            addMealToFavoritesViewModel.saveFilteredMeals(filteredMealsModel)
         }
     }
 

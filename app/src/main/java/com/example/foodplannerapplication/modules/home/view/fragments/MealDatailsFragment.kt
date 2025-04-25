@@ -27,14 +27,15 @@ import com.example.foodplannerapplication.core.functions.CountryFlagMapper
 import com.example.foodplannerapplication.core.helpers.MealDateTimePickerHelper
 import com.example.foodplannerapplication.core.helpers.MealValidator
 import com.example.foodplannerapplication.core.notifications.SchedulerMealNotification
-import com.example.foodplannerapplication.modules.favorite.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.modules.favorite.viewmodel.MyFactory
-import com.example.foodplannerapplication.modules.plans.models.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
-import com.example.foodplannerapplication.modules.home.model.MealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealModel
+import com.example.foodplannerapplication.modules.home.data.model.MealModel
 import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModel
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModelFactory
 import com.example.foodplannerapplication.modules.home.view.adapters.IngredientsAdapter
-import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealViewModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealToPlansDatabase
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealToPlansViewModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealToPlansViewModelFactory
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -47,12 +48,11 @@ import java.util.concurrent.TimeUnit
 class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
     // arguments
     private val MealDatailsFragmentArgs: MealDatailsFragmentArgs by navArgs()
-
     // view model
-    private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
-    private lateinit var addMealViewModel: AddMealViewModel
+    private lateinit var addToFavoriteViewModel: AddMealToFavoritesViewModel
+    private lateinit var addMealToPlansViewModel: AddMealToPlansViewModel
+    // helpers
     private lateinit var dateTimePickerHelper: MealDateTimePickerHelper
-
     // ui components
     private lateinit var mealImage: ShapeableImageView
     private lateinit var mealTitle: TextView
@@ -72,7 +72,6 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         dateTimePickerHelper = MealDateTimePickerHelper(requireContext())
         initViews(view)
         setUpViewModel()
@@ -95,13 +94,11 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
 
     private fun setUpViewModel() {
         var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
-        var myFactory = MyFactory(dao, RetrofitHelper)
-        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
-
-        val daoAddMeal = AddMealDatabase.getDatabase(requireContext()).getAddMealDao()
-        val factory =
-            com.example.foodplannerapplication.modules.plans.viewmodel.MyFactory(daoAddMeal)
-        addMealViewModel = ViewModelProvider(this, factory).get(AddMealViewModel::class.java)
+        var myFactory = AddMealToFavoritesViewModelFactory(dao, RetrofitHelper)
+        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddMealToFavoritesViewModel::class.java)
+        val daoAddMeal = AddMealToPlansDatabase.getDatabase(requireContext()).getAddMealToPlansDao()
+        val factory = AddMealToPlansViewModelFactory(daoAddMeal)
+        addMealToPlansViewModel = ViewModelProvider(this, factory).get(AddMealToPlansViewModel::class.java)
     }
 
     private fun extractedDataFromViewModel() {
@@ -130,7 +127,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
     }
 
     private fun observeMealDetails() {
-        addMealViewModel.message.observe(viewLifecycleOwner) {
+        addMealToPlansViewModel.message.observe(viewLifecycleOwner) {
             Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
         }
 
@@ -222,7 +219,7 @@ class MealDatailsFragment : Fragment() , ICommonFilteredMealListener {
                 onDateTimeSelected = { dateTimeInMillis ->
                     val mealPlan = createMealPlan(filteredMeals, dateTimeInMillis)
                     if (mealPlan?.let { it1 -> MealValidator.isValid(it1) } == true) {
-                        addMealViewModel.addPlan(mealPlan)
+                        addMealToPlansViewModel.addPlan(mealPlan)
                         scheduleMealNotification(filteredMeals.strMeal, dateTimeInMillis)
                         showSuccessMessage()
                     } else {

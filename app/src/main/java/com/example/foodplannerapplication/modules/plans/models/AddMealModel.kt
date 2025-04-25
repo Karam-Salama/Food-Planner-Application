@@ -1,4 +1,4 @@
-package com.example.foodplannerapplication.modules.plans.models.entity
+package com.example.foodplannerapplication.modules.plans.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

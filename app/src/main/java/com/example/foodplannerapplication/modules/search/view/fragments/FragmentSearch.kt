@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,49 +16,44 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
 import com.example.foodplannerapplication.core.data.cache.CacheHelper
+import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
 import com.example.foodplannerapplication.core.utils.Constants
 import com.example.foodplannerapplication.core.helpers.DialogHelper
 import com.example.foodplannerapplication.core.helpers.NetworkReceiver
-import com.example.foodplannerapplication.modules.favorite.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.modules.home.viewmodel.DashboardViewModel
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModel
+import com.example.foodplannerapplication.modules.home.data.repo.HomeRepository
 import com.example.foodplannerapplication.modules.home.viewmodel.FilterType
-import com.example.foodplannerapplication.modules.favorite.viewmodel.MyFactory
-import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
+import com.example.foodplannerapplication.modules.home.viewmodel.HomeAndSearchViewModel
 import com.example.foodplannerapplication.modules.search.view.ICommonSearchFilteredListener
 import com.example.foodplannerapplication.modules.search.view.adapters.SearchAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
-    private lateinit var viewModel: DashboardViewModel
-    private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
+    // Views
     private lateinit var searchAdapter: SearchAdapter
-
+    // ViewModels
+    private lateinit var searchViewModel: HomeAndSearchViewModel
+    private lateinit var addMealToFavoritesViewModel: AddMealToFavoritesViewModel
+    // For Network Connection
     private lateinit var networkReceiver: NetworkReceiver
     private lateinit var noInternetAnimation: LottieAnimationView
     private lateinit var noInternetText: TextView
     private lateinit var mainContentLayout: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews(view)
-        setUpViewModel()
         setUpRecyclerView(view)
         setupChips(view)
         setupSearch(view)
         setUpFavoriteViewModel()
+        setUpViewModel()
         observeViewModel()
-    }
-
-    private fun setUpViewModel() {
-        viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
     }
 
     private fun setUpRecyclerView(view: View) {
@@ -103,86 +97,80 @@ class FragmentSearch : Fragment(), ICommonSearchFilteredListener {
     }
 
     private fun setupChips(view: View) {
-        view.findViewById<Chip>(R.id.chipCategories).setOnClickListener { viewModel.setFilterType(
-            FilterType.CATEGORIES) }
-        view.findViewById<Chip>(R.id.chipCountries).setOnClickListener { viewModel.setFilterType(
-            FilterType.COUNTRIES) }
-        view.findViewById<Chip>(R.id.chipIngredients).setOnClickListener { viewModel.setFilterType(
-            FilterType.INGREDIENTS) }
+        view.findViewById<Chip>(R.id.chipCategories).setOnClickListener {
+            searchViewModel.setFilterType(FilterType.CATEGORIES)
+        }
+        view.findViewById<Chip>(R.id.chipCountries).setOnClickListener {
+            searchViewModel.setFilterType(FilterType.COUNTRIES)
+        }
+        view.findViewById<Chip>(R.id.chipIngredients).setOnClickListener {
+            searchViewModel.setFilterType(FilterType.INGREDIENTS)
+        }
+    }
+
+    private fun setUpViewModel() {
+        searchViewModel = HomeAndSearchViewModel(HomeRepository())
     }
 
     private fun setupSearch(view: View) {
-        view.findViewById<TextInputEditText>(R.id.et_meals_search).addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) { viewModel.setSearchQuery(s.toString()) }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        view.findViewById<TextInputEditText>(R.id.et_meals_search).addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {searchViewModel.setSearchQuery(s.toString())}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            }
+        )
     }
 
     private fun observeViewModel() {
-        viewModel.filteredData.observe(viewLifecycleOwner) { searchAdapter.updateList(it) }
+        searchViewModel.filteredData.observe(viewLifecycleOwner) {
+            searchAdapter.updateList(it)
+        }
     }
 
     private fun setUpFavoriteViewModel() {
-        var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
-        var myFactory = MyFactory(dao, RetrofitHelper)
-        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
+        val dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
+        val retrofitHelper = RetrofitHelper
+        addMealToFavoritesViewModel = AddMealToFavoritesViewModel(dao,retrofitHelper)
+    }
+
+    private fun shouldShowLoginDialog(): Boolean {
+        val isGuestUser = searchViewModel.isGuestUser()
+        val isUnAuthenticatedUser = !searchViewModel.isUserLoggedIn()
+        return isGuestUser && isUnAuthenticatedUser
     }
 
     override fun openMealsActivityByCategory(category: String?) {
-        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
-
-        if (isAuthSkipClicked) {
-            if (Firebase.auth.currentUser == null) {
-                DialogHelper.showLoginRequiredDialog(requireContext())
-            } else {
-                val actionFragmentSearchToFilteredMealsByCategoryFragment =
-                    FragmentSearchDirections.actionFragmentSearchToFilteredMealsByCategoryFragment(category)
-                findNavController().navigate(actionFragmentSearchToFilteredMealsByCategoryFragment)
-            }
+        if (shouldShowLoginDialog()) {
+            DialogHelper.showLoginRequiredDialog(requireContext())
         } else {
-            val actionFragmentSearchToFilteredMealsByCategoryFragment =
+            findNavController().navigate(
                 FragmentSearchDirections.actionFragmentSearchToFilteredMealsByCategoryFragment(category)
-            findNavController().navigate(actionFragmentSearchToFilteredMealsByCategoryFragment)
+            )
         }
     }
 
     override fun openMealsActivityByArea(area: String?) {
-        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
-
-        if (isAuthSkipClicked) {
-            if (Firebase.auth.currentUser == null) {
-                DialogHelper.showLoginRequiredDialog(requireContext())
-            } else {
-                val actionFragmentSearchToFilteredMealsByAreaFragment =
-                    FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment(area)
-                findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
-            }
+        if (shouldShowLoginDialog()) {
+            DialogHelper.showLoginRequiredDialog(requireContext())
         } else {
-            val actionFragmentSearchToFilteredMealsByAreaFragment =
+            findNavController().navigate(
                 FragmentSearchDirections.actionFragmentSearchToFilteredMealsByAreaFragment(area)
-            findNavController().navigate(actionFragmentSearchToFilteredMealsByAreaFragment)
+            )
         }
-
     }
 
     override fun openMealsActivityByIngredient(ingredient: String?) {
-        val isAuthSkipClicked = CacheHelper.getBoolean(Constants.OnBording_SKIP_KEY, false)
-
-        if (isAuthSkipClicked) {
-            if (Firebase.auth.currentUser == null) {
-                DialogHelper.showLoginRequiredDialog(requireContext())
-            } else {
-                val actionFragmentSearchToFilteredMealsByIngredientFragment =
-                    FragmentSearchDirections.actionFragmentSearchToFilteredMealsByIngredientFragment(ingredient)
-                findNavController().navigate(actionFragmentSearchToFilteredMealsByIngredientFragment)
-            }
+        if (shouldShowLoginDialog()) {
+            DialogHelper.showLoginRequiredDialog(requireContext())
         } else {
-            val actionFragmentSearchToFilteredMealsByIngredientFragment =
+            findNavController().navigate(
                 FragmentSearchDirections.actionFragmentSearchToFilteredMealsByIngredientFragment(ingredient)
-            findNavController().navigate(actionFragmentSearchToFilteredMealsByIngredientFragment)
+            )
         }
     }
 
-    override fun onFilteredMealsClick(mealId: String?) {}
+    override fun onFilteredMealsClick(mealId: String?) {
+        // Handle meal click if needed
+    }
 }

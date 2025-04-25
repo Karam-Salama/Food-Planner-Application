@@ -1,25 +1,22 @@
-package com.example.foodplannerapplication.modules.plans.models.database
-
+package com.example.foodplannerapplication.modules.plans.models
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.foodplannerapplication.modules.plans.models.dao.AddMealDao
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
 
 @Database(entities = [AddMealModel::class], version = 5)
-abstract class AddMealDatabase : RoomDatabase() {
-    abstract fun getAddMealDao(): AddMealDao
+abstract class AddMealToPlansDatabase : RoomDatabase() {
+    abstract fun getAddMealToPlansDao(): AddMealToPlansDao
 
     companion object {
         @Volatile
-        private var INSTANCE: AddMealDatabase? = null
+        private var INSTANCE: AddMealToPlansDatabase? = null
 
-        fun getDatabase(ctx: Context): AddMealDatabase {
+        fun getDatabase(ctx: Context): AddMealToPlansDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     ctx.applicationContext,
-                    AddMealDatabase::class.java,
+                    AddMealToPlansDatabase::class.java,
                     "weekly_plan_db"
                 ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance

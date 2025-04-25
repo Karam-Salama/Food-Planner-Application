@@ -1,4 +1,4 @@
-package com.example.foodplannerapplication.modules.home.model
+package com.example.foodplannerapplication.modules.home.data.model
 
 data class RandomMealResponse(
     val meals: List<MealModel>?

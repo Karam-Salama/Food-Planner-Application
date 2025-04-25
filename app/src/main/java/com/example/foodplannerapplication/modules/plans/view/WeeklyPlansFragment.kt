@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.plans.view
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,28 +13,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.helpers.DialogHelper
-import com.example.foodplannerapplication.modules.plans.models.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
-import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealViewModel
-import com.example.foodplannerapplication.modules.plans.viewmodel.MyFactory
+import com.example.foodplannerapplication.modules.plans.models.AddMealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealToPlansDatabase
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealToPlansViewModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealToPlansViewModelFactory
+
 import kotlinx.coroutines.launch
 
-
 class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
+    // ui components
     private lateinit var rcWeeklyPlans: RecyclerView
     private lateinit var weeklyPlansAdapter: WeeklyPlansAdapter
-    private lateinit var weeklyPlansViewModel: AddMealViewModel
-
     private lateinit var lottieEmptyView: LottieAnimationView
     private lateinit var tvNoPlans: TextView
+    // ViewModel
+    private lateinit var addMealToPlansViewModel: AddMealToPlansViewModel
 
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_weekly_plans, container, false)
     }
 
@@ -64,20 +58,20 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
     }
 
     private fun setUpViewModel() {
-        var dao = AddMealDatabase.getDatabase(requireContext()).getAddMealDao()
-        var myFactory = MyFactory(dao)
-        weeklyPlansViewModel = ViewModelProvider(this, myFactory).get(AddMealViewModel::class.java)
+        var dao = AddMealToPlansDatabase.getDatabase(requireContext()).getAddMealToPlansDao()
+        var myFactory = AddMealToPlansViewModelFactory(dao)
+        addMealToPlansViewModel = ViewModelProvider(this, myFactory).get(AddMealToPlansViewModel::class.java)
     }
 
     private fun extractedDataFromViewModel() {
         lifecycleScope.launch {
-            weeklyPlansViewModel.fetchPlans()
+            addMealToPlansViewModel.fetchPlans()
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun observeViewModel() {
-        weeklyPlansViewModel.mealsPlanList.observe(viewLifecycleOwner) { newList ->
+        addMealToPlansViewModel.mealsPlanList.observe(viewLifecycleOwner) { newList ->
             if (newList.isNullOrEmpty()) {
                 rcWeeklyPlans.visibility = View.GONE
                 lottieEmptyView.visibility = View.VISIBLE
@@ -96,7 +90,7 @@ class WeeklyPlansFragment : Fragment(), IWeeklyPlansListener {
     override fun onDeleteWeeklyPlansClick(addMealModel: AddMealModel) {
         DialogHelper.showDeleteConfirmationDialog(requireContext()) {
             lifecycleScope.launch {
-                weeklyPlansViewModel.removePlan(addMealModel)
+                addMealToPlansViewModel.removePlan(addMealModel)
             }
         }
     }

@@ -1,14 +1,13 @@
-package com.example.foodplannerapplication.modules.plans.models.dao
+package com.example.foodplannerapplication.modules.plans.models
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
 
 @Dao
-interface AddMealDao {
+interface AddMealToPlansDao {
     @Query("SELECT * FROM Plans_table")
     suspend fun getAllPlans(): List<AddMealModel>
 

@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.foodplannerapplication.core.data.models.FilteredMealModel
 import com.example.foodplannerapplication.modules.favorite.models.FavoritesDao
-import com.example.foodplannerapplication.modules.home.model.MealModel
+import com.example.foodplannerapplication.modules.home.data.model.MealModel
 import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddToFavoriteViewModel(private val dao: FavoritesDao, var retrofitHelper: RetrofitHelper) : ViewModel() {
+class AddMealToFavoritesViewModel(private val dao: FavoritesDao, var retrofitHelper: RetrofitHelper) : ViewModel() {
     private var _filteredMealsList: MutableLiveData<List<FilteredMealModel>> = MutableLiveData()
     var filteredMealsList: LiveData<List<FilteredMealModel>> = _filteredMealsList
 
@@ -171,8 +171,8 @@ class AddToFavoriteViewModel(private val dao: FavoritesDao, var retrofitHelper: 
     }
 }
 
-class MyFactory(private val dao: FavoritesDao, var retrofitHelper: RetrofitHelper) : ViewModelProvider.Factory {
+class AddMealToFavoritesViewModelFactory(private val dao: FavoritesDao, var retrofitHelper: RetrofitHelper) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AddToFavoriteViewModel(dao, retrofitHelper) as T
+        return AddMealToFavoritesViewModel(dao, retrofitHelper) as T
     }
 }

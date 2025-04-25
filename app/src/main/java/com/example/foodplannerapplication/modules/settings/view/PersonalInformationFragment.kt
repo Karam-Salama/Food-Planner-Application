@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.settings.view
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +7,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.functions.Validation
+import com.example.foodplannerapplication.modules.settings.models.SettingRepo
+import com.example.foodplannerapplication.modules.settings.viewmodel.SettingViewModel
+import com.example.foodplannerapplication.modules.settings.viewmodel.SettingViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.userProfileChangeRequest
-import com.google.firebase.ktx.Firebase
 
 class PersonalInformationFragment : Fragment() {
     private lateinit var etName: TextInputEditText
@@ -26,18 +26,17 @@ class PersonalInformationFragment : Fragment() {
     private lateinit var etConfirmNewPassword: TextInputEditText
     private lateinit var btnSaveChanges: Button
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private lateinit var  settingViewModel: SettingViewModel
+
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_personal_information, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews(view)
-        setUpViews()
+        setupViewModel()
+        setupObservers()
         setListeners()
     }
 
@@ -52,34 +51,38 @@ class PersonalInformationFragment : Fragment() {
         btnSaveChanges = view.findViewById(R.id.btn_save_changes)
     }
 
-    private fun setUpViews() {
-        val user = Firebase.auth.currentUser
+    private fun setupViewModel() {
+        val repository = SettingRepo()
+        settingViewModel = ViewModelProvider(this, SettingViewModelFactory(repository)).get(SettingViewModel::class.java)
+    }
 
-        etName.text = user?.displayName?.let {
-            android.text.Editable.Factory.getInstance().newEditable(it)
-        }
-        etEmail.text = user?.email?.let {
-            android.text.Editable.Factory.getInstance().newEditable(it)
+    private fun setupObservers() {
+        settingViewModel.userData.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                etName.setText(it.displayName ?: "")
+                etEmail.setText(it.email ?: "")
+            }
         }
 
-        etName.isEnabled = false
-        etEmail.isEnabled = false
+        settingViewModel.updateResult.observe(viewLifecycleOwner) { (success, message) ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            if (success) {
+                etName.isEnabled = false
+                etEmail.isEnabled = false
+                etCurrentPassword.text?.clear()
+                etNewPassword.text?.clear()
+                etConfirmNewPassword.text?.clear()
+            }
+        }
     }
 
     private fun setListeners() {
-        ivEditName.setOnClickListener { enableEditing(etName) }
-        ivEditEmail.setOnClickListener { enableEditing(etEmail) }
-        btnSaveChanges.setOnClickListener { saveChanges() }
+        ivEditName.setOnClickListener { etName.isEnabled = true; etName.requestFocus() }
+        ivEditEmail.setOnClickListener { etEmail.isEnabled = true; etEmail.requestFocus() }
+        btnSaveChanges.setOnClickListener { validateAndSaveChanges() }
     }
 
-    private fun enableEditing(editText: TextInputEditText) {
-        editText.isEnabled = true
-        editText.requestFocus()
-    }
-
-    private fun saveChanges() {
-        val user = Firebase.auth.currentUser ?: return
-
+    private fun validateAndSaveChanges() {
         val newName = etName.text.toString().trim()
         val newEmail = etEmail.text.toString().trim()
         val currentPassword = etCurrentPassword.text.toString().trim()
@@ -91,82 +94,30 @@ class PersonalInformationFragment : Fragment() {
             return
         }
 
-        try {
-            // تحديث الاسم
-            if (newName.isNotEmpty() && newName != user.displayName) {
-                val profileUpdates = userProfileChangeRequest {
-                    displayName = newName
-                }
-                user.updateProfile(profileUpdates).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(requireContext(), "Name updated successfully", Toast.LENGTH_SHORT).show()
-                        etName.isEnabled = false
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to update name", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        // Update name if changed
+        settingViewModel.userData.value?.let { user ->
+            if (newName != user.displayName) {
+                settingViewModel.updateUserName(newName)
             }
+        }
 
-            // تحديث البريد الإلكتروني
-            if (newEmail.isNotEmpty() && newEmail != user.email) {
-                user.updateEmail(newEmail).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(requireContext(), "Email updated successfully", Toast.LENGTH_SHORT).show()
-                        etEmail.isEnabled = false
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to update email", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        // Update email if changed
+        settingViewModel.userData.value?.let { user ->
+            if (newEmail != user.email) {
+                settingViewModel.updateUserEmail(newEmail)
             }
+        }
 
-            // التحقق من صحة كلمات المرور وتغييرها
+        // Handle password change if fields are not empty
+        if (newPassword.isNotEmpty() || confirmPassword.isNotEmpty()) {
             val passwordError = Validation.validatePassword(newPassword)
             val confirmPasswordError = Validation.validateConfirmPassword(confirmPassword, newPassword)
 
-            if (newPassword.isNotEmpty() || confirmPassword.isNotEmpty()) {
-                if (passwordError != null) {
-                    etNewPassword.error = passwordError
-                    return
-                }
-
-                if (confirmPasswordError != null) {
-                    etConfirmNewPassword.error = confirmPasswordError
-                    return
-                }
-
-                if (currentPassword.isEmpty()) {
-                    etCurrentPassword.error = "Current password is required."
-                    return
-                }
-
-                // تغيير كلمة المرور
-                changePassword(currentPassword, newPassword)
-            }
-
-        } catch (e: Exception) {
-            Toast.makeText(requireContext(), "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun changePassword(currentPassword: String, newPassword: String) {
-        val user = Firebase.auth.currentUser ?: return
-
-        val credential = EmailAuthProvider.getCredential(user.email!!, currentPassword)
-
-        user.reauthenticate(credential).addOnCompleteListener { authTask ->
-            if (authTask.isSuccessful) {
-                user.updatePassword(newPassword).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
-                        etCurrentPassword.text = null
-                        etNewPassword.text = null
-                        etConfirmNewPassword.text = null
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to update password", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                etCurrentPassword.error = "Incorrect current password."
+            when {
+                passwordError != null -> etNewPassword.error = passwordError
+                confirmPasswordError != null -> etConfirmNewPassword.error = confirmPasswordError
+                currentPassword.isEmpty() -> etCurrentPassword.error = "Current password is required"
+                else -> settingViewModel.changePassword(currentPassword, newPassword)
             }
         }
     }

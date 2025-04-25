@@ -15,11 +15,11 @@ import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.data.models.FilteredMealModel
 import com.example.foodplannerapplication.core.utils.Constants
 import com.example.foodplannerapplication.core.functions.CountryFlagMapper
-import com.example.foodplannerapplication.modules.home.model.AreaModel
-import com.example.foodplannerapplication.modules.home.model.CategoryModel
+import com.example.foodplannerapplication.modules.home.data.model.AreaModel
+import com.example.foodplannerapplication.modules.home.data.model.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 import android.util.Log
-import com.example.foodplannerapplication.modules.home.model.IngredientModel
+import com.example.foodplannerapplication.modules.home.data.model.IngredientModel
 import com.example.foodplannerapplication.modules.search.view.ICommonSearchFilteredListener
 
 class SearchAdapter(

@@ -2,11 +2,8 @@ package com.example.foodplannerapplication.modules.home.view.fragments
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,16 +23,16 @@ import com.example.foodplannerapplication.core.helpers.DateUtils
 import com.example.foodplannerapplication.core.helpers.MealImageHandler
 import com.example.foodplannerapplication.core.helpers.MealValidator
 import com.example.foodplannerapplication.core.notifications.MealReminderWorker
-import com.example.foodplannerapplication.modules.plans.models.database.AddMealDatabase
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
-import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealViewModel
-import com.example.foodplannerapplication.modules.plans.viewmodel.MyFactory
+import com.example.foodplannerapplication.modules.plans.models.AddMealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealToPlansDatabase
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealToPlansViewModel
+import com.example.foodplannerapplication.modules.plans.viewmodel.AddMealToPlansViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AddMealFragment : Fragment() {
-    private lateinit var addMealViewModel: AddMealViewModel
+    private lateinit var addMealToPlansViewModel: AddMealToPlansViewModel
     private lateinit var mealImageHandler: MealImageHandler
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var ivMealImage: ImageView
@@ -45,21 +42,12 @@ class AddMealFragment : Fragment() {
     private lateinit var edtMealTime: EditText
     private lateinit var btnSaveMeal: Button
 
-    companion object {
-        private const val CALENDAR_PERMISSION_REQUEST_CODE = 100
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_add_meal, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mealImageHandler = MealImageHandler(requireContext())
         setUpViewModel()
         initViews(view)
@@ -138,7 +126,7 @@ class AddMealFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        addMealViewModel.message.observe(viewLifecycleOwner) { message ->
+        addMealToPlansViewModel.message.observe(viewLifecycleOwner) { message ->
             Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
         }
     }
@@ -169,7 +157,7 @@ class AddMealFragment : Fragment() {
         )
 
         if (MealValidator.isValid(mealPlan)) {
-            addMealViewModel.addPlan(mealPlan)
+            addMealToPlansViewModel.addPlan(mealPlan)
             scheduleMealNotification(dateInMillis, mealName)
             Snackbar.make(requireView(), "Meal added successfully", Snackbar.LENGTH_SHORT).show()
         } else {
@@ -194,9 +182,9 @@ class AddMealFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        val dao = AddMealDatabase.getDatabase(requireContext()).getAddMealDao()
-        val factory = MyFactory(dao)
-        addMealViewModel = ViewModelProvider(this, factory).get(AddMealViewModel::class.java)
+        val dao = AddMealToPlansDatabase.getDatabase(requireContext()).getAddMealToPlansDao()
+        val factory = AddMealToPlansViewModelFactory(dao)
+        addMealToPlansViewModel = ViewModelProvider(this, factory).get(AddMealToPlansViewModel::class.java)
     }
 
     private fun openGallery() {
@@ -218,5 +206,4 @@ class AddMealFragment : Fragment() {
             }
         }
     }
-
 }

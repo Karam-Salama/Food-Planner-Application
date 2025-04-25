@@ -1,11 +1,11 @@
 package com.example.foodplannerapplication.core.data.server.retrofit
 
 
-import com.example.foodplannerapplication.modules.home.model.AreaResponse
-import com.example.foodplannerapplication.modules.home.model.CategoryResponse
+import com.example.foodplannerapplication.modules.home.data.model.AreaResponse
+import com.example.foodplannerapplication.modules.home.data.model.CategoryResponse
 import com.example.foodplannerapplication.core.data.models.FilterdMealsResponse
-import com.example.foodplannerapplication.modules.home.model.IngredientsResponse
-import com.example.foodplannerapplication.modules.home.model.RandomMealResponse
+import com.example.foodplannerapplication.modules.home.data.model.IngredientsResponse
+import com.example.foodplannerapplication.modules.home.data.model.RandomMealResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

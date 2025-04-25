@@ -1,6 +1,6 @@
 package com.example.foodplannerapplication.core.helpers
 
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealModel
 
 object MealValidator {
     fun isValid(meal: AddMealModel): Boolean {

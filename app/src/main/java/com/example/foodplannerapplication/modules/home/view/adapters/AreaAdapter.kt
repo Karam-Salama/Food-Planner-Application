@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.functions.CountryFlagMapper
-import com.example.foodplannerapplication.modules.home.model.AreaModel
+import com.example.foodplannerapplication.modules.home.data.model.AreaModel
 
 class AreaAdapter(private var areas: List<AreaModel?>?,
                   private val context: Context,

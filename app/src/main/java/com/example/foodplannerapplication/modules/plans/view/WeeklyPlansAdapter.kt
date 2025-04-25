@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
 import com.example.foodplannerapplication.core.helpers.DateUtils
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealModel
 import com.google.android.material.imageview.ShapeableImageView
 
 class WeeklyPlansAdapter(

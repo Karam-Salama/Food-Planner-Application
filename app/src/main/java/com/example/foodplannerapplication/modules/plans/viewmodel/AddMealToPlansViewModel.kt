@@ -1,18 +1,16 @@
 package com.example.foodplannerapplication.modules.plans.viewmodel
-
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.foodplannerapplication.modules.plans.models.dao.AddMealDao
-import com.example.foodplannerapplication.modules.plans.models.entity.AddMealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealModel
+import com.example.foodplannerapplication.modules.plans.models.AddMealToPlansDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
-
+class AddMealToPlansViewModel(private val addMealToPlansDao: AddMealToPlansDao) : ViewModel() {
     private val _mealsPlanList = MutableLiveData<List<AddMealModel>>()
     val mealsPlanList: LiveData<List<AddMealModel>> = _mealsPlanList
 
@@ -26,7 +24,7 @@ class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
     fun fetchPlans() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val list = addMealDao.getAllPlans()
+                val list = addMealToPlansDao.getAllPlans()
                 _mealsPlanList.postValue(list)
             } catch (e: Exception) {
                 Log.e("ViewModel", "Error Fetching Plans", e)
@@ -37,7 +35,7 @@ class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
     fun addPlan(plan: AddMealModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = addMealDao.addPlan(plan)
+                val result = addMealToPlansDao.addPlan(plan)
                 _message.postValue(if (result > 0) "Added to Plans" else "Already in Plans")
                 fetchPlans()
             } catch (e: Exception) {
@@ -50,7 +48,7 @@ class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
     fun removePlan(plan: AddMealModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = addMealDao.removePlan(plan)
+                val result = addMealToPlansDao.removePlan(plan)
                 _message.postValue(if (result > 0) "Removed Successfully" else "Couldn't Remove")
                 fetchPlans()
             } catch (e: Exception) {
@@ -61,11 +59,11 @@ class AddMealViewModel(private val addMealDao: AddMealDao) : ViewModel() {
 }
 
 
-class MyFactory(private val addMealDao: AddMealDao) : ViewModelProvider.Factory {
+class AddMealToPlansViewModelFactory(private val addMealDao: AddMealToPlansDao) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddMealViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(AddMealToPlansViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AddMealViewModel(addMealDao) as T
+            return AddMealToPlansViewModel(addMealDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
