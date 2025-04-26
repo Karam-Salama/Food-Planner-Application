@@ -6,8 +6,18 @@ import androidx.room.PrimaryKey
 data class AddMealModel(
     @PrimaryKey(autoGenerate = true)
     val idMealPlan: Int = 0,
-    val thumbMealPlan: String,
-    val nameMealPlan: String,
-    val categoryMealPlan: String,
-    val dateMealPlan: Long?,
-)
+    val thumbMealPlan: String = "",
+    val nameMealPlan: String = "",
+    val categoryMealPlan: String = "",
+    val dateMealPlan: Long? = null,
+) {
+   fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "idMealPlan" to idMealPlan,
+            "thumbMealPlan" to thumbMealPlan,
+            "nameMealPlan" to nameMealPlan,
+            "categoryMealPlan" to categoryMealPlan,
+            "dateMealPlan" to dateMealPlan,
+        )
+    }
+}

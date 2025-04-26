@@ -68,7 +68,7 @@ class FilteredMealsByAreaFragment : Fragment(), ICommonFilteredMealListener {
 
     private fun observeViewModel() {
         addMealToFavoritesViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
-            adapter.updateList(newList.filterNotNull()) // تصفية القيم null إن وجدت
+            adapter.updateList(newList.filterNotNull())
         }
 
         addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) { message ->

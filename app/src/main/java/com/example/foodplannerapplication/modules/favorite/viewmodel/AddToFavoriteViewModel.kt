@@ -171,7 +171,6 @@ class AddMealToFavoritesViewModel(private val dao: FavoritesDao, var retrofitHel
                         }
                         .addOnFailureListener { e ->
                             _message.postValue("Failed to sync with cloud")
-                            // استعادة البيانات إذا فشل الحذف من Firebase
                             viewModelScope.launch {
                                 dao.addFilteredMealsToFavorites(filteredMealModel)
                             }

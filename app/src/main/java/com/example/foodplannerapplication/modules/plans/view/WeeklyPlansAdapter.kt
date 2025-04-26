@@ -17,7 +17,7 @@ class WeeklyPlansAdapter(
     var weeklyMeals : List<AddMealModel?>?,
     private val context: Context,
     var listener: IWeeklyPlansListener
-    ) : RecyclerView.Adapter<WeeklyPlansAdapter.WeeklyPlansViewHolder>() {
+) : RecyclerView.Adapter<WeeklyPlansAdapter.WeeklyPlansViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyPlansViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.weekly_plans_item, parent, false)
