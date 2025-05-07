@@ -43,7 +43,7 @@ class SplashActivity : AppCompatActivity() {
                 SplashViewModel.NavigationDestination.Onboarding -> navigateTo(OnboardingActivity::class.java)
                 SplashViewModel.NavigationDestination.Login -> navigateTo(LoginActivity::class.java)
                 SplashViewModel.NavigationDestination.Home -> navigateTo(HomeActivity::class.java)
-                null -> { /* Do nothing */ }
+                else -> {}
             }
         }
     }

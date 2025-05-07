@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.splash.viewmodel
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +23,6 @@ class SplashViewModel(private val repository: SplashRepository) : ViewModel() {
     fun determineDestination() {
         viewModelScope.launch {
             delay(3000)
-
             _navigationEvent.postValue(
                 if (repository.shouldShowOnboarding()){
                     NavigationDestination.Onboarding

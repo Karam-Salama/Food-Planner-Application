@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.splash.model
-
 import com.example.foodplannerapplication.core.data.cache.CacheHelper
 import com.example.foodplannerapplication.core.utils.Constants
 import com.google.firebase.auth.ktx.auth
