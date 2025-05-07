@@ -1,7 +1,5 @@
 package com.example.foodplannerapplication.modules.home.view.fragments
-
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,42 +11,32 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
-import com.example.foodplannerapplication.core.model.cache.room.database.FavoritesDatabase
-import com.example.foodplannerapplication.core.viewmodel.AddToFavoriteViewModel
-import com.example.foodplannerapplication.core.viewmodel.MyFactory
-import com.example.foodplannerapplication.modules.home.model.server.services.RetrofitHelper
+import com.example.foodplannerapplication.core.data.models.FilteredMealModel
+import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
+import com.example.foodplannerapplication.modules.favorite.models.FavoritesDatabase
+import com.example.foodplannerapplication.core.data.server.retrofit.RetrofitHelper
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModel
+import com.example.foodplannerapplication.modules.favorite.viewmodel.AddMealToFavoritesViewModelFactory
 import com.example.foodplannerapplication.modules.home.view.adapters.FilteredMealsByCategoryAdapter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 
 class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener {
     // arguments
     private val filteredMealsByCategoryFragmentArgs: FilteredMealsByCategoryFragmentArgs by navArgs()
-
     // view model
-    private lateinit var addToFavoriteViewModel: AddToFavoriteViewModel
-
+    private lateinit var addMealToFavoritesViewModel: AddMealToFavoritesViewModel
     // ui components
     private lateinit var filteredMealsByCategoryAdapter: FilteredMealsByCategoryAdapter
     private lateinit var rvFilteredMealsByCategory: RecyclerView
     private lateinit var filteredMeals: List<FilteredMealModel?>
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_filtered_meals_by_category, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView(view)
         setUpViewModel()
         extractedDataFromViewModel()
@@ -58,7 +46,6 @@ class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener 
     private fun setupRecyclerView(view: View) {
         rvFilteredMealsByCategory = view.findViewById(R.id.rv_filteredMealsByCategory)
         filteredMealsByCategoryAdapter = FilteredMealsByCategoryAdapter(null, requireContext(), this)
-
         rvFilteredMealsByCategory.apply {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -68,31 +55,29 @@ class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener 
 
     private fun setUpViewModel() {
         var dao = FavoritesDatabase.getDatabase(requireContext()).getFavoritesDao()
-        var myFactory = MyFactory(dao, RetrofitHelper)
-        addToFavoriteViewModel = ViewModelProvider(this, myFactory).get(AddToFavoriteViewModel::class.java)
+        var myFactory = AddMealToFavoritesViewModelFactory(dao, RetrofitHelper)
+        addMealToFavoritesViewModel = ViewModelProvider(this, myFactory).get(AddMealToFavoritesViewModel::class.java)
     }
 
     private fun extractedDataFromViewModel() {
         lifecycleScope.launch {
-            addToFavoriteViewModel.getFilteredMealsByCategory(filteredMealsByCategoryFragmentArgs.categoryName)
+            addMealToFavoritesViewModel.getFilteredMealsByCategory(filteredMealsByCategoryFragmentArgs.categoryName)
         }
     }
 
     private fun observeViewModel() {
-        addToFavoriteViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
+        addMealToFavoritesViewModel.filteredMealsList.observe(viewLifecycleOwner) { newList ->
             filteredMealsByCategoryAdapter.filteredMeals = newList.toList()
             filteredMealsByCategoryAdapter.notifyDataSetChanged()
         }
-
-
-        addToFavoriteViewModel.message.observe(viewLifecycleOwner) {
+        addMealToFavoritesViewModel.message.observe(viewLifecycleOwner) {
             Snackbar.make(rvFilteredMealsByCategory, it, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     override fun onFilteredMealsFavoriteClick(filteredMealsModel: FilteredMealModel?) {
         lifecycleScope.launch {
-            addToFavoriteViewModel.saveFilteredMeals(filteredMealsModel)
+            addMealToFavoritesViewModel.saveFilteredMeals(filteredMealsModel)
         }
     }
 
@@ -103,5 +88,4 @@ class FilteredMealsByCategoryFragment : Fragment(), ICommonFilteredMealListener 
             )
         findNavController().navigate(actionFilteredMealsByCategoryFragmentToMealDatailsFragment)
     }
-
 }

@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.settings.view
-
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,11 +14,7 @@ class AboutUsFragment : Fragment() {
     private lateinit var ivInstagramIcon:ImageView
     private lateinit var ivLinkedinIcon:ImageView
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_about_us, container, false)
     }
 
@@ -52,5 +47,4 @@ class AboutUsFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
-
 }

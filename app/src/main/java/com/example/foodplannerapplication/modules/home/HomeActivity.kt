@@ -18,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+
 class HomeActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
@@ -30,15 +31,12 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
-
         initViews()
         setSupportActionBar(toolbar)
-
         initNav()
         toggle = setupActionBarDrawerToggle()
         handleLeadingToolbarIcon()
         handleLeadingToolbarTitle()
-
         NavigationUI.setupWithNavController(navView, navController)
         bottomNavigationView.setupWithNavController(navController)
     }

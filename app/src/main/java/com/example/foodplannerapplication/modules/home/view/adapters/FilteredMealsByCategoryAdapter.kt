@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,14 +10,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
+import com.example.foodplannerapplication.core.data.models.FilteredMealModel
+import com.example.foodplannerapplication.core.data.models.ICommonFilteredMealListener
 import com.google.android.material.imageview.ShapeableImageView
 
 class FilteredMealsByCategoryAdapter(
-     var filteredMeals: List<FilteredMealModel?>?,
+    var filteredMeals: List<FilteredMealModel?>?,
     private val context: Context,
-     var listener: ICommonFilteredMealListener
+    var listener: ICommonFilteredMealListener
 ) : RecyclerView.Adapter<FilteredMealsByCategoryAdapter.CategoryViewHolder>() {
 
     @SuppressLint("ResourceType")

@@ -17,91 +17,63 @@
         android:layout_height="wrap_content"
         tools:context=".modules.auth.view.LoginActivity">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/auth_header_image"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/top_background" />
-
-        <TextView
-            android:id="@+id/tv_signInTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_title"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:orientation="vertical"
             android:paddingHorizontal="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/edt_Email"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_Email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
+                android:layout_height="wrap_content"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey">
 
-            <TextView
-                android:id="@+id/error_login_email"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_Email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_Password"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
-
-            <EditText
-                android:id="@+id/edt_Password"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
                 android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey"
+                app:passwordToggleEnabled="true">
 
-            <TextView
-                android:id="@+id/error_login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_Password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <TextView
                 android:id="@+id/tv_forgetPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18sp"
                 android:text="@string/login_forgot"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/primary"
@@ -116,8 +88,8 @@
                 android:padding="14dp"
                 android:text="@string/login"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins_regular"
                 app:backgroundTint="@null" />
 
             <LinearLayout
@@ -159,12 +131,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/edt_background"
+                android:drawableLeft="@drawable/fui_ic_googleg_color_24dp"
                 android:padding="14dp"
                 android:text="@string/login_google"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:drawableLeft="@drawable/fui_ic_googleg_color_24dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="13sp"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btn_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edt_background"
+                android:drawableLeft="@drawable/facebook"
+                android:padding="14dp"
+                android:text="@string/login_facebook"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"
+                android:textSize="13sp"
                 app:backgroundTint="@null" />
 
             <LinearLayout
@@ -181,7 +167,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/dont_have_account"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:fontFamily="@font/poppins_regular" />
 
                 <TextView
                     android:id="@+id/tv_signup"
@@ -193,8 +180,10 @@
                     android:text="@string/sign_up"
                     android:textColor="@color/primary"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_semibold" />
             </LinearLayout>
+
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

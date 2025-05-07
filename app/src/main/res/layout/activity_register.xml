@@ -17,150 +17,118 @@
         android:layout_height="match_parent"
         tools:context=".modules.auth.view.RegisterActivity">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/top_background" />
-
-        <TextView
-            android:id="@+id/tv_signUpTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_up_title"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:orientation="vertical"
             android:paddingHorizontal="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/edt_Name"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_Name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
+                android:layout_height="wrap_content"
                 android:hint="@string/full_Name"
-                android:inputType="textPersonName"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey">
 
-            <TextView
-                android:id="@+id/error_name"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_Phone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
-
-            <EditText
-                android:id="@+id/edt_Phone"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
                 android:hint="@string/phone"
-                android:inputType="phone"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey">
 
-            <TextView
-                android:id="@+id/error_phone"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_Phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_Email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
-
-            <EditText
-                android:id="@+id/edt_Email"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey">
 
-            <TextView
-                android:id="@+id/error_email"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_Email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_Password"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
-
-            <EditText
-                android:id="@+id/edt_Password"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
                 android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey"
+                app:passwordToggleEnabled="true">
 
-            <TextView
-                android:id="@+id/error_password"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_Password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_confirmPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
-
-            <EditText
-                android:id="@+id/edt_confirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/edt_background"
-                android:ems="10"
                 android:hint="@string/confirm_password"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:textColor="@color/edt_input"
-                android:textSize="18sp" />
+                android:theme="@style/EditTextCursorTheme"
+                app:boxStrokeColor="@color/grey"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/grey"
+                app:passwordToggleEnabled="true">
 
-            <TextView
-                android:id="@+id/error_confirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="4dp"
-                android:text=""
-                android:textColor="@color/red" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_confirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edt_background"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
             <Button

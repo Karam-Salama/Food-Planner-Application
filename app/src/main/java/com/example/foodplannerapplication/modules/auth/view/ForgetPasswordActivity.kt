@@ -1,68 +1,110 @@
 package com.example.foodplannerapplication.modules.auth.view
-
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.util.Patterns
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.utils.functions.Validation
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.foodplannerapplication.core.helpers.DialogHelper
+import com.example.foodplannerapplication.core.helpers.SnackbarHelper
+import com.example.foodplannerapplication.modules.auth.ViewModels.ResetPasswordViewModel
+import com.example.foodplannerapplication.modules.auth.ViewModels.ResetPasswordViewModelFactory
+import com.example.foodplannerapplication.modules.auth.models.AuthRepository
+import com.google.android.material.textfield.TextInputEditText
 
 class ForgetPasswordActivity : AppCompatActivity() {
     private lateinit var btnResetPassword: Button
-    private lateinit var edtEmail: EditText
-    private lateinit var errorEmail: TextView
-
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var viewModel: ResetPasswordViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_forget_password)
+        initViews()
+        setupViewModel()
+        observeResetState()
+        setupListeners()
+    }
 
+    private fun initViews() {
         btnResetPassword = findViewById(R.id.btn_resetPassword)
-        edtEmail = findViewById(R.id.edt_Email)
-        errorEmail = findViewById(R.id.error_forget_password_email)
+        etEmail = findViewById(R.id.edt_Email)
+    }
 
-        btnResetPassword.setOnClickListener {
-            if(validateInput()){
-                forgetPassword(edtEmail.text.toString().trim())
+    private fun setupViewModel() {
+        val repository = AuthRepository()
+        viewModel = ViewModelProvider(this, ResetPasswordViewModelFactory(repository))
+            .get(ResetPasswordViewModel::class.java)
+    }
+
+    private fun observeResetState() {
+        viewModel.resetState.observe(this) { state ->
+            when (state) {
+                is ResetPasswordViewModel.ResetPasswordState.Loading -> {
+                    SnackbarHelper.showLoadingSnackbar(
+                        findViewById(android.R.id.content),
+                        state.message
+                    )
+                }
+                is ResetPasswordViewModel.ResetPasswordState.Success -> {
+                    SnackbarHelper.dismissCurrentSnackbar()
+                    DialogHelper.showGenericDialog(
+                        context = this,
+                        message = state.message,
+                        positiveButtonText = "OK",
+                        onPositiveAction = {
+                            startActivity(Intent(this, LoginActivity::class.java))
+                            finish()
+                        },
+                        cancelable = false // لمنع إغلاق الـ Dialog بالضغط خارجها
+                    )
+                }
+                is ResetPasswordViewModel.ResetPasswordState.Error -> {
+                    SnackbarHelper.dismissCurrentSnackbar()
+                    if (state.message.contains("No account")) {
+                        etEmail.error = state.message
+                    } else {
+                        SnackbarHelper.showErrorSnackbar(
+                            findViewById(android.R.id.content),
+                            state.message,
+                            "Retry",
+                            { retryResetPassword() }
+                        )
+                    }
+                }
             }
         }
     }
+
+    private fun retryResetPassword() {
+        if (validateInput()) {
+            viewModel.resetPassword(etEmail.text.toString().trim())
+        }
+    }
+
+    private fun setupListeners() {
+        btnResetPassword.setOnClickListener {
+            if (validateInput()) {
+                viewModel.resetPassword(etEmail.text.toString().trim())
+            }
+        }
+    }
+
     private fun validateInput(): Boolean {
-        val email = edtEmail.text.toString().trim()
+        val email = etEmail.text.toString().trim()
         var isValid = true
 
-        val emailError = Validation.validateEmail(email)
-        errorEmail.text = emailError
-        if (emailError != null) isValid = false
+        if (email.isEmpty()) {
+            etEmail.error = "Email is required"
+            isValid = false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.error = "Invalid email format"
+            isValid = false
+        }
 
         return isValid
-    }
-    private fun forgetPassword(email: String) {
-        val TAG = "ForgetPasswordActivity"
-        Firebase.auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "resetPassword:success")
-                    Toast.makeText(
-                        baseContext,
-                        "Password reset email sent. Check your inbox.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    Log.w(TAG, "resetPassword:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Failed to send reset email. Please try again.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
     }
 }

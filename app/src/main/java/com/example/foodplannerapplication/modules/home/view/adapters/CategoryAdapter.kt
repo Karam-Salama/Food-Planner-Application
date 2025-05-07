@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.home.view.adapters
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
+import com.example.foodplannerapplication.modules.home.data.model.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 
 class CategoryAdapter(

@@ -1,5 +1,4 @@
 package com.example.foodplannerapplication.modules.search.view.adapters
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,24 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodplannerapplication.R
-import com.example.foodplannerapplication.core.model.FilteredMealModel
-import com.example.foodplannerapplication.core.model.ICommonFilteredMealListener
-import com.example.foodplannerapplication.core.utils.classes.Constants
-import com.example.foodplannerapplication.core.utils.functions.CountryFlagMapper
-import com.example.foodplannerapplication.modules.home.model.server.models.AreaModel
-import com.example.foodplannerapplication.modules.home.model.server.models.CategoryModel
+import com.example.foodplannerapplication.core.data.models.FilteredMealModel
+import com.example.foodplannerapplication.core.utils.Constants
+import com.example.foodplannerapplication.core.functions.CountryFlagMapper
+import com.example.foodplannerapplication.modules.home.data.model.AreaModel
+import com.example.foodplannerapplication.modules.home.data.model.CategoryModel
 import com.google.android.material.imageview.ShapeableImageView
 import android.util.Log
+import com.example.foodplannerapplication.modules.home.data.model.IngredientModel
+import com.example.foodplannerapplication.modules.search.view.ICommonSearchFilteredListener
 
 class SearchAdapter(
     private val context: Context,
-    private val listener: ICommonFilteredMealListener
+    private val listener: ICommonSearchFilteredListener
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     enum class ItemType { MEAL, INGREDIENT, AREA, CATEGORY }
@@ -35,7 +34,7 @@ class SearchAdapter(
 
         return when (item) {
             is FilteredMealModel -> ItemType.MEAL.ordinal
-            is String -> ItemType.INGREDIENT.ordinal
+            is IngredientModel -> ItemType.INGREDIENT.ordinal
             is AreaModel -> ItemType.AREA.ordinal
             is CategoryModel -> ItemType.CATEGORY.ordinal
             else -> throw IllegalArgumentException("Unknown item type")
@@ -47,7 +46,7 @@ class SearchAdapter(
 
         val inflater = LayoutInflater.from(parent.context)
         val view = when (viewType) {
-            ItemType.MEAL.ordinal -> inflater.inflate(R.layout.filtered_meals_by_category_item, parent, false)
+            ItemType.MEAL.ordinal -> inflater.inflate(R.layout.search_filtered_item, parent, false)
             ItemType.INGREDIENT.ordinal, ItemType.CATEGORY.ordinal -> inflater.inflate(R.layout.category_list_item, parent, false)
             ItemType.AREA.ordinal -> inflater.inflate(R.layout.area_list_item, parent, false)
             else -> throw IllegalArgumentException("Unknown view type")
@@ -65,16 +64,14 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MealViewHolder -> bindMeal(holder, getItem(position) as FilteredMealModel, position)
-            is IngredientViewHolder -> bindIngredient(holder, getItem(position) as String)
+            is MealViewHolder -> bindMeal(holder, getItem(position) as FilteredMealModel)
+            is IngredientViewHolder -> bindIngredient(holder, getItem(position) as IngredientModel)
             is AreaViewHolder -> bindArea(holder, getItem(position) as AreaModel)
             is CategoryViewHolder -> bindCategory(holder, getItem(position) as CategoryModel)
         }
     }
 
-    private fun bindMeal(holder: MealViewHolder, item: FilteredMealModel, position: Int) {
-        Log.d("BindMeal Debug", "bindMeal is called for position: $position")
-
+    private fun bindMeal(holder: MealViewHolder, item: FilteredMealModel) {
         val imageUrl = item.strMealThumb
         Log.d("Glide Debug", "Loading Meal Image URL: $imageUrl")
 
@@ -89,33 +86,29 @@ class SearchAdapter(
         }
 
         holder.mealTitle.text = item.strMeal
-        holder.mealFavorite.apply {
-            setImageResource(if (item.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_border)
-            setColorFilter(ContextCompat.getColor(context, if (item.isFavorite) R.color.red else R.color.black))
-            setOnClickListener {
-                item.isFavorite = !item.isFavorite
-                listener.onFilteredMealsFavoriteClick(item)
-                notifyItemChanged(position)
-            }
-        }
         holder.itemView.setOnClickListener { listener.onFilteredMealsClick(item.idMeal) }
+
     }
 
-    private fun bindIngredient(holder: IngredientViewHolder, currentItem: String) {
-        val imageUrl = "${Constants.INGREDIENTS_IMAGES_URL}${currentItem}.png"
+    private fun bindIngredient(holder: IngredientViewHolder, ingredient: IngredientModel) {
+        val imageUrl = "${Constants.INGREDIENTS_IMAGES_URL}${ingredient.strIngredient}.png"
         Log.d("Glide Debug", "Loading Ingredient Image URL: $imageUrl")
 
-        holder.ingredientTitle.text = currentItem
+        holder.ingredientTitle.text = ingredient.strIngredient
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .placeholder(R.drawable.placeholder_ic)
-            .error(R.drawable.error_ic)
             .into(holder.ingredientImage)
+
+        holder.itemView.setOnClickListener { listener.openMealsActivityByIngredient(ingredient.strIngredient) }
     }
 
     private fun bindArea(holder: AreaViewHolder, currentItem: AreaModel) {
-        holder.areaTitle.text = currentItem.strArea
-        holder.areaFlag.text = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
+        if (currentItem != null) {
+            holder.areaTitle.text = currentItem.strArea
+            holder.areaFlag.text = CountryFlagMapper.getFlagEmoji(currentItem.strArea)
+            holder.itemView.setOnClickListener { listener.openMealsActivityByArea(currentItem.strArea) }
+        }
     }
 
     private fun bindCategory(holder: CategoryViewHolder, currentItem: CategoryModel) {
@@ -133,6 +126,7 @@ class SearchAdapter(
         }
 
         holder.categoryTitle.text = currentItem.strCategory
+        holder.itemView.setOnClickListener { listener.openMealsActivityByCategory(currentItem.strCategory) }
     }
 
     fun updateList(newItems: List<Any>) = submitList(newItems)
@@ -140,7 +134,6 @@ class SearchAdapter(
     class MealViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mealTitle: TextView = view.findViewById(R.id.tv_mealName)
         val mealImage: ShapeableImageView = view.findViewById(R.id.si_mealImage)
-        val mealFavorite: ImageView = view.findViewById(R.id.iv_favorite)
     }
 
     class IngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
