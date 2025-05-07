@@ -1,0 +1,33 @@
+package com.example.foodplannerapplication.modules.auth
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.foodplannerapplication.R
+
+class LoginActivity : AppCompatActivity() {
+    private lateinit var tv_signup: TextView
+    private lateinit var tv_forgetPassword: TextView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_login)
+
+        tv_signup = findViewById(R.id.tv_signup)
+        tv_forgetPassword = findViewById(R.id.tv_forgetPassword)
+
+        tv_signup.setOnClickListener {
+           finish()
+        }
+
+        tv_forgetPassword.setOnClickListener {
+            var intent = Intent(this, ForgetPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+}

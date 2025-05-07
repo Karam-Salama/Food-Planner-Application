@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FFD32F2F</color>
+    <color name="grey">#888FA0</color>
+    <color name="primary">#FF068251</color>
+    <color name="lighter_primary">#9BEABA</color>
+    <color name="background">#FFF2F2F2</color>
+    <color name="edt_background">#FFD7D6D7</color>
+    <color name="edt_input">#FF707070</color>
+    <color name="lightGrey">#FFF5F5F5</color>
+    <color name="input_border">#E6E9EA</color>
+    <color name="green">#EBF9F1</color>
 </resources>

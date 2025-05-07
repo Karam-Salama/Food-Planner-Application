@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentHome">
+
+    <fragment
+        android:id="@+id/fragmentHome"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FragmentHome"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_fragmentHome_to_addMealFragment"
+            app:destination="@id/addMealFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_filteredMealsByCategoryFragment"
+            app:destination="@id/filteredMealsByCategoryFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_filteredMealsByAreaFragment"
+            app:destination="@id/filteredMealsByAreaFragment" />
+        <action
+            android:id="@+id/action_fragmentHome_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentFavorite"
+        android:name="com.example.foodplannerapplication.modules.favorite.view.FragmentFavorite"
+        android:label="Favorite"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_fragmentFavorite_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="com.example.foodplannerapplication.modules.search.view.fragments.FragmentSearch"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_fragmentSearch_to_filteredMealsByCategoryFragment"
+            app:destination="@id/filteredMealsByCategoryFragment" />
+        <action
+            android:id="@+id/action_fragmentSearch_to_filteredMealsByAreaFragment"
+            app:destination="@id/filteredMealsByAreaFragment" />
+        <action
+            android:id="@+id/action_fragmentSearch_to_filteredMealsByIngredientFragment"
+            app:destination="@id/filteredMealsByIngredientFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentSetting"
+        android:name="com.example.foodplannerapplication.modules.settings.view.FragmentSetting"
+        android:label="Settings"
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_fragmentSetting_to_personalInformationFragment"
+            app:destination="@id/personalInformationFragment" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_fragmentWeeklyPlans"
+            app:destination="@id/fragmentWeeklyPlans" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_fragmentFavorite"
+            app:destination="@id/fragmentFavorite" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+        <action
+            android:id="@+id/action_fragmentSetting_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentDashboard"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FragmentDashboard"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
+
+        <argument
+            android:name="username"
+            android:defaultValue="User"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_fragmentDashboard_to_fragmentHome"
+            app:destination="@id/fragmentHome" />
+        <action
+            android:id="@+id/action_fragmentDashboard_to_fragmentSetting"
+            app:destination="@id/fragmentSetting" />
+        <action
+            android:id="@+id/action_fragmentDashboard_to_fragmentSearch"
+            app:destination="@id/fragmentSearch" />
+        <action
+            android:id="@+id/action_fragmentDashboard_to_fragmentFavorite"
+            app:destination="@id/fragmentFavorite" />
+        <action
+            android:id="@+id/action_fragmentDashboard_to_weeklyPlansFragment"
+            app:destination="@id/fragmentWeeklyPlans" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/addMealFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.AddMealFragment"
+        android:label="fragment_add_meal"
+        tools:layout="@layout/fragment_add_meal" />
+    <fragment
+        android:id="@+id/filteredMealsByCategoryFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FilteredMealsByCategoryFragment"
+        android:label="fragment_filtered_meals_by_category"
+        tools:layout="@layout/fragment_filtered_meals_by_category" >
+        <argument
+            android:name="categoryName"
+            app:nullable="true"
+            android:defaultValue="Beef"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_filteredMealsByCategoryFragment_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filteredMealsByAreaFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.FilteredMealsByAreaFragment"
+        android:label="fragment_filtered_meals_by_area"
+        tools:layout="@layout/fragment_filtered_meals_by_area" >
+        <argument
+            android:name="areaName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="Egyptian" />
+        <action
+            android:id="@+id/action_filteredMealsByAreaFragment_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealDatailsFragment"
+        android:name="com.example.foodplannerapplication.modules.home.view.fragments.MealDatailsFragment"
+        android:label="fragment_meal_datails"
+        tools:layout="@layout/fragment_meal_datails" >
+        <argument
+            android:name="mealId"
+            app:nullable="true"
+            android:defaultValue="52772"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_mealDatailsFragment_to_filteredMealsByIngredientFragment"
+            app:destination="@id/filteredMealsByIngredientFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentWeeklyPlans"
+        android:name="com.example.foodplannerapplication.modules.plans.view.WeeklyPlansFragment"
+        android:label="fragment_weekly_plans"
+        tools:layout="@layout/fragment_weekly_plans" />
+    <fragment
+        android:id="@+id/personalInformationFragment"
+        android:name="com.example.foodplannerapplication.modules.settings.view.PersonalInformationFragment"
+        android:label="fragment_personal_information"
+        tools:layout="@layout/fragment_personal_information" />
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.example.foodplannerapplication.modules.settings.view.AboutUsFragment"
+        android:label="fragment_about_us"
+        tools:layout="@layout/fragment_about_us" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.foodplannerapplication.modules.auth.view.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/filteredMealsByIngredientFragment"
+        android:name="com.example.foodplannerapplication.modules.search.view.fragments.FilteredMealsByIngredientFragment"
+        android:label="fragment_filtered_meals_by_ingredient"
+        tools:layout="@layout/fragment_filtered_meals_by_ingredient" >
+        <argument
+            android:name="ingredientName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="chicken" />
+        <action
+            android:id="@+id/action_filteredMealsByIngredientFragment_to_mealDatailsFragment"
+            app:destination="@id/mealDatailsFragment" />
+    </fragment>
+
+</navigation>
